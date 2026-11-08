@@ -164,6 +164,8 @@ class Api:
         return {"cpu": psutil.cpu_percent(interval=None),
                 "ram_used": vm.used / 2**30, "ram_total": vm.total / 2**30,
                 "disk": psutil.disk_usage(os.path.abspath(os.sep)).percent,
+                "disk_free": psutil.disk_usage(os.path.abspath(os.sep)).free,
+                "disk_total": psutil.disk_usage(os.path.abspath(os.sep)).total,
                 "temp": _temp["v"]}
 
     def info(self):
@@ -203,10 +205,10 @@ class Api:
         for label, host in (("Cloudflare (1.1.1.1)", "1.1.1.1"), ("Google DNS (8.8.8.8)", "8.8.8.8"),
                             ("google.com", "google.com")):
             best = None
-            for _ in range(3):
+            for _ in range(2):
                 t = time.perf_counter()
                 try:
-                    socket.create_connection((host, 443), 2).close()
+                    socket.create_connection((host, 443), 1.5).close()
                     ms = round((time.perf_counter() - t) * 1000)
                     best = ms if best is None else min(best, ms)
                 except OSError:
@@ -329,6 +331,54 @@ class Api:
             code, _ = run(["sc", "config", name, "start=", "disabled"])
         return code == 0
 
+    def freemem(self):
+        """Esvazia o working set dos processos (libera RAM sem fechar nada). Retorna bytes liberados."""
+        if os.name != "nt":
+            return 0
+        import ctypes
+        from ctypes import wintypes
+        k32, psapi = ctypes.windll.kernel32, ctypes.windll.psapi
+        k32.OpenProcess.restype = wintypes.HANDLE
+        k32.OpenProcess.argtypes = [wintypes.DWORD, wintypes.BOOL, wintypes.DWORD]
+        k32.CloseHandle.argtypes = [wintypes.HANDLE]
+        psapi.EmptyWorkingSet.argtypes = [wintypes.HANDLE]
+        before = psutil.virtual_memory().available
+        for pid in psutil.pids():
+            try:
+                h = k32.OpenProcess(0x0100 | 0x0400, False, pid)  # SET_QUOTA | QUERY_INFORMATION
+                if h:
+                    psapi.EmptyWorkingSet(h)
+                    k32.CloseHandle(h)
+            except Exception:
+                pass
+        time.sleep(0.6)
+        return max(0, psutil.virtual_memory().available - before)
+
+    def dns_status(self):
+        code, out = run(["powershell", "-NoProfile", "-NonInteractive", "-Command",
+                         "$a = Get-NetAdapter | Where-Object Status -eq 'Up'; "
+                         "($a | Get-DnsClientServerAddress -AddressFamily IPv4).ServerAddresses -join ', '"], 30)
+        out = out.strip()
+        if code != 0 or not out:
+            return None
+        names = {"1.1.1.1": "Cloudflare", "8.8.8.8": "Google"}
+        first = out.split(",")[0].strip()
+        return f"{out} ({names[first]})" if first in names else out
+
+    def set_dns(self, kind):
+        servers = {"cloudflare": "'1.1.1.1','1.0.0.1'", "google": "'8.8.8.8','8.8.4.4'"}
+        base_cmd = "Get-NetAdapter | Where-Object Status -eq 'Up' | "
+        if kind == "auto":
+            ps = base_cmd + "Set-DnsClientServerAddress -ResetServerAddresses"
+        elif kind in servers:
+            ps = base_cmd + f"Set-DnsClientServerAddress -ServerAddresses {servers[kind]}"
+        else:
+            return False
+        code, _ = run(["powershell", "-NoProfile", "-NonInteractive", "-Command", ps], 60)
+        if code == 0:
+            run(["ipconfig", "/flushdns"])
+        return code == 0
+
     def abrir(self, key):
         try:
             if key in TOOLS:
@@ -353,9 +403,9 @@ def main():
     psutil.cpu_percent(interval=None)
     if os.name == "nt":
         threading.Thread(target=temp_loop, daemon=True).start()
-    webview.create_window("Painel - Central de otimização", os.path.join(base(), "index.html"),
+    webview.create_window("Painel", os.path.join(base(), "index.html"),
                           js_api=Api(), width=1440, height=900, min_size=(1000, 700),
-                          background_color="#030814")
+                          background_color="#0b0c10")
     webview.start()
 
 

@@ -3,292 +3,272 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Painel — Central de otimização</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Painel — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#030814;--blue:#1b8cff;--cy:#2bc4ff;--line:rgba(55,125,255,.3);--mut:#a9bbdc;--ok:#3ddc97;--warn:#ffc15e;--bad:#ff6b6b;--r1:#1b7bff;--r2:#2bc4ff;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--bg0:#0b0c10;--bg1:#171a20;--card:#1f2229;--card2:#262a33;--line:#2c313b;--tx:#f2f4f8;--mut:#9aa3b3;--blue:#2f6fed;--blue2:#5b95ff;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{background:var(--bg);color:#fff;font-family:Inter,"Segoe UI Variable Display","Segoe UI",system-ui,sans-serif;min-height:100vh;overflow-x:hidden;user-select:none;-webkit-user-select:none}
+body{background:radial-gradient(900px 500px at 80% -10%,#161b29,transparent 60%),var(--bg0);color:var(--tx);font:14px/1.4 Inter,"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;min-height:100vh;overflow-x:hidden;user-select:none;-webkit-user-select:none}
 input{user-select:text;-webkit-user-select:text}
-button{font-family:inherit}
-svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+button{font-family:inherit;color:inherit}
+svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
 [hidden]{display:none!important}
-*::-webkit-scrollbar{width:10px;height:10px}*::-webkit-scrollbar-thumb{background:#1f4fae;border-radius:8px;border:2px solid transparent;background-clip:padding-box}*::-webkit-scrollbar-track{background:transparent}
-:focus-visible{outline:2px solid var(--cy);outline-offset:2px}
-
-/* fundo */
-.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(900px 520px at 78% -8%,#0c2566,transparent 62%),radial-gradient(700px 500px at 5% 105%,rgba(10,42,122,.45),transparent 60%),var(--bg)}
-.bg::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(60,130,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(60,130,255,.07) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse at 60% 25%,#000,transparent 72%);mask-image:radial-gradient(ellipse at 60% 25%,#000,transparent 72%)}
-.orb{position:absolute;border-radius:50%;filter:blur(90px);animation:float 18s ease-in-out infinite alternate}
-.o1{width:420px;height:420px;background:#1b6bff;top:-120px;right:8%;opacity:.3}
-.o2{width:360px;height:360px;background:#2bc4ff;bottom:-150px;left:34%;opacity:.14;animation-delay:-8s}
-@keyframes float{to{transform:translate(-60px,50px) scale(1.12)}}
-@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@keyframes shine{to{transform:translateX(100%)}}
+*::-webkit-scrollbar{width:10px;height:10px}*::-webkit-scrollbar-thumb{background:#363c49;border-radius:8px;border:2px solid transparent;background-clip:padding-box}*::-webkit-scrollbar-track{background:transparent}
+:focus-visible{outline:2px solid var(--blue2);outline-offset:2px}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes glow{50%{filter:drop-shadow(0 0 16px var(--r2))}}
-@keyframes pulse{50%{transform:scale(1.08);opacity:.8}}
+@keyframes pulse{50%{opacity:.55}}
 
-/* splash */
-#splash{position:fixed;inset:0;background:var(--bg);display:grid;place-content:center;justify-items:center;gap:14px;z-index:60;transition:opacity .6s,visibility .6s}
-#splash svg{width:84px;height:84px;animation:pulse 1.4s ease-in-out infinite}
-#splash b{font-size:26px;letter-spacing:6px;font-weight:700}
+#splash{position:fixed;inset:0;background:var(--bg0);display:grid;place-content:center;justify-items:center;gap:14px;z-index:60;transition:opacity .5s,visibility .5s}
+#splash svg{width:64px;height:64px;animation:pulse 1.2s ease-in-out infinite}
 #splash.out{opacity:0;visibility:hidden}
 
-.app{display:grid;grid-template-columns:255px 1fr;min-height:100vh}
-.side{background:linear-gradient(180deg,rgba(11,30,84,.92) 0%,rgba(7,18,56,.95) 55%,rgba(8,42,120,.95) 100%);border-right:1px solid #12337a;padding:22px 14px 24px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:hidden auto;backdrop-filter:blur(10px)}
-.side::after{content:"";position:absolute;left:-40%;bottom:4%;width:200%;height:240px;background:radial-gradient(ellipse at 70% 100%,rgba(30,120,255,.5),transparent 65%);pointer-events:none}
-.logo{display:flex;align-items:center;gap:12px;padding:0 12px 12px;font-weight:700;font-size:26px;letter-spacing:.5px}
-.logo svg{width:44px;height:44px;filter:drop-shadow(0 0 10px rgba(40,130,255,.7))}
-.sec{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:#7fb4f5;letter-spacing:.8px;margin:16px 12px 6px;text-transform:uppercase}
-.sec::after{content:"";flex:1;height:1px;background:#1a3b82}
-.nav{position:relative;display:flex;align-items:center;gap:16px;width:100%;padding:10px 12px;border:1px solid transparent;border-radius:10px;background:none;color:#e8efff;font:500 16.5px Inter,"Segoe UI",sans-serif;cursor:pointer;text-align:left;transition:background .25s,transform .25s,box-shadow .25s}
-.nav:hover{background:rgba(40,110,255,.16);transform:translateX(3px)}
-.nav.on{background:linear-gradient(180deg,#1b6bff,#1457d8);border-color:#3b8aff;box-shadow:0 0 22px rgba(30,110,255,.5);font-weight:600;transform:none}
-.nav.on::before{content:"";position:absolute;left:-15px;top:22%;bottom:22%;width:4px;border-radius:0 4px 4px 0;background:var(--cy);box-shadow:0 0 12px var(--cy)}
-.sp{flex:1;min-height:10px}
-.foot{border-top:1px solid #1a3b82;padding-top:12px;position:relative;z-index:1}
+.shell{margin:10px;min-height:calc(100vh - 20px);border:1px solid #2b2f39;border-radius:22px;background:var(--bg1);display:grid;grid-template-columns:70px 1fr;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.side{background:#1b1e25;border-right:1px solid var(--line);border-radius:22px 0 0 22px;padding:14px 0 12px;z-index:10;display:flex;flex-direction:column;align-items:center;gap:3px;position:sticky;top:10px;height:calc(100vh - 20px)}
+.logo{width:44px;height:44px;display:grid;place-items:center;margin-bottom:8px}
+.logo svg{width:30px;height:30px}
+.div{width:26px;height:1px;background:var(--line);margin:8px 0}
+.nav{position:relative;width:42px;height:42px;border:0;border-radius:50%;background:none;color:var(--mut);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s}
+.nav svg.i{width:19px;height:19px}
+.nav:hover{background:var(--card2);color:#fff}
+.nav.on{color:var(--blue2);box-shadow:inset 0 0 0 2px var(--blue)}
+.nav.on::before{content:"";position:absolute;left:-14px;top:25%;bottom:25%;width:3px;border-radius:0 3px 3px 0;background:var(--blue)}
+.nav::after{content:attr(data-tip);position:absolute;left:54px;top:50%;transform:translate(-4px,-50%);background:#0e1014;border:1px solid var(--line);color:#fff;font-size:12.5px;font-weight:500;padding:5px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:.15s;z-index:30}
+.nav:hover::after,.nav:focus-visible::after{opacity:1;transform:translate(0,-50%)}
+.sp{flex:1}
+.ver{font-size:11px;color:var(--mut);background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:3px 8px;margin-top:6px}
 
-.main{padding:14px 28px 28px;display:grid;gap:14px;align-content:start;min-width:0}
-.hd{display:flex;justify-content:space-between;align-items:center;gap:16px}
-.ttl{display:flex;gap:16px}
-.ttl::before{content:"";width:6px;background:linear-gradient(var(--cy),var(--blue));border-radius:3px;box-shadow:0 0 12px var(--blue)}
-h1{font-size:40px;font-weight:700;letter-spacing:-.5px;line-height:1.05;background:linear-gradient(90deg,#fff 40%,#9fcbff);-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{color:var(--mut);font-size:20px;margin-top:2px}
-.hr{display:flex;align-items:center;gap:20px;position:relative}
-.ok{display:flex;align-items:center;gap:14px;padding:9px 24px 9px 18px;border:2px solid var(--blue);border-radius:40px;background:rgba(7,26,69,.85);font-weight:600;font-size:20px;white-space:nowrap;box-shadow:0 0 20px rgba(27,140,255,.25);transition:.4s}
-.ok b{width:32px;height:32px;border-radius:50%;background:var(--blue);display:grid;place-items:center;transition:.4s}
-.ok b svg{width:20px;height:20px;stroke-width:3}
-.ok.warn{border-color:var(--warn);box-shadow:0 0 20px rgba(255,193,94,.25)}
+.main{padding:20px 32px 28px;display:grid;gap:16px;align-content:start;min-width:0}
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
+.sub{color:var(--mut);font-size:14px;margin-top:6px;max-width:760px}
+.hr{display:flex;align-items:center;gap:10px;position:relative;flex:none}
+.ok{display:flex;align-items:center;gap:8px;padding:6px 14px 6px 10px;border:1px solid var(--line);border-radius:20px;background:var(--card);font-size:12.5px;font-weight:600;white-space:nowrap;transition:.3s}
+.ok b{width:18px;height:18px;border-radius:50%;background:var(--ok);display:grid;place-items:center;color:#06281b}
+.ok b svg{width:12px;height:12px;stroke-width:3.2}
 .ok.warn b{background:var(--warn);color:#2a1a00}
-.demo{padding:6px 14px;border:1px dashed var(--warn);color:var(--warn);border-radius:20px;font-size:14px;font-weight:600;white-space:nowrap}
-.bw{position:relative;padding-left:20px;border-left:1px solid #1a3b82}
-.bell{position:relative;width:42px;height:42px;display:grid;place-items:center;border:0;border-radius:50%;background:none;color:#cfe0ff;cursor:pointer;transition:background .2s}
-.bell:hover{background:rgba(40,110,255,.2)}
-.bell.un::after{content:"";position:absolute;top:6px;right:8px;width:10px;height:10px;border-radius:50%;background:var(--cy);box-shadow:0 0 8px var(--cy)}
-.np{position:absolute;top:54px;right:0;width:360px;max-height:400px;overflow:auto;background:#081836;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:0 24px 60px rgba(0,0,0,.6);z-index:20;animation:rise .25s both}
-.np div{padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.35}
-.np div+div{border-top:1px solid #12337a}
-.np small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
+.demo{padding:5px 12px;border:1px dashed var(--warn);color:var(--warn);border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap}
+.bell{position:relative;width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--mut);cursor:pointer}
+.bell:hover{color:#fff;background:var(--card2)}
+.bell.un::after{content:"";position:absolute;top:6px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--blue2);box-shadow:0 0 0 2px var(--card)}
+.np{position:absolute;top:44px;right:0;width:340px;max-height:380px;overflow:auto;background:#14171c;border:1px solid var(--line);border-radius:14px;padding:6px;box-shadow:0 24px 60px rgba(0,0,0,.6);z-index:20;animation:rise .2s both}
+.np div{padding:9px 12px;border-radius:8px;font-size:13.5px}
+.np div+div{border-top:1px solid var(--line)}
+.np small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
 
-.card{background:linear-gradient(145deg,rgba(14,42,104,.72) 0%,rgba(7,20,56,.8) 60%,rgba(6,16,42,.85) 100%);border:1px solid var(--line);border-radius:12px;backdrop-filter:blur(8px);box-shadow:0 8px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06);transition:transform .3s,border-color .3s,box-shadow .3s}
-.view{display:grid;gap:14px;align-content:start;min-width:0}
-.view>*{animation:rise .5s both}.view>*:nth-child(2){animation-delay:.06s}.view>*:nth-child(3){animation-delay:.12s}.view>*:nth-child(4){animation-delay:.18s}.view>*:nth-child(5){animation-delay:.24s}
-.top{display:grid;grid-template-columns:1.5fr 2fr;gap:18px}
-.score{display:flex;align-items:center;gap:24px;padding:14px 22px;border-color:#2a66d8;background:linear-gradient(135deg,rgba(15,52,138,.85),rgba(7,26,73,.9) 70%)}
-.ring{position:relative;width:200px;height:200px;flex:none}
-.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-#arc{animation:glow 3.2s ease-in-out infinite;transition:stroke-dasharray .1s}
-.ring .n{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
-.ring b{font-size:76px;font-weight:800;line-height:.95}
-.ring span{font-size:19px;font-weight:500}
-.ring.low{--r1:#e69a1b;--r2:#ffc15e}.ring.bad{--r1:#e03a3a;--r2:#ff7b7b}
-.sc-r{border-left:1px solid #1d4590;padding-left:22px;display:grid;gap:12px;align-content:center}
-.sc-r p{font-size:21px;color:#e5edff;max-width:190px;line-height:1.25}
-.btn{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:12px;padding:10px 18px;border:1px solid #4aa0ff;border-radius:8px;background:linear-gradient(180deg,#2091ff,#1062e6);color:#fff;font:600 19px Inter,"Segoe UI",sans-serif;cursor:pointer;box-shadow:0 0 20px rgba(30,130,255,.55);transition:transform .2s,filter .2s}
-.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.4),transparent 70%);transform:translateX(-120%)}
-.btn:hover::after{transform:translateX(120%);transition:transform .8s}
-.btn:hover{transform:translateY(-1px)}
-.btn:disabled{opacity:.7;cursor:progress}
-.btn.sm{padding:7px 20px;font-size:16px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px}
-.st{padding:8px 24px 14px;display:grid;gap:6px;position:relative}
-.st:hover,.cat:hover,.perf:hover,.qa:hover{border-color:rgba(80,160,255,.6);box-shadow:0 12px 36px rgba(10,80,220,.28),inset 0 1px 0 rgba(255,255,255,.08)}
-.st:hover,.cat:hover{transform:translateY(-2px)}
-.st h3{display:flex;align-items:center;gap:12px;font-size:18px;font-weight:600}
-.st h3 svg{width:28px;height:28px;color:#cfe3ff}
-.st .v{font-size:36px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
-.st .v small{font-size:28px;font-weight:500}
-.st svg.sp2{position:absolute;right:20px;top:20px;width:130px;height:34px;overflow:visible}
-.sp2 path{fill:none;stroke:var(--cy);stroke-width:2;filter:drop-shadow(0 0 4px var(--cy))}
-.bar{height:10px;border-radius:6px;background:#17285a;overflow:hidden;margin-top:4px}
-.bar i{display:block;position:relative;overflow:hidden;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#1b8cff,#2bc4ff);transition:width .8s}
-.bar i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transform:translateX(-100%);animation:shine 2.8s infinite}
-.bar i.warn{background:linear-gradient(90deg,#e69a1b,#ffc15e)}.bar i.bad{background:linear-gradient(90deg,#e03a3a,#ff7b7b)}
-.h2{display:flex;justify-content:space-between;align-items:center;font-size:29px;font-weight:700}
-.h2 span{display:flex;gap:14px;align-items:center}
-.h2 span::before{content:"";width:5px;height:26px;background:linear-gradient(var(--cy),var(--blue));border-radius:3px;box-shadow:0 0 8px var(--blue)}
-.h2 a{font-size:18px;font-weight:500;color:var(--cy);text-decoration:none;display:flex;align-items:center;gap:6px;cursor:pointer;transition:gap .2s}
-.h2 a:hover{gap:12px}
-.h2 a svg{width:18px;height:18px;stroke-width:2.4}
-.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 16px}
-.cat{display:flex;align-items:center;gap:20px;padding:16px 20px 16px 22px}
-.ic{width:72px;height:72px;flex:none;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#1f56c8,#0f2b78);border:1px solid #2a63d4;box-shadow:0 4px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.18);color:#eaf2ff;transition:transform .3s}
-.cat:hover .ic{transform:scale(1.07) rotate(-3deg)}
-.ic svg{width:40px;height:40px;stroke-width:1.6}
-.cat h4{font-size:21px;font-weight:700}
-.cat p{font-size:16.5px;color:#dbe6ff;margin:2px 0 8px}
-.cat p b{font-weight:700}
-.ghost{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:5px 16px;border:1px solid var(--cy);border-radius:7px;background:rgba(10,42,106,.85);color:#fff;font:500 17px Inter,"Segoe UI",sans-serif;cursor:pointer;transition:background .2s,transform .2s,box-shadow .2s}
-.ghost:hover{background:#13439e;box-shadow:0 0 14px rgba(43,196,255,.35)}
-.ghost:active{transform:scale(.97)}
-.ghost:disabled{opacity:.6;cursor:progress}
-.ghost svg{width:18px;height:18px;stroke-width:2.4}
-.btm{display:grid;grid-template-columns:1.9fr 1fr;gap:18px}
-.perf{padding:14px 20px 8px}
-.ph{display:flex;align-items:center;gap:14px;font-size:23px;font-weight:700}
-.ph svg{color:#cfe0ff}
-.ph select{margin-left:auto;padding:6px 14px;border:1px solid #2a5bc0;border-radius:7px;background:#091d4a;color:#fff;font:500 16px Inter,"Segoe UI",sans-serif;cursor:pointer}
-.chart{width:100%;height:auto;margin-top:6px}
-.chart text{fill:#fff;font:14.5px Inter,"Segoe UI",sans-serif}
-.qa{padding:14px 18px;display:grid;gap:10px;align-content:start}
-.qa .qt{display:flex;align-items:center;gap:12px;font-size:23px;font-weight:700;padding:0 4px 4px}
-.qa .qt svg{width:34px;height:34px;color:var(--cy);fill:var(--cy)}
-.q{display:flex;align-items:center;gap:20px;padding:14px 18px;border:1px solid #1f4fae;border-radius:9px;background:rgba(7,22,56,.85);color:#fff;font:500 19px Inter,"Segoe UI",sans-serif;cursor:pointer;text-align:left;width:100%;transition:background .2s,transform .2s,border-color .2s}
-.q:hover{background:#0d2660;transform:translateX(4px);border-color:var(--cy)}
-.q svg:last-child{margin-left:auto;width:22px;height:22px;stroke-width:2.2}
-.q svg:first-child{width:30px;height:30px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;transition:border-color .25s,background .25s,transform .25s}
+.view{display:grid;gap:16px;align-content:start;min-width:0}
+.view>*{animation:rise .35s both}.view>*:nth-child(2){animation-delay:.05s}.view>*:nth-child(3){animation-delay:.1s}.view>*:nth-child(4){animation-delay:.15s}
+.dh{display:flex;align-items:center;gap:10px;padding:13px 20px;border-bottom:1px solid var(--line);font-size:13.5px;font-weight:600}
+.dh svg{color:var(--mut)}
+.ib{margin-left:auto;width:28px;height:28px;display:grid;place-items:center;border:0;border-radius:8px;background:none;color:var(--mut);cursor:pointer}
+.ib:hover{background:var(--card2);color:#fff}
+.ib.spin svg{animation:spin 1s linear infinite}
+.dash{display:grid;grid-template-columns:1.65fr 1fr;gap:16px}
+.score{display:flex;flex-direction:column;min-height:300px}
+.sb{flex:1;display:grid;grid-template-columns:minmax(210px,.8fr) 1.2fr;gap:20px;padding:20px 22px 20px}
+.sl{display:flex;flex-direction:column;justify-content:flex-end;gap:6px;min-width:0}
+.sn{display:flex;align-items:baseline;gap:6px;margin-bottom:6px}
+.sn b{font-size:64px;font-weight:600;line-height:1;color:#c9d2e3;font-variant-numeric:tabular-nums;transition:color .4s}
+.sn b.good{color:#fff}.sn b.mid{color:var(--warn)}.sn b.low{color:var(--bad)}
+.sn span{color:var(--mut);font-size:14px}
+.sl h3{font-size:15px;font-weight:600}
+.sl p{color:var(--mut);font-size:13px;line-height:1.5}
+.chips{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;color:var(--mut);font-size:12px}
+.chips span{display:flex;align-items:center;gap:6px;max-width:100%}
+.chips svg{width:14px;height:14px}
+.sr{display:flex;flex-direction:column;justify-content:flex-end;gap:18px;min-width:0}
+.sr svg.bars{width:100%;height:auto;max-height:170px}
+.sr svg.bars rect{fill:#2b3548;transition:fill .25s}
+.sr svg.bars rect.on{fill:#3a69d4}.sr svg.bars rect.top{fill:#7aa6ff}
+.sr svg.bars text{fill:var(--mut);font:10.5px Inter,sans-serif}
+.btn{position:relative;overflow:hidden;align-self:flex-end;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 22px;border:0;border-radius:12px;background:linear-gradient(180deg,#3b7bff,#2559d8);color:#fff;font:600 13.5px Inter,"Segoe UI",sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(47,111,237,.35);transition:transform .2s,filter .2s}
+.btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.btn:disabled{opacity:.75;cursor:progress;transform:none;filter:none}
+.btn.sm{padding:8px 18px}
+.radar{display:flex;flex-direction:column}
+.radar svg#rd{width:100%;height:auto;flex:1;max-height:300px;padding:8px 14px 12px}
+.radar .rg{fill:none;stroke:#2f3541;stroke-width:1}
+.radar .ax{stroke:#2a303b;stroke-width:1}
+.radar .pl{fill:rgba(59,123,255,.28);stroke:#5b95ff;stroke-width:1.6;stroke-linejoin:round;transition:all .4s}
+.radar .dot{fill:#5b95ff}
+.radar text{fill:var(--mut);font:10.5px Inter,sans-serif}
+.radar .sweep{transform-origin:160px 150px;animation:spin 1.8s linear infinite}
+.radar:not(.scanning) .sweep{display:none}
+.lab{font-size:11.5px;font-weight:600;letter-spacing:1px;color:var(--mut);text-transform:uppercase;margin:2px 2px -6px}
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.qc{display:flex;align-items:center;gap:14px;padding:14px 16px;text-align:left;cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:14px;transition:.25s}
+.qc:hover{background:var(--card2);border-color:#3a414e;transform:translateY(-2px)}
+.qc .ic{width:40px;height:40px;border-radius:11px;background:var(--card2);border:1px solid var(--line);display:grid;place-items:center;color:#c3cbda;flex:none}
+.qc b{display:block;font-size:14px;font-weight:600}
+.qc small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
+.live{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.lv{padding:14px 16px 12px;display:grid;gap:6px}
+.lv:hover{border-color:#3a414e}
+.lh{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.9px;text-transform:uppercase;color:var(--mut)}
+.lh i{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-style:normal}
+.lh i svg{width:15px;height:15px}
+.lh .v{margin-left:auto;font-size:30px;font-weight:500;letter-spacing:-.5px;color:#fff;text-transform:none;line-height:1;font-variant-numeric:tabular-nums}
+.lh .v small{font-size:13px;color:var(--mut);margin-left:2px}
+.lv svg.mini{width:100%;height:52px}
+.lv .ft{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-b{background:rgba(59,123,255,.16);color:#6ea0ff}.c-g{background:rgba(52,211,153,.15);color:#34d399}.c-c{background:rgba(56,189,248,.15);color:#38bdf8}.c-o{background:rgba(251,146,60,.16);color:#fb923c}
 
 /* telas internas */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.pn{padding:16px 24px 10px}
-.pt{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:22px;font-weight:700;margin-bottom:6px;flex-wrap:wrap}
-.rw{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;border-top:1px solid #12337a;font-size:17px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pn{padding:16px 22px 8px}
+.pt{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:16px;font-weight:600;margin-bottom:4px;flex-wrap:wrap;min-height:34px}
+.rw{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
 .rw>div:first-child{min-width:0}
-.rw small{display:block;color:var(--mut);font-size:14px;margin-top:2px;font-weight:400;overflow:hidden;text-overflow:ellipsis}
+.rw small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px;font-weight:400;overflow:hidden;text-overflow:ellipsis}
 .pt+.rw{border-top:0}
 .rw>div:last-child{display:flex;align-items:center;gap:12px;flex:none}
-.tg{position:relative;width:50px;height:28px;flex:none;cursor:pointer;display:block}
+.tg{position:relative;width:42px;height:24px;flex:none;cursor:pointer;display:block}
 .tg input{opacity:0;position:absolute;inset:0;cursor:pointer;z-index:1;margin:0;width:100%;height:100%}
-.tg i{position:absolute;inset:0;border-radius:20px;background:#1c2d55;border:1px solid #2a5bc0;transition:.25s}
-.tg i::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#cfe0ff;transition:.25s}
-.tg input:checked+i{background:var(--blue);box-shadow:0 0 12px rgba(27,140,255,.6)}
-.tg input:checked+i::after{transform:translateX(22px);background:#fff}
-.tg input:focus-visible+i{outline:2px solid var(--cy);outline-offset:2px}
-.ghost.sm{display:inline-flex;width:auto;white-space:nowrap;padding:5px 16px}
+.tg i{position:absolute;inset:0;border-radius:20px;background:#343a47;transition:.25s}
+.tg i::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#cfd6e4;transition:.25s}
+.tg input:checked+i{background:var(--blue)}
+.tg input:checked+i::after{transform:translateX(18px);background:#fff}
+.tg input:focus-visible+i{outline:2px solid var(--blue2);outline-offset:2px}
+.ghost{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:7px 16px;border:1px solid #3a414e;border-radius:9px;background:var(--card2);color:#fff;font:500 13px Inter,"Segoe UI",sans-serif;cursor:pointer;white-space:nowrap;transition:background .2s,border-color .2s,transform .15s}
+.ghost:hover{background:#303541;border-color:#4a5262}
+.ghost:active{transform:scale(.97)}
+.ghost:disabled{opacity:.6;cursor:progress}
+.ghost.pri{background:var(--blue);border-color:var(--blue)}.ghost.pri:hover{background:#3b7bff}
 .mono{font-variant-numeric:tabular-nums}
-.lst{max-height:calc(100vh - 290px);min-height:240px;overflow:auto}
-.inp{width:100%;padding:10px 14px;border:1px solid #2a5bc0;border-radius:8px;background:#091d4a;color:#fff;font:500 17px Inter,"Segoe UI",sans-serif;margin-bottom:6px}
-.inp:focus{outline:none;border-color:var(--cy);box-shadow:0 0 0 3px rgba(43,196,255,.2)}
+.lst{max-height:calc(100vh - 300px);min-height:220px;overflow:auto}
+.inp{width:100%;padding:10px 14px;border:1px solid #3a414e;border-radius:10px;background:#16191f;color:#fff;font:14px Inter,"Segoe UI",sans-serif;margin-bottom:6px}
+.inp:focus{outline:none;border-color:var(--blue2);box-shadow:0 0 0 3px rgba(91,149,255,.2)}
 .tl{display:grid;gap:8px;padding-bottom:10px}
-.bd{font-size:12px;font-weight:600;padding:2px 9px;border-radius:10px;border:1px solid;margin-left:10px;vertical-align:2px}
-.bd.good{color:#5be0a0;border-color:#2c8a63}.bd.at{color:#ffc766;border-color:#a77a22}
-.nt{font-size:16px;color:var(--mut);line-height:1.5;padding:4px 0 12px}
-.ld{display:flex;align-items:center;gap:14px;font-size:18px;color:var(--mut);padding:22px 24px}
-.spin{width:22px;height:22px;border:3px solid #1f4fae;border-top-color:var(--cy);border-radius:50%;animation:spin .8s linear infinite}
-.chart.big{margin:0}
+.bd{font-size:11px;font-weight:600;padding:2px 8px;border-radius:10px;border:1px solid;margin-left:8px;vertical-align:1px}
+.bd.good{color:#5be0a0;border-color:#2c6e53}.bd.at{color:#ffc766;border-color:#7d6020}
+.nt{font-size:13.5px;color:var(--mut);line-height:1.55;padding:2px 0 12px}
+.ld{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--mut);padding:20px 22px}
+.spn{width:18px;height:18px;border:2.5px solid #353b48;border-top-color:var(--blue2);border-radius:50%;animation:spin .8s linear infinite;flex:none}
+.chart{width:100%;height:auto}
+.seg{display:flex;gap:8px;flex-wrap:wrap}
+.chk{display:flex;align-items:center;gap:12px}
+.chk input{width:18px;height:18px;accent-color:var(--blue);cursor:pointer}
+.st-ok{color:var(--ok);font-size:13px}.st-run{color:var(--mut);font-size:13px}
 
-/* toast e modal */
-.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,40px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,#123a8f,#0c2a6e);border:1px solid var(--cy);padding:12px 22px;border-radius:30px;font-weight:600;box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 24px rgba(43,196,255,.25);transition:.35s;z-index:45;max-width:90vw}
-.toast svg{width:20px;height:20px;stroke-width:3;color:var(--cy)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,30px);opacity:0;pointer-events:none;display:flex;align-items:center;gap:10px;background:#14171c;border:1px solid #3a414e;padding:11px 20px;border-radius:30px;font-weight:500;font-size:13.5px;box-shadow:0 12px 40px rgba(0,0,0,.55);transition:.3s;z-index:45;max-width:90vw}
+.toast svg{width:16px;height:16px;stroke-width:3;color:var(--ok)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-.md{position:fixed;inset:0;background:rgba(2,6,18,.72);backdrop-filter:blur(5px);display:grid;place-items:center;z-index:50}
-.mb{width:min(500px,90vw);padding:24px 26px;animation:rise .3s both}
-.mb h3{font-size:22px;margin-bottom:8px}
-.mb p{color:var(--mut);line-height:1.5;font-size:16px}
-.mbt{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}
+.md{position:fixed;inset:0;background:rgba(5,6,9,.7);backdrop-filter:blur(4px);display:grid;place-items:center;z-index:50}
+.mb{width:min(480px,90vw);padding:22px 24px;animation:rise .25s both}
+.mb h3{font-size:18px;margin-bottom:8px}
+.mb p{color:var(--mut);line-height:1.5;font-size:14px}
+.mbt{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
 .calm *,.calm *::before,.calm *::after{animation:none!important;transition:none!important}
-@media(max-width:1250px){.top,.btm{grid-template-columns:1fr}.cats{grid-template-columns:1fr 1fr}}
-@media(max-width:900px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.side::after,.sp{display:none}.main{padding:14px}h1{font-size:30px}.sub{font-size:17px}.hd{flex-direction:column;align-items:flex-start}.cats,.stats,.g2{grid-template-columns:1fr}.score{flex-wrap:wrap}.foot{margin-top:10px}.np{right:auto;left:0}}
+@media(max-width:1250px){.dash{grid-template-columns:1fr}.live{grid-template-columns:1fr 1fr}.sb{grid-template-columns:1fr}}
+@media(max-width:900px){.main{padding:16px}.qgrid,.g2,.live{grid-template-columns:1fr}.hd{flex-direction:column}.np{right:auto;left:0}}
+@media(max-height:780px){.side{gap:1px}.nav{height:38px;width:38px}.div{margin:5px 0}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="bg" aria-hidden="true"><div class="orb o1"></div><div class="orb o2"></div></div>
-<div id="splash"><svg viewBox="0 0 44 44"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="url(#lg)"/></svg><b>PAINEL</b></div>
+<div id="splash"><svg viewBox="0 0 44 44"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="#5b95ff"/></svg></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
 <defs>
-<linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--r1)"/><stop offset="1" style="stop-color:var(--r2)"/></linearGradient>
-<linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d8cff"/><stop offset="1" stop-color="#1347d6"/></linearGradient>
-<symbol id="home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></symbol>
-<symbol id="rocket" viewBox="0 0 24 24"><path d="M14 4c4-1 6 0 6 0s1 2 0 6l-6 6-6-6zM8 10l-4 1 2 3M14 16l-1 4-3-2M6 18l-3 3M15 9h.01"/></symbol>
-<symbol id="bars" viewBox="0 0 24 24"><path d="M5 20v-8M10 20V6M15 20v-10M20 20V3"/></symbol>
-<symbol id="pad" viewBox="0 0 24 24"><path d="M6 8h12a3.5 3.5 0 0 1 3.5 3.5v3A2.7 2.7 0 0 1 16.7 16L15 13.5H9L7.3 16A2.7 2.7 0 0 1 2.5 14.5v-3A3.5 3.5 0 0 1 6 8zM8 10.5v3M6.5 12h3M16 11.5h.01M18 13h.01"/></symbol>
-<symbol id="wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0M12 19.5h.01"/></symbol>
-<symbol id="pwr" viewBox="0 0 24 24"><path d="M12 3v8M6.5 6.5a8 8 0 1 0 11 0"/></symbol>
+<linearGradient id="wg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b7bff" stop-opacity="0"/><stop offset="1" stop-color="#3b7bff" stop-opacity=".55"/></linearGradient>
+<symbol id="dash" viewBox="0 0 24 24"><path d="M4 4h6.5v6.5H4zM13.500 4H20v6.500h-6.500zM4 13.500h6.500V20H4zM13.500 13.500H20V20h-6.500z"/></symbol>
 <symbol id="bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></symbol>
-<symbol id="broom" viewBox="0 0 24 24"><path d="M15 3l6 6-3 3-6-6zM12 8L4 20l12-8M7 17l3 3"/></symbol>
-<symbol id="grid" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></symbol>
-<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM8.5 12l2.5 2.5 4.5-5"/></symbol>
+<symbol id="pad" viewBox="0 0 24 24"><path d="M6 8h12a3.5 3.5 0 0 1 3.5 3.5v3A2.7 2.7 0 0 1 16.7 16L15 13.5H9L7.3 16A2.7 2.7 0 0 1 2.5 14.5v-3A3.5 3.5 0 0 1 6 8zM8 10.5v3M6.500 12h3M16 11.500h.01M18 13h.01"/></symbol>
+<symbol id="pulse" viewBox="0 0 24 24"><path d="M3 12h4l2.500-7 4 14 2.500-7H21"/></symbol>
+<symbol id="wifi" viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.500 12.500a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0M12 19.500h.01"/></symbol>
+<symbol id="pwr" viewBox="0 0 24 24"><path d="M12 3v8M6.500 6.500a8 8 0 1 0 11 0"/></symbol>
+<symbol id="batt" viewBox="0 0 24 24"><path d="M3 8h15v8H3zM18 11h3v2h-3M6.500 10.500v3"/></symbol>
+<symbol id="trash" viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13M10 11v6M14 11v6"/></symbol>
+<symbol id="box" viewBox="0 0 24 24"><path d="M12 3l8 4.500v9L12 21l-8-4.500v-9zM12 12l8-4.500M12 12v9M12 12L4 7.500"/></symbol>
+<symbol id="svc" viewBox="0 0 24 24"><path d="M4 4h16v6H4zM4 14h16v6H4zM8 7h.01M8 17h.01M13 7h4M13 17h4"/></symbol>
+<symbol id="shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.500 8-8 9-4.500-1-8-4-8-9V6zM8.500 12l2.500 2.500 4.500-5"/></symbol>
 <symbol id="wrench" viewBox="0 0 24 24"><path d="M21 7a5 5 0 0 1-7 5l-8 8a2 2 0 0 1-3-3l8-8a5 5 0 0 1 5-7l-3 3 1 3 3 1z"/></symbol>
-<symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.5"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/><circle cx="12" cy="12" r="6.5"/></symbol>
+<symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.500v3M12 18.500v3M2.500 12h3M18.500 12h3M5.300 5.300l2.100 2.100M16.600 16.600l2.100 2.100M18.700 5.300l-2.100 2.100M7.400 16.600l-2.100 2.100"/><circle cx="12" cy="12" r="6.500"/></symbol>
 <symbol id="cpu" viewBox="0 0 24 24"><path d="M7 7h10v10H7zM10 10h4v4h-4zM9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/></symbol>
 <symbol id="ram" viewBox="0 0 24 24"><path d="M2 6h20v10H2zM6 10v2M10 10v2M14 10v2M18 10v2M5 16v3M9 16v3M15 16v3M19 16v3"/></symbol>
-<symbol id="db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+<symbol id="db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.500" rx="8" ry="3"/><path d="M4 5.500v13c0 1.700 3.600 3 8 3s8-1.300 8-3v-13M4 12c0 1.700 3.600 3 8 3s8-1.300 8-3"/></symbol>
+<symbol id="hdd" viewBox="0 0 24 24"><path d="M3 14l2.500-8h13L21 14M3 14v4h18v-4zM7 16h.01"/></symbol>
 <symbol id="therm" viewBox="0 0 24 24"><path d="M10 14V5a2 2 0 0 1 4 0v9a4 4 0 1 1-4 0zM12 9v7"/></symbol>
 <symbol id="bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 21h4"/></symbol>
 <symbol id="ck" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
 <symbol id="alert" viewBox="0 0 24 24"><path d="M12 6v8M12 18h.01"/></symbol>
-<symbol id="ch" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
-<symbol id="pulse" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M6 12h3l2-4 3 7 2-3h2"/></symbol>
-<symbol id="svc" viewBox="0 0 24 24"><path d="M4 4h16v6H4zM4 14h16v6H4zM8 7h.01M8 17h.01M13 7h4M13 17h4"/></symbol>
+<symbol id="refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.500-5.800M20 4v5h-5"/></symbol>
+<symbol id="target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.500"/></symbol>
+<symbol id="monitor" viewBox="0 0 24 24"><path d="M3 5h18v11H3zM8 20h8M12 16v4"/></symbol>
 </defs>
 </svg>
 
-<div class="app">
-<aside class="side">
-  <div class="logo"><svg viewBox="0 0 44 44"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="url(#lg)"/></svg>PAINEL</div>
-  <div class="sec">Geral</div>
-  <button class="nav" data-v="visao"><svg class="i"><use href="#home"/></svg>Visão geral</button>
-  <button class="nav on" data-v="otim"><svg class="i"><use href="#rocket"/></svg>Otimização</button>
-  <button class="nav" data-v="monitor"><svg class="i"><use href="#bars"/></svg>Monitoramento</button>
-  <div class="sec">Desempenho</div>
-  <button class="nav" data-v="jogos"><svg class="i"><use href="#pad"/></svg>Jogos e FPS</button>
-  <button class="nav" data-v="rede"><svg class="i"><use href="#wifi"/></svg>Rede e internet</button>
-  <button class="nav" data-v="init"><svg class="i"><use href="#pwr"/></svg>Inicialização</button>
-  <button class="nav" data-v="energia"><svg class="i"><use href="#bolt"/></svg>Energia</button>
-  <div class="sec">Sistema</div>
-  <button class="nav" data-v="limpeza"><svg class="i"><use href="#broom"/></svg>Limpeza</button>
-  <button class="nav" data-v="apps"><svg class="i"><use href="#grid"/></svg>Aplicativos</button>
-  <button class="nav" data-v="servicos"><svg class="i"><use href="#svc"/></svg>Serviços</button>
-  <button class="nav" data-v="priv"><svg class="i"><use href="#shield"/></svg>Privacidade</button>
-  <button class="nav" data-v="ferr"><svg class="i"><use href="#wrench"/></svg>Ferramentas</button>
+<div class="shell">
+<aside class="side" aria-label="Menu">
+  <div class="logo"><svg viewBox="0 0 44 44"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="#e8eefc"/></svg></div>
+  <button class="nav on" data-v="dash" data-tip="Dashboard" aria-label="Dashboard"><svg class="i"><use href="#dash"/></svg></button>
+  <div class="div"></div>
+  <button class="nav" data-v="otim" data-tip="Otimização" aria-label="Otimização"><svg class="i"><use href="#bolt"/></svg></button>
+  <button class="nav" data-v="jogos" data-tip="Jogos e FPS" aria-label="Jogos e FPS"><svg class="i"><use href="#pad"/></svg></button>
+  <button class="nav" data-v="monitor" data-tip="Monitoramento" aria-label="Monitoramento"><svg class="i"><use href="#pulse"/></svg></button>
+  <button class="nav" data-v="rede" data-tip="Rede e internet" aria-label="Rede e internet"><svg class="i"><use href="#wifi"/></svg></button>
+  <button class="nav" data-v="init" data-tip="Inicialização" aria-label="Inicialização"><svg class="i"><use href="#pwr"/></svg></button>
+  <button class="nav" data-v="energia" data-tip="Energia" aria-label="Energia"><svg class="i"><use href="#batt"/></svg></button>
+  <div class="div"></div>
+  <button class="nav" data-v="limpeza" data-tip="Limpeza" aria-label="Limpeza"><svg class="i"><use href="#trash"/></svg></button>
+  <button class="nav" data-v="apps" data-tip="Aplicativos" aria-label="Aplicativos"><svg class="i"><use href="#box"/></svg></button>
+  <button class="nav" data-v="servicos" data-tip="Serviços" aria-label="Serviços"><svg class="i"><use href="#svc"/></svg></button>
+  <button class="nav" data-v="priv" data-tip="Privacidade" aria-label="Privacidade"><svg class="i"><use href="#shield"/></svg></button>
+  <button class="nav" data-v="ferr" data-tip="Ferramentas" aria-label="Ferramentas"><svg class="i"><use href="#wrench"/></svg></button>
   <div class="sp"></div>
-  <div class="foot"><button class="nav" data-v="config"><svg class="i"><use href="#gear"/></svg>Configurações</button></div>
+  <button class="nav" data-v="config" data-tip="Configurações" aria-label="Configurações"><svg class="i"><use href="#gear"/></svg></button>
+  <div class="ver">v1.0</div>
 </aside>
 
 <main class="main">
   <header class="hd">
-    <div class="ttl"><div><h1 id="h1">Central de otimização</h1><div class="sub" id="sub">Mais controle. Mais desempenho.</div></div></div>
+    <div><h1 id="h1">Dashboard</h1><div class="sub" id="sub">Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.</div></div>
     <div class="hr">
       <div class="demo" id="demo" hidden title="Abra o Painel.exe no Windows para ver dados reais">Modo demonstração</div>
       <div class="ok" id="hl"><b><svg class="i"><use id="hli" href="#ck"/></svg></b><span id="hlt">Sistema saudável</span></div>
-      <div class="bw"><button class="bell" id="bellb" aria-label="Notificações"><svg class="i"><use href="#bell"/></svg></button><div class="np" id="np" hidden></div></div>
+      <button class="bell" id="bellb" aria-label="Notificações"><svg class="i"><use href="#bell"/></svg></button>
+      <div class="np" id="np" hidden></div>
     </div>
   </header>
 
-  <div id="v-otim" class="view">
-    <section class="top">
-      <div class="card score">
-        <div class="ring" id="ring">
-          <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="90" fill="none" stroke="#12306f" stroke-width="14"/><circle id="arc" cx="100" cy="100" r="90" fill="none" stroke="url(#rg)" stroke-width="14" stroke-linecap="round" stroke-dasharray="0 566"/></svg>
-          <div class="n"><b id="sc">0</b><span>Desempenho</span></div>
+  <div id="v-dash" class="view">
+    <section class="dash">
+      <div class="card score" id="scorecard">
+        <div class="dh"><svg class="i"><use href="#pulse"/></svg>Pontuação de desempenho<button class="ib" id="rean" title="Analisar novamente" aria-label="Analisar novamente"><svg class="i"><use href="#refresh"/></svg></button></div>
+        <div class="sb">
+          <div class="sl">
+            <div class="sn"><b id="sc">0</b><span>/100</span></div>
+            <h3 id="st">Analisando o computador…</h3>
+            <p id="sdesc">Lendo hardware, serviços, inicialização e segurança deste PC.</p>
+            <div class="chips" id="chips"></div>
+          </div>
+          <div class="sr">
+            <svg class="bars" id="bars" viewBox="0 0 500 142" aria-hidden="true"></svg>
+            <button class="btn" id="opt"><svg class="i"><use href="#target"/></svg><span>Analisando…</span></button>
+          </div>
         </div>
-        <div class="sc-r"><p id="msg">Analisando seu PC…</p><button class="btn" id="opt"><svg class="i"><use href="#rocket"/></svg><span>Otimizar agora</span></button></div>
       </div>
-      <div class="stats">
-        <div class="card st"><h3><svg class="i"><use href="#cpu"/></svg>CPU</h3><svg class="sp2" viewBox="0 0 130 34"><path/></svg><div class="v"><span id="cpuV">--</span>%</div><div class="bar"><i id="cpuB"></i></div></div>
-        <div class="card st"><h3><svg class="i"><use href="#ram"/></svg>Memória RAM</h3><svg class="sp2" viewBox="0 0 130 34"><path/></svg><div class="v"><span id="ramV">--</span> <small>/ <span id="ramT">--</span> GB</small></div><div class="bar"><i id="ramB"></i></div></div>
-        <div class="card st"><h3><svg class="i"><use href="#db"/></svg>Armazenamento</h3><div class="v"><span id="dskV">--</span>%</div><div class="bar"><i id="dskB"></i></div></div>
-        <div class="card st" title="Leitura do sensor térmico do Windows. Alguns PCs não informam a temperatura."><h3><svg class="i"><use href="#therm"/></svg>Temperatura</h3><svg class="sp2" viewBox="0 0 130 34"><path/></svg><div class="v"><span id="tmpV">--</span><span id="tmpU"> °C</span></div><div class="bar"><i id="tmpB"></i></div></div>
+      <div class="card radar" id="radar">
+        <div class="dh"><svg class="i"><use href="#target"/></svg>Perfil da pontuação</div>
+        <svg id="rd" viewBox="0 0 320 310" role="img" aria-label="Gráfico radar da pontuação"></svg>
       </div>
     </section>
 
-    <div class="h2"><span>Otimização por categoria</span><a data-go="visao" role="button" tabindex="0">Ver todas <svg class="i"><use href="#ch"/></svg></a></div>
-    <section class="cats">
-      <div class="card cat"><div class="ic"><svg class="i"><use href="#pad"/></svg></div><div><h4>Jogos e FPS</h4><p>Perfil de desempenho para jogos.</p><button class="ghost" data-go="jogos">Ativar modo jogo <svg class="i"><use href="#ch"/></svg></button></div></div>
-      <div class="card cat"><div class="ic"><svg class="i"><use href="#wifi"/></svg></div><div><h4>Rede e internet</h4><p>Conexão e latência.</p><button class="ghost" data-go="rede">Analisar rede <svg class="i"><use href="#ch"/></svg></button></div></div>
-      <div class="card cat"><div class="ic"><svg class="i"><use href="#pwr"/></svg></div><div><h4>Inicialização</h4><p>Gerencie os apps ao iniciar.</p><button class="ghost" data-go="init">Gerenciar apps <svg class="i"><use href="#ch"/></svg></button></div></div>
-      <div class="card cat"><div class="ic"><svg class="i"><use href="#broom"/></svg></div><div><h4>Limpeza inteligente</h4><p><b id="junk">--</b> disponíveis para liberar.</p><button class="ghost" data-go="limpeza">Analisar arquivos <svg class="i"><use href="#ch"/></svg></button></div></div>
-      <div class="card cat"><div class="ic"><svg class="i"><use href="#shield"/></svg></div><div><h4>Privacidade</h4><p>Revise permissões e preferências.</p><button class="ghost" data-go="priv">Revisar ajustes <svg class="i"><use href="#ch"/></svg></button></div></div>
-      <div class="card cat"><div class="ic"><svg class="i"><use href="#wrench"/></svg></div><div><h4>Ferramentas</h4><p>Diagnóstico e utilitários.</p><button class="ghost" data-go="ferr">Explorar <svg class="i"><use href="#ch"/></svg></button></div></div>
-      <div class="card cat" style="grid-column:1/-1"><div class="ic"><svg class="i"><use href="#svc"/></svg></div><div><h4>Serviços</h4><p>Desative serviços do Windows que raramente são usados.</p><button class="ghost" data-go="servicos">Gerenciar serviços <svg class="i"><use href="#ch"/></svg></button></div></div>
+    <div class="lab">Ações rápidas</div>
+    <section class="qgrid">
+      <button class="qc" data-act="freemem"><span class="ic"><svg class="i"><use href="#ram"/></svg></span><span><b>Liberar Memória</b><small>Libera memória sem fechar nada</small></span></button>
+      <button class="qc" data-go="limpeza"><span class="ic"><svg class="i"><use href="#trash"/></svg></span><span><b>Limpeza</b><small id="qjunk">Carregando…</small></span></button>
+      <button class="qc" data-act="netopt"><span class="ic"><svg class="i"><use href="#wifi"/></svg></span><span><b>Otimizar rede</b><small>Limpa o DNS e mede a latência</small></span></button>
     </section>
 
-    <section class="btm">
-      <div class="card perf">
-        <div class="ph"><svg class="i"><use href="#bars"/></svg>Desempenho do sistema
-          <select id="rng" aria-label="Período"><option value="5">Últimos 5 min</option><option value="15">Últimos 15 min</option><option value="30">Últimos 30 min</option></select></div>
-        <svg class="chart" id="perf" viewBox="0 0 720 250"></svg>
-      </div>
-      <div class="card qa">
-        <div class="qt"><svg class="i"><use href="#bolt"/></svg>Ações rápidas</div>
-        <button class="q" data-go="apps"><svg class="i"><use href="#grid"/></svg>Gerenciar aplicativos<svg class="i"><use href="#ch"/></svg></button>
-        <button class="q" data-go="proc"><svg class="i"><use href="#pulse"/></svg>Ver processos ativos<svg class="i"><use href="#ch"/></svg></button>
-        <button class="q" data-act="restore"><svg class="i"><use href="#db"/></svg>Criar ponto de restauração<svg class="i"><use href="#ch"/></svg></button>
-      </div>
+    <div class="lab">Ao vivo</div>
+    <section class="live">
+      <div class="card lv"><div class="lh"><i class="c-b"><svg class="i"><use href="#cpu"/></svg></i>CPU<span class="v"><span id="cpuV">--</span><small>%</small></span></div><svg class="mini" id="mCpu" viewBox="0 0 280 52" preserveAspectRatio="none"></svg><div class="ft" id="cpuF">&nbsp;</div></div>
+      <div class="card lv"><div class="lh"><i class="c-g"><svg class="i"><use href="#ram"/></svg></i>Memória<span class="v"><span id="ramV">--</span><small>%</small></span></div><svg class="mini" id="mRam" viewBox="0 0 280 52" preserveAspectRatio="none"></svg><div class="ft" id="ramF">&nbsp;</div></div>
+      <div class="card lv"><div class="lh"><i class="c-c"><svg class="i"><use href="#hdd"/></svg></i>Disco<span class="v"><span id="dskV">--</span><small>%</small></span></div><svg class="mini" id="mDsk" viewBox="0 0 280 52" preserveAspectRatio="none"></svg><div class="ft" id="dskF">&nbsp;</div></div>
+      <div class="card lv" title="Leitura do sensor térmico do Windows. Alguns PCs não informam a temperatura."><div class="lh"><i class="c-o"><svg class="i"><use href="#therm"/></svg></i>Temperatura<span class="v"><span id="tmpV">--</span><small id="tmpU">°C</small></span></div><svg class="mini" id="mTmp" viewBox="0 0 280 52" preserveAspectRatio="none"></svg><div class="ft" id="tmpF">&nbsp;</div></div>
     </section>
   </div>
   <div id="view" class="view" hidden></div>
@@ -296,39 +276,42 @@ h1{font-size:40px;font-weight:700;letter-spacing:-.5px;line-height:1.05;backgrou
 </div>
 
 <div class="toast" id="toast" role="status"><svg class="i"><use href="#ck"/></svg><span id="tt"></span></div>
-<div class="md" id="md" hidden><div class="card mb" role="dialog" aria-modal="true"><h3 id="mt"></h3><p id="mp"></p><div class="mbt"><button class="ghost sm" id="mn">Cancelar</button><button class="btn sm" id="my">Confirmar</button></div></div></div>
+<div class="md" id="md" hidden><div class="card mb" role="dialog" aria-modal="true"><h3 id="mt"></h3><p id="mp"></p><div class="mbt"><button class="ghost" id="mn">Cancelar</button><button class="btn sm" id="my">Confirmar</button></div></div></div>
 
 <script>
 const $=s=>document.querySelector(s),R=(a,b)=>a+Math.random()*(b-a);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fmt=b=>b>=2**30?(b/2**30).toFixed(1).replace('.',',')+' GB':Math.round(b/2**20)+' MB';
-const sleep=t=>new Promise(r=>setTimeout(r,t));
+const sleep=t=>new Promise(r=>setTimeout(r,t)),clamp=(v,a=0,b=100)=>Math.max(a,Math.min(b,v));
 let S={};try{S=JSON.parse(localStorage.painel||'{}')}catch(e){}
 const save=()=>{try{localStorage.painel=JSON.stringify(S)}catch(e){}};
 document.body.classList.toggle('calm',!!S.calm);
-let timer,gn=0,DEMO=false,JUNK=0,LD=[],CUR={cpu:0,rp:0,used:0,tot:16,dsk:0,tmp:null},H={cpu:[],ram:[],tmp:[]};
+const MAXH=40;
+let timer,gn=0,DEMO=false,JUNK=0,INFO={},analyzing=false,AX={},CUR={cpu:0,rp:0,used:0,tot:16,dsk:0,tmp:null,free:0,total:0},HL={cpu:[],ram:[],dsk:[],tmp:[]};
 const LOG=[];
 
-/* ---------- suavização de curvas ---------- */
 function smooth(p){if(p.length<2)return'';let d=`M${p[0][0]},${p[0][1]}`;for(let i=0;i<p.length-1;i++){const a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;d+=`C${b[0]+(c[0]-a[0])/6},${b[1]+(c[1]-a[1])/6} ${c[0]-(e[0]-b[0])/6},${c[1]-(e[1]-b[1])/6} ${c[0]},${c[1]}`}return d}
 
-/* ---------- dados de demonstração (só quando abre fora do .exe) ---------- */
+/* ---------- dados de demonstração (somente fora do .exe) ---------- */
 const MB=2**20,MJ=[1.1*2**30,.8*2**30,.5*2**30];
 const MA=['7-Zip','Discord','Google Chrome','Microsoft Visual C++ 2015-2022 Redistributable (x64)','Spotify','Steam','Visual Studio Code'].map(n=>({name:n,ver:'1.0.0',pub:'Fabricante',can:true}));
 const MS=[['DiagTrack','Telemetria do Windows','Envia dados de diagnóstico e uso à Microsoft.',1],['WerSvc','Relatório de erros do Windows','Envia relatórios de falhas à Microsoft.',1],['Fax','Fax','Envio e recebimento de fax.',1],['SysMain','SysMain (Superfetch)','Pré-carrega apps na memória. Pode ser desativado em SSD; em HD costuma ajudar.',0],['Spooler','Spooler de impressão','Necessário para imprimir. Desative só se não usa impressora.',0]].map(x=>({name:x[0],title:x[1],desc:x[2],safe:!!x[3],on:true,running:true}));
 const MOCK={
-stats:()=>({cpu:R(15,35),ram_used:R(5.9,6.6),ram_total:16,disk:68,temp:Math.round(R(46,50))}),
+stats:()=>({cpu:R(15,40),ram_used:R(6.2,6.8),ram_total:16,disk:68,disk_free:164e9,disk_total:512e9,temp:Math.round(R(46,50))}),
 info:()=>({os:'Windows 11',cpu:'Processador de exemplo',cores:'8 núcleos / 16 threads',ram:16,disk_total:512e9,disk_free:164e9,uptime:19800}),
 procs:()=>[['chrome.exe',1240],['Code.exe',830],['Discord.exe',512],['explorer.exe',230],['Spotify.exe',190]].map((p,i)=>({pid:4100+i,name:p[0],mem:p[1]*MB})),
 kill:()=>true,
 ping:()=>[['Cloudflare (1.1.1.1)',Math.round(R(9,18))],['Google DNS (8.8.8.8)',Math.round(R(10,20))],['google.com',Math.round(R(12,25))]],
 flushdns:()=>true,
-startup:()=>['Discord','Spotify','Steam'].map(n=>({name:n,cmd:'C:\\Programs\\'+n+'\\'+n+'.exe',hive:'HKCU',on:true})),
+startup:()=>['Discord','Spotify','Steam','OneDrive','Teams'].map(n=>({name:n,cmd:'C:\\Programs\\'+n+'\\'+n+'.exe',hive:'HKCU',on:true})),
 set_startup:()=>true,
 plans:()=>[{id:'a',name:'Equilibrado',on:true},{id:'b',name:'Alto desempenho',on:false},{id:'c',name:'Economia de energia',on:false}],
 setplan:()=>true,
 scan:()=>[['Arquivos temporários do usuário',MJ[0]],['Temp do Windows',MJ[1]],['Cache de internet',MJ[2]]],
 clean:()=>{const t=MJ.reduce((a,b)=>a+b,0);MJ.fill(0);return t},
+freemem:()=>R(300,900)*MB,
+dns_status:()=>'Automático (do provedor)',
+set_dns:()=>true,
 apps:()=>MA.map(x=>({...x})),
 uninstall:n=>{const i=MA.findIndex(a=>a.name===n);if(i>=0)MA.splice(i,1);return 'removido'},
 services:()=>MS.map(x=>({...x})),
@@ -345,50 +328,88 @@ function ask(title,msg,ok='Confirmar'){return new Promise(res=>{$('#mt').textCon
 const card=(t,b,x='')=>`<div class="card pn"><div class="pt"><span>${t}</span>${x}</div>${b}</div>`;
 const row=(l,r='',s='')=>`<div class="rw"><div>${l}${s?`<small>${s}</small>`:''}</div><div>${r}</div></div>`;
 const tg=(id,on)=>`<label class="tg"><input type="checkbox" id="${id}" ${on?'checked':''}><i></i></label>`;
-const bt=(t,id)=>`<button class="ghost sm" id="${id}">${t}</button>`;
-const ob=(t,k)=>`<button class="ghost sm" data-open="${k}">${t}</button>`;
-function bar(sel,v,lo=75,hi=90){const e=$(sel);e.style.width=Math.max(0,Math.min(100,v))+'%';e.className=v>=hi?'bad':v>=lo?'warn':''}
+const bt=(t,id,c='')=>`<button class="ghost ${c}" id="${id}">${t}</button>`;
+const ob=(t,k)=>`<button class="ghost" data-open="${k}">${t}</button>`;
 
-/* ---------- início: números, gráficos, pontuação ---------- */
-function spark(){document.querySelectorAll('.sp2').forEach((s,i)=>{const d=[H.cpu,H.ram,H.tmp][i]||[],[lo,hi]=i===2?[30,90]:[0,100];s.querySelector('path').setAttribute('d',d.length<2?'':smooth(d.map((v,k)=>[k*130/(d.length-1),32-Math.max(0,Math.min(1,(v-lo)/(hi-lo)))*30])))})}
-const push=(a,v)=>{a.push(v);if(a.length>14)a.shift()};
+/* ---------- tarefas de otimização (usadas no Dashboard e na tela Otimização) ---------- */
+const TASKS={
+temp:{t:'Limpar arquivos temporários',d:'Remove arquivos temporários do usuário e do Windows.',run:async()=>{const f=await A('clean')||0;JUNK=0;return 'Liberados '+fmt(f)}},
+dns:{t:'Limpar cache DNS',d:'Ajuda quando sites não abrem corretamente.',run:async()=>await A('flushdns')?'Cache DNS limpo':'Não foi possível limpar o DNS'},
+ram:{t:'Liberar memória RAM',d:'Devolve ao sistema a memória que os programas não estão usando, sem fechar nada.',run:async()=>'Liberados '+fmt(await A('freemem')||0)},
+plan:{t:'Ativar plano de alto desempenho',d:'Mantém o processador sem economizar energia.',run:async()=>await A('setplan','high')?'Plano ativado':'Plano indisponível neste PC'},
+serv:{t:'Desativar serviços seguros',d:'Desliga os serviços marcados como Seguro na tela Serviços.',run:async()=>{const l=(await A('services')||[]).filter(s=>s.safe&&s.on);let n=0;for(const s of l)if(await A('set_service',s.name,false))n++;return n+' de '+l.length+' serviços desativados'}}};
+
+/* ---------- Dashboard: barras, radar, ao vivo ---------- */
+const AXL={cpu:'CPU',mem:'Memória',disk:'Disco',limp:'Limpeza',init:'Inicialização',serv:'Serviços',ener:'Energia',rede:'Rede'},AXK=Object.keys(AXL),AXW={cpu:15,mem:15,disk:10,limp:15,init:15,serv:10,ener:10,rede:10};
+function bars(v){const idx=Math.round(clamp(v)/100*49);let s='';for(let i=0;i<50;i++){const h=4+Math.pow(i/49,2)*112;s+=`<rect x="${i*9.8}" y="${122-h}" width="6" height="${h}" rx="1.5" class="${i<idx?'on':''}${i===idx&&idx>0?' top':''}"/>`}
+s+='<line x1="0" x2="500" y1="127" y2="127" stroke="#2f3541"/>';[[0,'0'],[55,'55'],[80,'80'],[100,'100']].forEach(([x,l])=>{s+=`<text x="${x/100*490}" y="140" text-anchor="${x===0?'start':x===100?'end':'middle'}">${l}</text>`});$('#bars').innerHTML=s}
+function radar(){const cx=160,cy=150,Rr=100,pt=(i,r)=>{const a=(-90+i*45)*Math.PI/180;return[cx+Math.cos(a)*r,cy+Math.sin(a)*r]};let s='<defs><linearGradient id="wg2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b7bff" stop-opacity="0"/><stop offset="1" stop-color="#3b7bff" stop-opacity=".5"/></linearGradient></defs>';
+[25,50,75,100].forEach(r=>{s+=`<polygon class="rg" points="${AXK.map((_,i)=>pt(i,Rr*r/100).join(',')).join(' ')}"/>`});
+AXK.forEach((k,i)=>{const[x,y]=pt(i,Rr),[lx,ly]=pt(i,Rr+16);s+=`<line class="ax" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/><circle class="dot" cx="${x}" cy="${y}" r="2.6"/><text x="${lx}" y="${ly+3.5}" text-anchor="${Math.abs(lx-cx)<8?'middle':lx>cx?'start':'end'}">${AXL[k]}</text>`});
+if(AXK.some(k=>AX[k]!=null))s+=`<polygon class="pl" points="${AXK.map((k,i)=>pt(i,Rr*clamp(AX[k]??0)/100).join(',')).join(' ')}"/>`;
+s+=`<g class="sweep"><path d="M${cx},${cy} L${cx},${cy-Rr} A${Rr},${Rr} 0 0 0 ${cx-Rr*Math.sin(.7)},${cy-Rr*Math.cos(.7)} Z" fill="url(#wg2)"/></g>`;$('#rd').innerHTML=s}
+function setScore(v,anim=true){const t0=performance.now(),from=+$('#sc').textContent||0,to=Math.round(v);(function f(t){const k=anim?Math.min(1,(t-t0)/900):1,e=1-Math.pow(1-k,3),x=from+(to-from)*e;$('#sc').textContent=Math.round(x);bars(x);if(k<1)requestAnimationFrame(f)})(t0);const b=$('#sc');b.className=to>=70?'good':to>=45?'mid':'low'}
+function mini(id,d,col,max=100){const e=$(id);if(!e)return;const W=280,Hh=52,n=d.length,p=d.map((v,i)=>[W-(n-1-i)*W/(MAXH-1),Hh-3-clamp(v,0,max)/max*(Hh-8)]),g='g'+id.slice(1);
+if(n<2){e.innerHTML=`<line x1="0" x2="${W}" y1="${Hh-3}" y2="${Hh-3}" stroke="${col}" stroke-opacity=".5"/>`;return}
+const sm=smooth(p);e.innerHTML=`<defs><linearGradient id="${g}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".35"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs><path d="${sm}L${p[n-1][0]},${Hh}L${p[0][0]},${Hh}Z" fill="url(#${g})"/><path d="${sm}" fill="none" stroke="${col}" stroke-width="1.8" vector-effect="non-scaling-stroke"/>`}
+const pushH=(a,v)=>{a.push(v);if(a.length>MAXH)a.shift()};
+function lv(){const c=CUR;$('#cpuV').textContent=Math.round(c.cpu);$('#ramV').textContent=Math.round(c.rp);$('#dskV').textContent=Math.round(c.dsk);
+$('#cpuF').textContent=INFO.cores||'—';$('#ramF').textContent=c.used.toFixed(1).replace('.',',')+' GB / '+c.tot.toFixed(1).replace('.',',')+' GB';$('#dskF').textContent=c.total?'Livre '+fmt(c.free)+' de '+fmt(c.total):'—';
+if(c.tmp==null){$('#tmpV').textContent='N/D';$('#tmpU').hidden=true;$('#tmpF').textContent='Não informado por este PC'}else{$('#tmpV').textContent=Math.round(c.tmp);$('#tmpU').hidden=false;$('#tmpF').textContent='Sensor térmico do Windows'}
+mini('#mCpu',HL.cpu,'#5b95ff');mini('#mRam',HL.ram,'#34d399');mini('#mDsk',HL.dsk,'#38bdf8');mini('#mTmp',HL.tmp,'#fb923c',100)}
 function health(){const c=CUR;let m=null;if(c.cpu>90)m='CPU muito alta';else if(c.rp>90)m='Memória quase cheia';else if(c.dsk>92)m='Disco quase cheio';else if(c.tmp!=null&&c.tmp>85)m='Temperatura alta';$('#hl').classList.toggle('warn',!!m);$('#hlt').textContent=m||'Sistema saudável';$('#hli').setAttribute('href',m?'#alert':'#ck')}
-function render(){const c=CUR;$('#cpuV').textContent=Math.round(c.cpu);bar('#cpuB',c.cpu);$('#ramV').textContent=c.used.toFixed(1).replace('.',',');$('#ramT').textContent=Math.round(c.tot);bar('#ramB',c.rp);$('#dskV').textContent=Math.round(c.dsk);bar('#dskB',c.dsk,80,92);
-if(c.tmp==null){$('#tmpV').textContent='N/D';$('#tmpU').hidden=true;bar('#tmpB',0)}else{$('#tmpV').textContent=Math.round(c.tmp);$('#tmpU').hidden=false;bar('#tmpB',c.tmp,70,85)}spark();health()}
-async function tick(){if(S.live===false)return;const s=await A('stats')||{},tot=s.ram_total||16,used=s.ram_used??0;
-CUR={cpu:s.cpu??0,used,tot,rp:used/tot*100,dsk:s.disk??0,tmp:s.temp??null};push(H.cpu,CUR.cpu);push(H.ram,CUR.rp);if(CUR.tmp!=null)push(H.tmp,CUR.tmp);
-const now=Date.now();LD.push({t:now,v:(CUR.cpu+CUR.rp)/2});if(LD.length>700)LD.splice(0,LD.length-700);
-render();if(!$('#v-otim').hidden)chart()}
-function setScore(v,anim=true){const c=2*Math.PI*90,t0=performance.now(),from=+$('#sc').textContent||0;(function f(t){const k=anim?Math.min(1,(t-t0)/1100):1,e=1-Math.pow(1-k,3),x=from+(v-from)*e;$('#sc').textContent=Math.round(x);$('#arc').setAttribute('stroke-dasharray',`${c*x/100} ${c}`);if(k<1)requestAnimationFrame(f)})(t0);$('#ring').className='ring'+(v<50?' bad':v<70?' low':'')}
-function score(){const c=CUR,v=Math.round(Math.max(40,Math.min(100,100-c.cpu*.25-c.rp*.15-Math.max(0,c.dsk-70)*.5-Math.min(15,JUNK/2**30*4))));setScore(v);$('#msg').textContent=v>=85?'Seu PC está em ótima forma':v>=65?'Seu PC está bem, mas dá para melhorar':'Seu PC precisa de uma otimização'}
-async function rescan(){const l=await A('scan')||[];JUNK=l.reduce((a,x)=>a+x[1],0);$('#junk').textContent=fmt(JUNK);score()}
-function chart(){const el=$('#perf');if(!el)return;const min=+$('#rng').value||5,now=Date.now(),from=now-min*60000,L=58,Rr=708,T=12,B=200,X=t=>L+(t-from)/(now-from)*(Rr-L-8),Y=v=>B-(B-T)*v/100;
-let s='<defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b8cff" stop-opacity=".55"/><stop offset="1" stop-color="#1b8cff" stop-opacity=".03"/></linearGradient></defs>';
-for(let i=0;i<=5;i++){const y=Y(i*20);s+=`<line x1="${L}" x2="${Rr}" y1="${y}" y2="${y}" stroke="#16408f" stroke-opacity=".7"/><text x="${L-10}" y="${y+5}" text-anchor="end">${i*20}%</text>`}
-for(let i=0;i<7;i++){const x=L+i*(Rr-L-8)/6,t=new Date(from+i*(now-from)/6);s+=`<line x1="${x}" x2="${x}" y1="${T}" y2="${B}" stroke="#16408f" stroke-opacity=".7"/><line x1="${x}" x2="${x}" y1="${B}" y2="${B+6}" stroke="#fff"/><text x="${x}" y="${B+26}" text-anchor="middle">${t.toLocaleTimeString('pt-BR',min<=5?{hour:'2-digit',minute:'2-digit',second:'2-digit'}:{hour:'2-digit',minute:'2-digit'})}</text>`}
-s+=`<line x1="${L}" x2="${L}" y1="${T}" y2="${B}" stroke="#fff"/><line x1="${L}" x2="${Rr}" y1="${B}" y2="${B}" stroke="#fff"/>`;
-const p=LD.filter(q=>q.t>=from).map(q=>[X(q.t),Y(q.v)]);
-if(p.length>1){const d=smooth(p),l=p[p.length-1];s+=`<path d="${d}L${l[0]},${B}L${p[0][0]},${B}Z" fill="url(#ar)"/><path d="${d}" fill="none" stroke="#2bc4ff" stroke-width="3" style="filter:drop-shadow(0 0 6px #1b8cff)"/>`}
-if(p.length){const l=p[p.length-1];s+=`<circle cx="${l[0]}" cy="${l[1]}" r="5" fill="#bfe6ff" stroke="#1b8cff" stroke-width="2"/>`}
-el.innerHTML=s}
+async function tick(force){if(S.live===false&&!force)return;const s=await A('stats')||{},tot=s.ram_total||16,used=s.ram_used??0;
+CUR={cpu:s.cpu??0,used,tot,rp:used/tot*100,dsk:s.disk??0,tmp:s.temp??null,free:s.disk_free||0,total:s.disk_total||0};
+pushH(HL.cpu,CUR.cpu);pushH(HL.ram,CUR.rp);pushH(HL.dsk,CUR.dsk);if(CUR.tmp!=null)pushH(HL.tmp,CUR.tmp);health();if(!$('#v-dash').hidden)lv()}
+
+/* ---------- análise do computador ---------- */
+const HINT={cpu:()=>'A CPU está muito ocupada agora. Feche programas pesados.',mem:()=>'A memória está em '+Math.round(CUR.rp)+'% de uso. Use Liberar Memória.',disk:()=>'O disco está '+Math.round(CUR.dsk)+'% cheio. Libere espaço em Limpeza e Aplicativos.',limp:()=>fmt(JUNK)+' de arquivos temporários podem ser removidos.',init:()=>AX._n+' apps iniciam com o Windows. Desative os que você não usa.',serv:()=>AX._s+' serviços seguros ainda estão ligados na tela Serviços.',ener:()=>'Ative o plano de alto desempenho para ganhar velocidade.',rede:()=>AX._m==null?'Sem conexão com a internet no momento.':'A latência está em '+AX._m+' ms. Tente Otimizar rede.'};
+async function analyze(){if(analyzing)return;analyzing=true;AX={};const b=$('#opt'),sp=b.querySelector('span');
+b.disabled=true;sp.textContent='Analisando…';$('#rean').classList.add('spin');$('#radar').classList.add('scanning');
+$('#st').textContent='Analisando o computador…';$('#sdesc').textContent='Lendo hardware, serviços, inicialização e segurança deste PC.';$('#sc').className='';
+let sum=0,sw=0;const step=async(k,v)=>{AX[k]=Math.round(clamp(v));sw+=AXW[k];sum+=AX[k]*AXW[k];setScore(sum/sw,false);radar();await sleep(280)};
+try{radar();bars(0);
+let c=0;for(let i=0;i<3;i++){await tick(true);c+=CUR.cpu;await sleep(250)}c/=3;
+await step('cpu',100-c);await step('mem',100-CUR.rp);await step('disk',100-Math.max(0,CUR.dsk-50)*2);
+const l=await A('scan')||[];JUNK=l.reduce((a,x)=>a+x[1],0);$('#qjunk').textContent=JUNK?fmt(JUNK)+' disponíveis para liberar':'Nada para limpar';await step('limp',100-Math.min(100,JUNK/2**30*25));
+const su=await A('startup');AX._n=su?su.filter(a=>a.on).length:0;await step('init',100-Math.min(100,AX._n*7));
+const sv=await A('services')||[];AX._s=sv.filter(s=>s.safe&&s.on).length;await step('serv',100-AX._s*10);
+const pl=await A('plans')||[],ap=pl.find(p=>p.on);await step('ener',ap?(/alto|high|ultimate|máx/i.test(ap.name)?100:/econom|saver/i.test(ap.name)?60:80):80);
+const pg=await A('ping')||[],ms=pg.map(x=>x[1]).filter(x=>x!=null).sort((x,y)=>x-y);AX._m=ms.length?ms[Math.floor(ms.length/2)]:null;await step('rede',AX._m==null?0:100-clamp((AX._m-20)*1.1));
+const fin=Math.round(sum/sw);setScore(fin,true);
+$('#st').textContent=fin>=85?'Seu PC está ótimo':fin>=65?'Seu PC está bem':fin>=45?'Seu PC pode melhorar':'Seu PC precisa de atenção';
+const w=AXK.reduce((a,k)=>AX[k]<AX[a]?k:a,AXK[0]);$('#sdesc').textContent=AX[w]>=90?'Tudo em ordem. Nenhum ponto de atenção encontrado.':'Maior oportunidade: '+HINT[w]()}
+catch(e){$('#st').textContent='Não foi possível concluir a análise';$('#sdesc').textContent='Tente de novo pelo botão de atualizar.'}
+finally{analyzing=false;sp.textContent='Otimizar agora';b.disabled=false;$('#rean').classList.remove('spin');$('#radar').classList.remove('scanning');radar()}}
+function chips(){const i=INFO,short=s=>String(s||'').replace(/\((R|TM)\)|CPU|Processor/gi,'').replace(/\s+/g,' ').trim();$('#chips').innerHTML=`<span><svg class="i"><use href="#cpu"/></svg>${esc(short(i.cpu).slice(0,34)||'Processador')}</span><span><svg class="i"><use href="#ram"/></svg>${i.ram?Math.round(i.ram)+' GB de RAM':'RAM'}</span><span><svg class="i"><use href="#monitor"/></svg>${esc(i.os||'Windows')}</span>`}
+async function runTasks(ids){const out=[];for(const id of ids){try{out.push(await TASKS[id].run())}catch(e){out.push('Falhou')}}return out}
 
 /* ---------- telas ---------- */
-const T={otim:['Central de otimização','Mais controle. Mais desempenho.'],visao:['Visão geral','Resumo do seu computador.'],monitor:['Monitoramento','Uso em tempo real.'],jogos:['Jogos e FPS','Perfil de desempenho para jogos.'],rede:['Rede e internet','Conexão e latência.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza inteligente','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],proc:['Processos ativos','Os 15 que mais usam memória.'],config:['Configurações','Preferências do painel.']};
+const T={dash:['Dashboard','Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.'],otim:['Otimização','Escolha o que otimizar e execute tudo de uma vez.'],jogos:['Jogos e FPS','Perfil de desempenho para jogos.'],monitor:['Monitoramento','Uso em tempo real e processos ativos.'],rede:['Rede e internet','Conexão, latência e DNS.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],config:['Configurações','Preferências do painel.']};
 const V={};
-V.visao=async()=>{const i=await A('info')||{},up=i.uptime?`${Math.floor(i.uptime/3600)} h ${Math.floor(i.uptime%3600/60)} min`:'—';
-const tl=[['jogos','pad','Jogos e FPS'],['rede','wifi','Rede e internet'],['init','pwr','Inicialização'],['energia','bolt','Energia'],['limpeza','broom','Limpeza'],['apps','grid','Aplicativos'],['servicos','svc','Serviços'],['priv','shield','Privacidade'],['ferr','wrench','Ferramentas'],['monitor','bars','Monitoramento']];
-return [`<div class="g2">${card('Seu computador',row('Sistema',esc(i.os||'—'))+row('Processador',esc(i.cpu||'—'))+row('Núcleos',esc(i.cores||'—'))+row('Memória',(i.ram||0).toFixed(1).replace('.',',')+' GB')+row('Disco livre',fmt(i.disk_free||0)+' de '+fmt(i.disk_total||0))+row('Ligado há',up))}${card('Categorias','<div class="tl">'+tl.map(t=>`<button class="q" data-go="${t[0]}"><svg class="i"><use href="#${t[1]}"/></svg>${t[2]}<svg class="i"><use href="#ch"/></svg></button>`).join('')+'</div>')}</div>`]};
-V.monitor=async()=>[`<div class="g2">${card('CPU','<svg class="chart big" id="mc" viewBox="0 0 600 160"></svg>','<b id="mcv"></b>')}${card('Memória RAM','<svg class="chart big" id="mr" viewBox="0 0 600 160"></svg>','<b id="mrv"></b>')}</div>`,()=>{const c=Array(60).fill(0),r=Array(60).fill(0),draw=(id,d)=>{const e=$(id);if(!e)return;const p=d.map((v,i)=>[i*10,150-1.4*v]),s=smooth(p);e.innerHTML=`<defs><linearGradient id="g${id.slice(1)}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b8cff" stop-opacity=".5"/><stop offset="1" stop-color="#1b8cff" stop-opacity="0"/></linearGradient></defs><path d="${s}L590,150L0,150Z" fill="url(#g${id.slice(1)})"/><path d="${s}" fill="none" stroke="#2bc4ff" stroke-width="3" style="filter:drop-shadow(0 0 5px #1b8cff)"/>`};
-const tick2=async()=>{const s=await A('stats')||{},rp=s.ram_total?s.ram_used/s.ram_total*100:0;c.push(s.cpu||0);c.shift();r.push(rp);r.shift();draw('#mc',c);draw('#mr',r);if($('#mcv')){$('#mcv').textContent=Math.round(c[59])+'%';$('#mrv').textContent=Math.round(rp)+'%'}};tick2();timer=setInterval(tick2,1000)}];
+V.otim=async()=>{const ids=['temp','dns','ram','plan','serv'],def={temp:1,dns:1,ram:1};
+return [card('Otimização rápida',ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
+if(sel.includes('serv')&&!await ask('Desativar serviços seguros','Isso desliga os serviços marcados como Seguro. Você pode restaurar na tela Serviços.','Continuar'))return;
+const b=$('#ex');b.disabled=true;ids.forEach(id=>$('#r_'+id).textContent='');let n=0;
+for(const id of sel){const e=$('#r_'+id);if(!e)return;e.className='st-run';e.textContent='Executando…';let m;try{m=await TASKS[id].run()}catch(x){m='Falhou'}if($('#r_'+id)){e.className='st-ok';e.textContent='✓ '+m}n++}
+if($('#ex'))b.disabled=false;toast(n+' otimizações concluídas');analyze()}}]};
 V.jogos=async()=>{const pl=await A('plans')||[],hi=pl.some(p=>p.on&&/alto|high|ultimate|máximo/i.test(p.name));
-return [card('Desempenho para jogos',row('Modo jogo (plano de energia de alto desempenho)',tg('gm',hi),'Mantém o processador sem economizar energia.')+row('Modo de Jogo do Windows',ob('Abrir','gaming-gamemode'),'Ajustes oficiais do Windows.')+row('Preferências de gráficos',ob('Abrir','display-advancedgraphics'),'Escolha a placa de vídeo para cada jogo.')),()=>{$('#gm').onchange=async e=>{const on=e.target.checked,ok=await A('setplan',on?'high':'balanced');if(!ok){e.target.checked=!on;toast('Plano indisponível neste PC')}else toast(on?'Modo jogo ativado':'Modo jogo desativado')}}]};
-V.rede=async()=>[card('Teste de conexão','<div id="pr"></div>',bt('Testar agora','pt'))+card('Ferramentas',row('Limpar cache DNS',bt('Limpar','fd'),'Ajuda quando sites não abrem após trocar de rede.')+row('Configurações de rede',ob('Abrir','network'))),()=>{const run=async()=>{$('#pr').innerHTML='<div class="rw">Testando…</div>';const r=await A('ping')||[];if($('#pr'))$('#pr').innerHTML=r.map(x=>row(esc(x[0]),x[1]==null?'Sem resposta':`<b class="mono">${x[1]} ms</b> ${x[1]<30?'Ótima':x[1]<80?'Boa':'Lenta'}`)).join('')||'<div class="rw">Não foi possível testar.</div>'};$('#pt').onclick=run;run();$('#fd').onclick=async()=>toast(await A('flushdns')?'Cache DNS limpo':'Não foi possível limpar o DNS')}];
+return [card('Desempenho para jogos',row('Modo jogo (plano de energia de alto desempenho)',tg('gm',hi),'Mantém o processador sem economizar energia.')+row('Modo de Jogo do Windows',ob('Abrir','gaming-gamemode'),'Ajustes oficiais do Windows.')+row('Preferências de gráficos',ob('Abrir','display-advancedgraphics'),'Escolha a placa de vídeo para cada jogo.')+row('Liberar memória antes de jogar',bt('Liberar agora','fm'),'Devolve memória ao sistema sem fechar programas.')),()=>{$('#gm').onchange=async e=>{const on=e.target.checked,ok=await A('setplan',on?'high':'balanced');if(!ok){e.target.checked=!on;toast('Plano indisponível neste PC')}else toast(on?'Modo jogo ativado':'Modo jogo desativado')};$('#fm').onclick=async()=>{toast('Liberando memória…');toast('Liberados '+fmt(await A('freemem')||0))}}]};
+V.monitor=async()=>{const i=await A('info')||{},pr=await A('procs')||[],up=i.uptime?`${Math.floor(i.uptime/3600)} h ${Math.floor(i.uptime%3600/60)} min`:'—';
+return [`<div class="g2">${card('CPU','<svg class="chart" id="mc" viewBox="0 0 600 150"></svg>','<b id="mcv"></b>')}${card('Memória RAM','<svg class="chart" id="mr" viewBox="0 0 600 150"></svg>','<b id="mrv"></b>')}</div>`+
+card('Seu computador',row('Sistema',esc(i.os||'—'))+row('Processador',esc(i.cpu||'—'))+row('Núcleos',esc(i.cores||'—'))+row('Memória',(i.ram||0).toFixed(1).replace('.',',')+' GB')+row('Disco livre',fmt(i.disk_free||0)+' de '+fmt(i.disk_total||0))+row('Ligado há',up))+
+card('Processos que mais usam memória',pr.map((p,k)=>row(esc(p.name),`<span class="mono">${fmt(p.mem)}</span>`+bt('Encerrar','k'+k),'PID '+p.pid)).join('')||'<div class="rw">Nenhum processo listado.</div>',bt('Atualizar','rf')),
+()=>{const c=[],r=[],draw=(id,d,col)=>{const e=$(id);if(!e||d.length<2)return;const p=d.map((v,k)=>[590-(d.length-1-k)*10,142-1.3*v]),s=smooth(p),g='g'+id.slice(1);e.innerHTML=`<defs><linearGradient id="${g}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".4"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs><path d="${s}L590,150L${p[0][0]},150Z" fill="url(#${g})"/><path d="${s}" fill="none" stroke="${col}" stroke-width="2.4"/>`};
+const t2=async()=>{const s=await A('stats')||{},rp=s.ram_total?s.ram_used/s.ram_total*100:0;c.push(s.cpu||0);r.push(rp);if(c.length>60){c.shift();r.shift()}draw('#mc',c,'#5b95ff');draw('#mr',r,'#34d399');if($('#mcv')){$('#mcv').textContent=Math.round(s.cpu||0)+'%';$('#mrv').textContent=Math.round(rp)+'%'}};t2();timer=setInterval(t2,1000);
+$('#rf').onclick=()=>go('monitor');pr.forEach((p,k)=>$('#k'+k).onclick=async()=>{if(!await ask('Encerrar processo','Encerrar '+p.name+'? Trabalho não salvo nesse programa será perdido.','Encerrar'))return;toast(await A('kill',p.pid)?p.name+' encerrado':'Não foi possível encerrar');go('monitor')})}]};
+V.rede=async()=>{const dns=await A('dns_status');return [card('Teste de conexão','<div id="pr"></div>',bt('Testar agora','pt'))+card('DNS e cache',row('DNS atual',esc(dns||'Não foi possível ler'))+row('Cloudflare (1.1.1.1)',bt('Usar','d1'),'Costuma ser o mais rápido.')+row('Google (8.8.8.8)',bt('Usar','d2'))+row('Automático (do provedor)',bt('Restaurar','d0'),'Volta ao DNS padrão da sua rede.')+row('Limpar cache DNS',bt('Limpar','fd'),'Ajuda quando sites não abrem após trocar de rede.')+row('Configurações de rede',ob('Abrir','network'))),()=>{const run=async()=>{$('#pr').innerHTML='<div class="rw">Testando…</div>';const r=await A('ping')||[];if($('#pr'))$('#pr').innerHTML=r.map(x=>row(esc(x[0]),x[1]==null?'Sem resposta':`<b class="mono">${x[1]} ms</b> ${x[1]<30?'Ótima':x[1]<80?'Boa':'Lenta'}`)).join('')||'<div class="rw">Não foi possível testar.</div>'};$('#pt').onclick=run;run();$('#fd').onclick=async()=>toast(await A('flushdns')?'Cache DNS limpo':'Não foi possível limpar o DNS');
+[['d1','cloudflare','Cloudflare'],['d2','google','Google'],['d0','auto','Automático']].forEach(([id,k,n])=>$('#'+id).onclick=async()=>{toast('Aplicando DNS…');const ok=await A('set_dns',k);toast(ok?'DNS alterado: '+n:'Não foi possível alterar o DNS (execute como administrador)');if(ok)go('rede')})}]};
 V.init=async()=>{const l=await A('startup')||[];return [card('Apps que iniciam com o Windows',l.length?l.map((a,i)=>row(esc(a.name),tg('s'+i,a.on),esc(String(a.cmd).slice(0,90)))).join(''):'<div class="rw">Nenhum app encontrado.</div>'),()=>l.forEach((a,i)=>$('#s'+i).onchange=async e=>{const on=e.target.checked,ok=await A('set_startup',a.name,a.hive,on);if(!ok){e.target.checked=!on;toast('Sem permissão para alterar '+a.name)}else toast((on?'Ativado: ':'Desativado: ')+a.name)})]};
 V.energia=async()=>{const l=await A('plans')||[];return [card('Planos de energia',(l.map((p,i)=>row(esc(p.name),p.on?'<b>Ativo</b>':bt('Ativar','p'+i))).join('')||'<div class="rw">Nenhum plano encontrado.</div>')+row('Mais opções',ob('Abrir configurações','powersleep'))),()=>l.forEach((p,i)=>{const b=$('#p'+i);if(b)b.onclick=async()=>{toast(await A('setplan',p.id)?'Plano ativado: '+p.name:'Não foi possível ativar');go('energia')}})]};
 V.limpeza=async()=>{const l=await A('scan')||[],tot=l.reduce((a,x)=>a+x[1],0);
-return [card('Arquivos que podem ser removidos',(l.map(x=>row(esc(x[0]),'<span class="mono">'+fmt(x[1])+'</span>')).join('')||'<div class="rw">Nada encontrado.</div>')+row('<b>Total</b>','<b class="mono">'+fmt(tot)+'</b>'),bt('Limpar agora','cl')),()=>$('#cl').onclick=async()=>{if(!tot)return toast('Não há nada para limpar');if(!await ask('Limpar arquivos temporários','Remover '+fmt(tot)+' de arquivos temporários? Arquivos em uso pelo Windows são ignorados.','Limpar'))return;toast('Limpando…');const f=await A('clean')||0;toast('Liberados '+fmt(f));rescan();go('limpeza')}]};
+return [card('Arquivos que podem ser removidos',(l.map(x=>row(esc(x[0]),'<span class="mono">'+fmt(x[1])+'</span>')).join('')||'<div class="rw">Nada encontrado.</div>')+row('<b>Total</b>','<b class="mono">'+fmt(tot)+'</b>'),bt('Limpar agora','cl','pri')),()=>$('#cl').onclick=async()=>{if(!tot)return toast('Não há nada para limpar');if(!await ask('Limpar arquivos temporários','Remover '+fmt(tot)+' de arquivos temporários? Arquivos em uso pelo Windows são ignorados.','Limpar'))return;toast('Limpando…');const f=await A('clean')||0;JUNK=0;toast('Liberados '+fmt(f));go('limpeza')}]};
 V.apps=async()=>{let l=await A('apps')||[];const sysRe=/Visual C\+\+|\.NET|Redistributable|Runtime|WebView2|Update Health|DirectX|Windows/i,
-draw=()=>{const q=($('#aq').value||'').toLowerCase(),f=l.filter(a=>a.name.toLowerCase().includes(q));$('#al').innerHTML=f.map(a=>row(esc(a.name)+(sysRe.test(a.name)?'<span class="bd at">Componente</span>':''),`<span class="mono">${esc(a.ver)}</span>`+(a.can?`<button class="ghost sm dn" data-un="${esc(a.name)}">Desinstalar</button>`:'<small style="margin:0">Sem desinstalador</small>'),esc(a.pub))).join('')||'<div class="rw">Nada encontrado.</div>';$('#ac').textContent=f.length+' apps'};
+draw=()=>{const q=($('#aq').value||'').toLowerCase(),f=l.filter(a=>a.name.toLowerCase().includes(q));$('#al').innerHTML=f.map(a=>row(esc(a.name)+(sysRe.test(a.name)?'<span class="bd at">Componente</span>':''),`<span class="mono" style="color:var(--mut)">${esc(a.ver)}</span>`+(a.can?`<button class="ghost dn" data-un="${esc(a.name)}">Desinstalar</button>`:'<small style="margin:0">Sem desinstalador</small>'),esc(a.pub))).join('')||'<div class="rw">Nada encontrado.</div>';$('#ac').textContent=f.length+' apps'};
 return [card('Aplicativos instalados','<input class="inp" id="aq" placeholder="Buscar aplicativo" aria-label="Buscar aplicativo"><div class="lst" id="al"></div>','<span style="display:flex;align-items:center;gap:14px"><small id="ac" style="font-weight:400;color:var(--mut)"></small>'+ob('Abrir lista do Windows','appwiz')+'</span>'),()=>{draw();$('#aq').oninput=draw;const my=gn;
 $('#al').onclick=async e=>{const b=e.target.closest('.dn');if(!b||b.disabled)return;const n=b.dataset.un,comp=sysRe.test(n);
 if(!await ask('Desinstalar programa',comp?'Atenção: "'+n+'" pode ser exigido por outros programas. Remover mesmo assim?':'Desinstalar "'+n+'"? O programa será removido do seu PC.','Desinstalar'))return;
@@ -399,37 +420,37 @@ if(r!=='aberto'){toast('Não foi possível desinstalar '+n);return}
 toast('O desinstalador está aberto. A lista atualiza quando terminar.');
 for(let i=0;i<30&&gn===my;i++){await sleep(4000);const x=await A('apps');if(gn===my&&x&&!x.some(a=>a.name===n)){l=x;draw();toast(n+' foi desinstalado');break}}}}]};
 V.servicos=async()=>{const l=await A('services')||[],set=async(a,on)=>{let n=0;for(const x of a)if(await A('set_service',x.name,on))n++;return n};
-return [card('Como funciona','<p class="nt">Desativar serviços que você não usa libera memória e processador. Os marcados com <b>Atenção</b> podem tirar recursos que você usa, e o painel pede confirmação antes. Tudo pode ser revertido aqui, e o botão Restaurar padrão devolve cada serviço ao seu estado original.</p>','<span style="display:flex;gap:10px;flex-wrap:wrap">'+bt('Desativar os seguros','sr')+bt('Restaurar padrão','sd')+ob('Abrir Serviços do Windows','services')+'</span>')+card('Serviços',l.length?l.map((s,i)=>row(esc(s.title)+`<span class="bd ${s.safe?'good':'at'}">${s.safe?'Seguro':'Atenção'}</span>`,tg('sv'+i,s.on),esc(s.desc)+' · '+esc(s.name))).join(''):'<div class="rw">Nenhum serviço da lista foi encontrado neste PC.</div>'),()=>{
+return [card('Como funciona','<p class="nt">Desativar serviços que você não usa libera memória e processador. Os marcados com <b>Atenção</b> podem tirar recursos que você usa, e o painel pede confirmação antes. Tudo pode ser revertido aqui, e o botão Restaurar padrão devolve cada serviço ao seu estado original.</p>','<span style="display:flex;gap:8px;flex-wrap:wrap">'+bt('Desativar os seguros','sr','pri')+bt('Restaurar padrão','sd')+ob('Abrir Serviços do Windows','services')+'</span>')+card('Serviços',l.length?l.map((s,i)=>row(esc(s.title)+`<span class="bd ${s.safe?'good':'at'}">${s.safe?'Seguro':'Atenção'}</span>`,tg('sv'+i,s.on),esc(s.desc)+' · '+esc(s.name))).join(''):'<div class="rw">Nenhum serviço da lista foi encontrado neste PC.</div>'),()=>{
 l.forEach((s,i)=>$('#sv'+i).onchange=async e=>{const on=e.target.checked;if(!on&&!s.safe&&!await ask('Desativar "'+s.title+'"?',s.desc,'Desativar')){e.target.checked=true;return}const ok=await A('set_service',s.name,on);if(!ok){e.target.checked=!on;toast('Sem permissão. Abra o painel como administrador.')}else toast((on?'Ativado: ':'Desativado: ')+s.title)});
 $('#sr').onclick=async()=>{const a=l.filter(s=>s.safe&&s.on);if(!a.length)return toast('Os serviços seguros já estão desativados');if(!await ask('Desativar serviços seguros','Desativar '+a.length+' serviços marcados como Seguro?','Desativar'))return;toast('Desativando…');const n=await set(a,false);toast(n+' de '+a.length+' serviços desativados');go('servicos')};
 $('#sd').onclick=async()=>{const a=l.filter(s=>!s.on);if(!a.length)return toast('Todos os serviços já estão no padrão');toast('Restaurando…');const n=await set(a,true);toast(n+' de '+a.length+' serviços restaurados');go('servicos')}}]};
-V.proc=async()=>{const l=await A('procs')||[];return [card('Processos ativos',l.map((p,i)=>row(esc(p.name),`<span class="mono">${fmt(p.mem)}</span>`+bt('Encerrar','k'+i),'PID '+p.pid)).join('')||'<div class="rw">Nenhum processo listado.</div>',bt('Atualizar','rf')),()=>{$('#rf').onclick=()=>go('proc');l.forEach((p,i)=>$('#k'+i).onclick=async()=>{if(!await ask('Encerrar processo','Encerrar '+p.name+'? Trabalho não salvo nesse programa será perdido.','Encerrar'))return;const ok=await A('kill',p.pid);toast(ok?p.name+' encerrado':'Não foi possível encerrar');go('proc')})}]};
 V.priv=async()=>[card('Permissões e preferências',[['privacy-webcam','Câmera','Quais apps podem usar a câmera.'],['privacy-microphone','Microfone','Quais apps podem gravar áudio.'],['privacy-location','Localização','Quais apps sabem onde você está.'],['privacy-general','Geral','ID de publicidade e idioma.'],['privacy-feedback','Diagnóstico e comentários','Dados enviados à Microsoft.']].map(x=>row(x[1],ob('Revisar',x[0]),x[2])).join(''))];
-V.ferr=async()=>[card('Utilitários do Windows',[['taskmgr','Gerenciador de Tarefas','Veja e encerre programas.'],['resmon','Monitor de Recursos','Uso detalhado de CPU, disco e rede.'],['cleanmgr','Limpeza de Disco','Ferramenta de limpeza do Windows.'],['devmgmt','Gerenciador de Dispositivos','Drivers e hardware.'],['diskmgmt','Gerenciamento de Disco','Partições e unidades.'],['services','Serviços','Serviços do Windows.'],['msinfo','Informações do sistema','Detalhes completos do PC.'],['cmd','Prompt de comando','Terminal do Windows.']].map(x=>row(x[1],ob('Abrir',x[0]),x[2])).join('')+row('Ponto de restauração','<button class="ghost sm" data-act="restore">Criar</button>','Salva o estado do Windows para voltar atrás se algo der errado.'))];
-V.config=async()=>[card('Preferências',row('Atualizar valores em tempo real',tg('cl1',S.live!==false),'CPU, RAM e temperatura na tela inicial.')+row('Reduzir animações',tg('cl2',!!S.calm),'Deixa o painel mais leve em PCs fracos.')+row('Versão','1.0')),()=>{$('#cl1').onchange=e=>{S.live=e.target.checked;save();if(S.live)tick()};$('#cl2').onchange=e=>{S.calm=e.target.checked;save();document.body.classList.toggle('calm',S.calm)}}];
+V.ferr=async()=>[card('Utilitários do Windows',[['taskmgr','Gerenciador de Tarefas','Veja e encerre programas.'],['resmon','Monitor de Recursos','Uso detalhado de CPU, disco e rede.'],['cleanmgr','Limpeza de Disco','Ferramenta de limpeza do Windows.'],['devmgmt','Gerenciador de Dispositivos','Drivers e hardware.'],['diskmgmt','Gerenciamento de Disco','Partições e unidades.'],['services','Serviços','Serviços do Windows.'],['msinfo','Informações do sistema','Detalhes completos do PC.'],['cmd','Prompt de comando','Terminal do Windows.']].map(x=>row(x[1],ob('Abrir',x[0]),x[2])).join('')+row('Ponto de restauração','<button class="ghost" data-act="restore">Criar</button>','Salva o estado do Windows para voltar atrás se algo der errado.'))];
+V.config=async()=>[card('Preferências',row('Atualizar valores em tempo real',tg('cl1',S.live!==false),'CPU, memória, disco e temperatura no Dashboard.')+row('Reduzir animações',tg('cl2',!!S.calm),'Deixa o painel mais leve em PCs fracos.')+row('Versão','1.0')),()=>{$('#cl1').onchange=e=>{S.live=e.target.checked;save();if(S.live)tick()};$('#cl2').onchange=e=>{S.calm=e.target.checked;save();document.body.classList.toggle('calm',S.calm)}}];
 
 async function go(k){const n=++gn;clearInterval(timer);document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on',b.dataset.v===k));
-const o=k==='otim';$('#h1').textContent=T[k][0];$('#sub').textContent=T[k][1];$('#v-otim').hidden=!o;$('#view').hidden=o;$('#np').hidden=true;scrollTo(0,0);
-if(o){chart();rescan();return}
-const v=$('#view');v.innerHTML='';const wt=setTimeout(()=>{if(n===gn)v.innerHTML='<div class="card ld"><i class="spin"></i>Carregando…</div>'},150);
-let r;try{r=await V[k]()}catch(e){r=[`<div class="card ld">Não foi possível carregar esta tela. <button class="ghost sm" data-go="${k}">Tentar de novo</button></div>`]}
+const o=k==='dash';$('#h1').textContent=T[k][0];$('#sub').textContent=T[k][1];$('#v-dash').hidden=!o;$('#view').hidden=o;$('#np').hidden=true;scrollTo(0,0);
+if(o){lv();return}
+const v=$('#view');v.innerHTML='';const wt=setTimeout(()=>{if(n===gn)v.innerHTML='<div class="card ld"><i class="spn"></i>Carregando…</div>'},150);
+let r;try{r=await V[k]()}catch(e){r=[`<div class="card ld">Não foi possível carregar esta tela. <button class="ghost" data-go="${k}">Tentar de novo</button></div>`]}
 clearTimeout(wt);if(n!==gn)return;v.innerHTML=r[0];if(r[1]){try{r[1]()}catch(e){}}}
 document.addEventListener('click',async e=>{const g=e.target.closest('[data-go],[data-v],[data-open],[data-act]');
-if(!g){if(!e.target.closest('.bw'))$('#np').hidden=true;return}
+if(!g){if(!e.target.closest('.hr'))$('#np').hidden=true;return}
 if(g.dataset.go||g.dataset.v)go(g.dataset.go||g.dataset.v);
 else if(g.dataset.open)await A('abrir',g.dataset.open);
-else if(g.dataset.act==='restore'){toast('Criando ponto de restauração…');toast(await A('restore')||'Não foi possível criar')}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#md').hidden)$('#mn').click();else $('#np').hidden=true}if(e.key==='Enter'&&e.target.matches('[role=button]'))e.target.click()});
+else if(g.dataset.act==='restore'){toast('Criando ponto de restauração…');toast(await A('restore')||'Não foi possível criar')}
+else if(g.dataset.act==='freemem'){toast('Liberando memória…');toast('Liberados '+fmt(await A('freemem')||0)+' de memória');tick(true)}
+else if(g.dataset.act==='netopt'){toast('Otimizando rede…');await A('flushdns');const pg=await A('ping')||[],ms=pg.map(x=>x[1]).filter(x=>x!=null).sort((a,b)=>a-b);toast(ms.length?'DNS limpo · latência de '+ms[Math.floor(ms.length/2)]+' ms':'DNS limpo. Sem conexão no momento')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#md').hidden)$('#mn').click();else $('#np').hidden=true}});
 $('#bellb').onclick=()=>{const n=$('#np');n.hidden=!n.hidden;if(!n.hidden){npRender();$('#bellb').classList.remove('un')}};
-$('#rng').onchange=chart;
-$('#opt').onclick=async function(){const b=this,l=b.querySelector('span');if(b.disabled)return;b.disabled=true;l.textContent='Otimizando…';$('#msg').textContent='Otimizando seu PC…';
-const f=await A('clean')||0;await A('flushdns');JUNK=0;await rescan();b.disabled=false;l.textContent='Otimizar agora';toast('Liberados '+fmt(f)+' e cache DNS limpo')};
+$('#rean').onclick=()=>analyze();
+$('#opt').onclick=async()=>{if(analyzing)return;const b=$('#opt'),sp=b.querySelector('span');b.disabled=true;sp.textContent='Otimizando…';$('#st').textContent='Otimizando seu PC…';const r=await runTasks(['temp','dns','ram']);toast(r.join(' · '));b.disabled=false;await analyze()};
 
 /* ---------- inicialização ---------- */
 let booted=false;
 async function boot(){if(booted)return;booted=true;DEMO=!(window.pywebview&&window.pywebview.api);
-if(DEMO){$('#demo').hidden=false;const now=Date.now();let v=50;for(let t=now-31*60000;t<=now;t+=3000){v=Math.max(22,Math.min(92,v+R(-4,4)+(55-v)*.06));LD.push({t,v})}for(let i=0;i<14;i++){H.cpu.push(R(15,40));H.ram.push(R(36,42));H.tmp.push(R(46,50))}}
-await tick();await rescan();chart();setTimeout(()=>$('#splash').classList.add('out'),250);setInterval(tick,3000)}
+if(DEMO){$('#demo').hidden=false;for(let i=0;i<MAXH;i++){HL.cpu.push(clamp(30+Math.sin(i/4)*18+R(-6,6)));HL.ram.push(R(40,43));HL.dsk.push(68);HL.tmp.push(R(46,50))}}
+bars(0);radar();INFO=await A('info')||{};chips();await tick(true);lv();setTimeout(()=>$('#splash').classList.add('out'),200);setInterval(tick,2000);analyze()}
 window.addEventListener('pywebviewready',boot);setTimeout(boot,2200);
 </script>
 </body>
