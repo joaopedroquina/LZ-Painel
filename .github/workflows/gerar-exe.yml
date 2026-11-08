@@ -1,0 +1,37 @@
+
+name: Gerar LZ Painel EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  compilar:
+    runs-on: windows-latest
+
+    steps:
+      - name: Baixar arquivos
+        uses: actions/checkout@v4
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
+
+      - name: Criar Painel.exe
+        run: |
+          python -m PyInstaller --noconfirm --clean --onefile --windowed --name Painel --icon icone.ico --add-data "index.html;." --collect-all webview app.py
+
+      - name: Disponibilizar executavel
+        uses: actions/upload-artifact@v4
+        with:
+          name: LZ-Painel-Windows
+          path: dist/Painel.exe
+          if-no-files-found: error
