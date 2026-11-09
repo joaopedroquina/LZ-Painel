@@ -40,6 +40,7 @@ SETTINGS = {"gaming-gamemode", "display-advancedgraphics", "network", "powerslee
 # nome do serviço: (título, descrição, início padrão, seguro desativar?)
 SERVICES = {
     "DiagTrack": ("Telemetria do Windows", "Envia dados de diagnóstico e uso à Microsoft.", "auto", True),
+    "RemoteRegistry": ("Registro Remoto", "Permite modificar remotamente o registro; normalmente não é necessário em PCs domésticos.", "demand", False),
     "dmwappushservice": ("Mensagens push WAP", "Usado pela telemetria; raramente necessário.", "demand", True),
     "WerSvc": ("Relatório de erros do Windows", "Envia relatórios de falhas à Microsoft.", "demand", True),
     "MapsBroker": ("Mapas baixados", "Atualiza mapas offline do Windows.", "delayed-auto", True),
@@ -432,6 +433,117 @@ class Api:
                           "StartupDelayInMSec", 0, 4),
         "menu_delay": (r"Control Panel\Desktop", "MenuShowDelay", "100", 1),
     }
+
+    # Ajustes individuais de privacidade do usuário atual com backup e restauração.
+    # Não alteram Defender, Windows Update, Store, serviços ou política de telemetria.
+    _PRIVACY_ITEMS = {
+        "search_web": (r"Software\Policies\Microsoft\Windows\Explorer",
+                       "DisableSearchBoxSuggestions", 1, 4),
+        "feedback": (r"Software\Microsoft\Siuf\Rules",
+                     "NumberOfSIUFInPeriod", 0, 4),
+        "search_history": (r"Software\Microsoft\Windows\CurrentVersion\SearchSettings",
+                           "IsDeviceSearchHistoryEnabled", 0, 4),
+    }
+
+    def _privacy_backup_path(self):
+        return os.path.join(os.path.dirname(self._interface_backup_path()),
+                            "privacy_backup.json")
+
+    def _privacy_backups(self):
+        try:
+            with open(self._privacy_backup_path(), "r", encoding="utf-8") as handle:
+                data = json.load(handle)
+                return data if isinstance(data, dict) else {}
+        except (FileNotFoundError, OSError, ValueError, TypeError):
+            return {}
+
+    def _privacy_write_backup(self, data):
+        path = self._privacy_backup_path()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        temp = path + ".tmp"
+        try:
+            with open(temp, "w", encoding="utf-8") as handle:
+                json.dump(data, handle, ensure_ascii=False, indent=2)
+            os.replace(temp, path)
+        finally:
+            if os.path.exists(temp):
+                os.remove(temp)
+
+    def _privacy_read(self, name):
+        path, value_name, _, data_type = self._PRIVACY_ITEMS[name]
+        try:
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, path, 0, winreg.KEY_READ) as key:
+                value, actual_type = winreg.QueryValueEx(key, value_name)
+                return {"exists": True, "value": value, "type": actual_type}
+        except OSError:
+            return {"exists": False, "value": None, "type": data_type}
+
+    def privacy_status(self):
+        output = {}
+        if os.name != "nt" or winreg is None:
+            for name in self._PRIVACY_ITEMS:
+                output[name] = {"applied": None, "supported": False, "restorable": False}
+            return output
+        backups = self._privacy_backups()
+        for name, (_, _, target, _) in self._PRIVACY_ITEMS.items():
+            current = self._privacy_read(name)
+            output[name] = {
+                "applied": bool(current["exists"] and current["value"] == target),
+                "supported": True,
+                "restorable": name in backups,
+            }
+        return output
+
+    def privacy_apply(self, name):
+        if name not in self._PRIVACY_ITEMS or os.name != "nt" or winreg is None:
+            return {"ok": False, "error": "Ajuste de privacidade indisponível."}
+        with self._interface_lock:
+            current = self._privacy_read(name)
+            target = self._PRIVACY_ITEMS[name][2]
+            if current["exists"] and current["value"] == target:
+                return {"ok": True, "already": True}
+            backups = self._privacy_backups()
+            if name not in backups:
+                backups[name] = current
+                try:
+                    self._privacy_write_backup(backups)
+                except OSError:
+                    return {"ok": False, "error": "Não foi possível criar backup."}
+            path, value_name, target, value_type = self._PRIVACY_ITEMS[name]
+            try:
+                with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, path, 0,
+                                        winreg.KEY_SET_VALUE) as key:
+                    winreg.SetValueEx(key, value_name, 0, value_type, target)
+            except OSError:
+                return {"ok": False, "error": "O Windows não permitiu a alteração."}
+            return {"ok": bool(self.privacy_status()[name]["applied"]),
+                    "relogin": name in {"search_web", "search_history"}}
+
+    def privacy_restore(self, name):
+        if name not in self._PRIVACY_ITEMS or os.name != "nt" or winreg is None:
+            return {"ok": False, "error": "Ajuste de privacidade indisponível."}
+        with self._interface_lock:
+            backups = self._privacy_backups()
+            if name not in backups:
+                return {"ok": False, "error": "Não há backup para restaurar."}
+            path, value_name, _, _ = self._PRIVACY_ITEMS[name]
+            previous = backups[name]
+            try:
+                with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, path, 0,
+                                        winreg.KEY_SET_VALUE) as key:
+                    if previous.get("exists"):
+                        winreg.SetValueEx(key, value_name, 0,
+                                          previous["type"], previous["value"])
+                    else:
+                        try:
+                            winreg.DeleteValue(key, value_name)
+                        except FileNotFoundError:
+                            pass
+                backups.pop(name, None)
+                self._privacy_write_backup(backups)
+                return {"ok": True, "relogin": name in {"search_web", "search_history"}}
+            except (OSError, KeyError, TypeError):
+                return {"ok": False, "error": "Não foi possível restaurar o ajuste."}
 
     def _interface_backup_path(self):
         folder = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),

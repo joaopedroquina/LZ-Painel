@@ -25,13 +25,26 @@ const fs=require('node:fs');
   await page.evaluate(()=>go('jogos'));
   assert.equal(await page.locator('.fpsx-page').isVisible(),true);
   assert.equal(await page.locator('.fpsx-cat').count(),8);
-  assert.equal(await page.locator('.fpsx-item').count(),5);
-  assert.equal(await page.locator('#fpsPaneTitle').innerText(),'Desempenho e Interface');
+  assert.equal(await page.locator('.fpsx-item').count(),10);
+  assert.equal(await page.locator('#fpsPaneTitle').innerText(),'Privacidade e Telemetria');
+  assert.equal(await page.locator('[data-privacy]').count(),0); // Navegador de prévia: ajustes reais indisponíveis.
   await page.locator('[data-fpscat="games"]').click();
   assert.equal(await page.locator('#fpsPaneTitle').innerText(),'Jogos');
   assert.equal(await page.locator('.fpsx-item').count(),4);
   await page.locator('[data-fpscat="interface"]').click();
   assert.equal(await page.locator('#fpsPaneTitle').innerText(),'Desempenho e Interface');
+  assert.equal(await page.locator('.fpsx-item').count(),5);
+  await page.locator('[data-fpscat="services"]').click();
+  assert.equal(await page.locator('#fpsPaneTitle').innerText(),'Serviços');
+  assert.equal(await page.locator('.fpsx-item').count(),4);
+  await page.evaluate(()=>go('game'));
+  assert.equal(await page.locator('.gb-card').count(),5);
+  await page.locator('[data-gbtab="advanced"]').click();
+  assert.equal(await page.locator('.gb-advanced button').count(),4);
+  await page.locator('[data-gbtab="history"]').click();
+  assert.equal(await page.locator('.gb-history').count(),1);
+  await page.evaluate(()=>go('jogos'));
+
   await page.evaluate(()=>{
    window.testActions=[];
    window.pywebview={api:{window_action:async action=>{window.testActions.push(action);return true}}};

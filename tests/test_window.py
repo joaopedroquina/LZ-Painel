@@ -36,6 +36,11 @@ class WindowTests(unittest.TestCase):
         self.api.window_action("close")
         self.window.destroy.assert_called_once()
 
+    def test_privacy_allowlist(self):
+        self.assertEqual(set(self.api._PRIVACY_ITEMS), {"search_web", "feedback", "search_history"})
+        self.assertFalse(self.api.privacy_apply("disable_defender")["ok"])
+        self.assertFalse(self.api.privacy_restore("diagtrack")["ok"])
+
     def test_no_window(self):
         self.api._window = None
         self.assertFalse(self.api.window_action("close"))
