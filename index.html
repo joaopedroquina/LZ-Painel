@@ -24,22 +24,46 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
 #splash svg{width:64px;height:64px;animation:pulse 1.2s ease-in-out infinite}
 #splash.out{opacity:0;visibility:hidden}
 
-.shell{margin:10px;min-height:calc(100vh - 20px);border:1px solid #2b2f39;border-radius:22px;background:var(--bg1);display:grid;grid-template-columns:70px 1fr;box-shadow:0 20px 60px rgba(0,0,0,.5)}
-.side{background:#1b1e25;border-right:1px solid var(--line);border-radius:22px 0 0 22px;padding:14px 0 12px;z-index:10;display:flex;flex-direction:column;align-items:center;gap:3px;position:sticky;top:10px;height:calc(100vh - 20px)}
-.logo{width:44px;height:44px;display:grid;place-items:center;margin-bottom:8px}
-.logo svg{width:30px;height:30px}
-.div{width:26px;height:1px;background:var(--line);margin:8px 0}
-.nav{position:relative;width:42px;height:42px;border:0;border-radius:50%;background:none;color:var(--mut);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s}
-.nav svg.i{width:19px;height:19px}
-.nav:hover{background:var(--card2);color:#fff}
-.nav.on{color:var(--blue2);box-shadow:inset 0 0 0 2px var(--blue)}
-.nav.on::before{content:"";position:absolute;left:-14px;top:25%;bottom:25%;width:3px;border-radius:0 3px 3px 0;background:var(--blue)}
-.nav::after{content:attr(data-tip);position:absolute;left:54px;top:50%;transform:translate(-4px,-50%);background:#0e1014;border:1px solid var(--line);color:#fff;font-size:12.5px;font-weight:500;padding:5px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:.15s;z-index:30}
-.nav:hover::after,.nav:focus-visible::after{opacity:1;transform:translate(0,-50%)}
-.sp{flex:1}
-.ver{font-size:11px;color:var(--mut);background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:3px 8px;margin-top:6px}
 
-.main{padding:20px 32px 28px;display:grid;gap:16px;align-content:start;min-width:0}
+.shell{margin:10px;min-height:calc(100vh - 20px);border:1px solid #2b2f39;border-radius:22px;background:var(--bg1);display:grid;grid-template-columns:260px 1fr;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.side{background:linear-gradient(180deg,#1b1f27,#171a20);border-right:1px solid var(--line);border-radius:22px 0 0 22px;padding:18px 14px 12px;z-index:10;display:flex;flex-direction:column;align-items:stretch;gap:8px;position:sticky;top:10px;height:calc(100vh - 20px);overflow:auto}
+.logo{display:flex;align-items:center;gap:12px;padding:8px 10px 12px;margin-bottom:2px}
+.logo svg{width:34px;height:34px;flex:none}.brandtxt{min-width:0}.brandttl{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;letter-spacing:.01em}.brandsub{font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--mut);text-transform:uppercase;margin-top:2px}
+.beta{padding:2px 7px;border-radius:8px;background:rgba(76,130,255,.16);border:1px solid rgba(76,130,255,.24);color:#86aeff;font-size:10px;font-weight:800;letter-spacing:.04em}
+.sec{padding:8px 10px 2px;color:#717b8f;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.div{display:none}
+.nav{position:relative;width:100%;min-height:42px;padding:10px 12px;border:0;border-radius:12px;background:none;color:#c8cfda;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background .2s,color .2s,transform .2s;text-align:left}
+.nav svg.i{width:18px;height:18px;flex:none;color:#c8cfda}.nav .lbl{font-size:13.5px;font-weight:700;line-height:1.2}.nav .meta{display:flex;gap:6px;align-items:center;margin-left:auto;flex-wrap:wrap;justify-content:flex-end}
+.nav:hover{background:#252a34;color:#fff;transform:translateX(2px)}.nav:hover svg.i{color:#fff}
+.nav.on{background:linear-gradient(180deg,#2d6fe9,#2263dd);color:#fff;box-shadow:0 8px 24px rgba(38,104,236,.24)}.nav.on svg.i{color:#fff}
+.nav.on::before{display:none}
+.nav::after{display:none}
+.mini-badge{display:inline-flex;align-items:center;justify-content:center;height:20px;padding:0 7px;border-radius:8px;font-size:10px;font-weight:800;letter-spacing:.04em;border:1px solid #3d4960;background:#242b38;color:#7aa7ff}
+.mini-badge.pro{background:rgba(74,111,192,.16);border-color:#38548e;color:#8eb0ff}
+.mini-badge.beta{background:rgba(76,130,255,.16);border-color:rgba(76,130,255,.24);color:#86aeff}
+.sp{flex:1}
+.ver{font-size:12px;color:var(--mut);text-align:center;padding:10px 0 0;border-top:1px solid rgba(255,255,255,.06);margin-top:6px}
+@media(max-width:1080px){.shell{grid-template-columns:82px 1fr}.side{padding:14px 8px;align-items:center}.logo{padding:4px 0 10px;justify-content:center}.brandtxt,.sec,.nav .lbl,.nav .meta,.ver{display:none}.nav{width:44px;min-height:44px;padding:0;justify-content:center;border-radius:50%}.nav.on::before{content:"";display:block;position:absolute;left:-8px;top:25%;bottom:25%;width:3px;border-radius:0 3px 3px 0;background:var(--blue)}.div{display:block;width:28px;height:1px;background:var(--line);margin:8px 0}}
+
+
+.main{padding:14px 28px 28px;display:grid;gap:16px;align-content:start;min-width:0;min-height:calc(100vh - 20px)}
+.appbar{position:sticky;top:0;z-index:35;display:grid;grid-template-columns:minmax(140px,1fr) auto auto;align-items:center;gap:14px;padding:10px 12px;border:1px solid #313744;border-radius:18px;background:linear-gradient(180deg,rgba(33,36,43,.96),rgba(28,31,39,.92));box-shadow:0 14px 34px rgba(0,0,0,.28);backdrop-filter:blur(16px)}
+.appdrag{min-height:16px}
+.apppromo{justify-self:center;display:flex;align-items:center;gap:10px;padding:4px 6px 4px 10px;border:1px solid rgba(242,184,68,.55);border-radius:999px;background:rgba(245,183,54,.12);color:#f4c14f;font-weight:700;font-size:12.5px;letter-spacing:.01em;box-shadow:inset 0 0 0 1px rgba(93,62,9,.22)}
+.apppromo b{font-size:12.5px;font-weight:700;color:#ffc853}
+.apppromo button{border:0;border-radius:999px;padding:8px 14px;background:linear-gradient(180deg,#efbc49,#d99c1d);color:#231600;font-size:12.5px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(218,163,37,.22)}
+.appbar-right{display:flex;justify-self:end;align-items:center;gap:10px}
+.userchip{display:flex;align-items:center;gap:9px;padding:5px 10px 5px 6px;border:1px solid var(--line);border-radius:999px;background:rgba(18,20,27,.78);min-width:0}
+.userav{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,#ff5252,#090c15 72%);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:11px;font-weight:800;overflow:hidden}
+.userplan{font-size:12px;font-weight:700;letter-spacing:.04em;color:#a7afbf;text-transform:uppercase;white-space:nowrap}
+.appmini{position:relative;width:32px;height:32px;display:grid;place-items:center;border-radius:50%;border:1px solid #54411f;background:rgba(239,188,73,.08);color:#e4b54a;cursor:pointer;transition:transform .18s ease,background .18s ease,border-color .18s ease}
+.appmini:hover{transform:translateY(-1px);background:rgba(239,188,73,.16);border-color:#876425}
+.appmini .badge{position:absolute;top:-5px;right:-2px;min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:#e1ad39;color:#221300;font-size:10px;font-weight:800;display:grid;place-items:center;box-shadow:0 0 0 3px rgba(24,27,34,.95)}
+.winset{display:flex;align-items:center;gap:2px;padding-left:4px}
+.winbtn{width:32px;height:32px;border:0;border-radius:10px;background:transparent;color:#9ca5b7;display:grid;place-items:center;cursor:pointer;transition:background .18s,color .18s,transform .18s}
+.winbtn:hover{background:rgba(255,255,255,.08);color:#fff}
+.winbtn.close:hover{background:#d24e4e;color:#fff}
+.winbtn svg,.appmini svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 .sub{color:var(--mut);font-size:14px;margin-top:6px;max-width:760px}
@@ -114,6 +138,49 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 .lv svg.mini{width:100%;height:52px}
 .lv .ft{font-size:12px;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c-b{background:rgba(59,123,255,.16);color:#6ea0ff}.c-g{background:rgba(52,211,153,.15);color:#34d399}.c-c{background:rgba(56,189,248,.15);color:#38bdf8}.c-o{background:rgba(251,146,60,.16);color:#fb923c}
+/* FPS Boost */
+.fps-layout{display:grid;grid-template-columns:1.15fr .95fr;gap:16px}
+.fps-hero{display:grid;grid-template-columns:1.35fr .85fr;gap:16px}
+.fps-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.fps-stat{position:relative;padding:18px;border:1px solid #313744;border-radius:16px;background:linear-gradient(180deg,rgba(27,30,37,.96),rgba(24,26,32,.92));box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.fps-stat h4{font-size:11px;letter-spacing:.11em;color:#8c96a8;text-transform:uppercase;margin-bottom:10px}
+.fps-stat p{font-size:12px;color:var(--mut);line-height:1.55;margin-top:10px}
+.fps-gauge{--pct:50;--g:#4f8dff;display:flex;align-items:center;gap:14px}
+.fps-ring{width:76px;height:76px;border-radius:50%;background:conic-gradient(var(--g) calc(var(--pct)*1%), rgba(255,255,255,.06) 0);position:relative;box-shadow:0 0 0 1px rgba(255,255,255,.04)}
+.fps-ring::before{content:"";position:absolute;inset:10px;border-radius:50%;background:#171a20;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+.fps-ring span{position:absolute;inset:0;display:grid;place-items:center;font-size:25px;font-weight:700;letter-spacing:-.03em}
+.fps-ring span small{display:block;font-size:11px;color:#95a2b6;font-weight:600;margin-top:-4px;letter-spacing:.02em}
+.fps-gauge strong{display:block;font-size:14px;margin-bottom:4px}
+.fps-gauge b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#90a2bf;margin-bottom:6px}
+.fps-side{display:grid;gap:14px}
+.fps-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.fps-badges span{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid #333846;color:#d4d9e2;font-size:12px}
+.fps-actionbox{padding:18px;border:1px solid #313744;border-radius:16px;background:linear-gradient(180deg,rgba(28,31,39,.96),rgba(22,24,30,.96));display:grid;gap:12px}
+.fps-actionbox .btn,.fps-actionbox .ghost{width:100%;justify-content:center}
+.fps-small{color:var(--mut);font-size:12.5px;line-height:1.55}
+.fps-grid{display:grid;grid-template-columns:248px 1fr;gap:16px}
+.fps-tabs{padding:12px;background:rgba(18,20,27,.6);border:1px solid #313744;border-radius:16px;display:grid;gap:8px;align-content:start}
+.fps-tab{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 13px;border-radius:14px;border:1px solid transparent;background:transparent;color:#c6cfdf;cursor:pointer;transition:transform .18s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease}
+.fps-tab:hover{transform:translateX(3px);background:rgba(255,255,255,.04)}
+.fps-tab.on{background:linear-gradient(180deg,rgba(52,98,214,.24),rgba(43,74,151,.18));border-color:#436fe6;box-shadow:0 8px 22px rgba(47,111,237,.14);color:#fff}
+.fps-tab span{display:block}
+.fps-tab b{font-size:13px;font-weight:700}
+.fps-tab small{font-size:11.5px;color:#94a1b6;margin-top:3px}
+.fps-tab i{font-style:normal;color:#4f8dff;font-size:16px}
+.fps-panel{position:relative;overflow:hidden;padding:0;border:1px solid #313744;border-radius:16px;background:linear-gradient(180deg,rgba(28,31,39,.96),rgba(23,25,31,.94));min-height:420px}
+.fps-panel::before{content:"";position:absolute;inset:-80% 20% auto -20%;height:180px;background:radial-gradient(circle,rgba(79,141,255,.18),transparent 62%);pointer-events:none;opacity:.9}
+.fps-panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
+.fps-panel-head h3{font-size:18px;letter-spacing:-.03em}
+.fps-panel-head p{font-size:13px;color:var(--mut);max-width:540px;margin-top:4px}
+.fps-accent{padding:7px 12px;border-radius:999px;background:rgba(79,141,255,.14);color:#7aa8ff;border:1px solid rgba(79,141,255,.24);font-size:11.5px;font-weight:700;white-space:nowrap}
+.fps-list{padding:6px 20px 18px}
+.fps-list .rw{padding:14px 0;animation:catin .35s ease both}
+.fps-list .rw:nth-child(2){animation-delay:.04s}.fps-list .rw:nth-child(3){animation-delay:.08s}.fps-list .rw:nth-child(4){animation-delay:.12s}.fps-list .rw:nth-child(5){animation-delay:.16s}.fps-list .rw:nth-child(6){animation-delay:.20s}
+@keyframes catin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.fps-apply{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:0 20px 18px}
+.fps-mini-note{font-size:11.5px;color:#8f9cb0}
+@media(max-width:1180px){.fps-layout,.fps-hero{grid-template-columns:1fr}.fps-grid{grid-template-columns:1fr}.fps-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.appbar{grid-template-columns:1fr;justify-items:center}.appdrag{display:none}.appbar-right{justify-self:center}}
+@media(max-width:760px){.fps-metrics{grid-template-columns:1fr}.fps-tabs{grid-template-columns:1fr}.apppromo{width:100%;justify-content:space-between}.userchip{display:none}}
 
 /* telas internas */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -214,7 +281,7 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 .sk.title{height:22px;width:27%}.sk.w1{width:75%}.sk.w2{width:47%}.sk.w3{width:100%}
 .sk.box{height:100px;flex:1;border-radius:12px}.sk.short{width:34%}
 .sk-panel .sk-row{align-items:center}
-.navfly{position:fixed;top:66px;left:64px;z-index:80;width:222px;max-height:calc(100vh - 84px);overflow-y:auto;overflow-x:hidden;padding:9px;background:rgba(27,30,37,.97);border:1px solid #384252;border-radius:14px;box-shadow:0 22px 70px rgba(0,0,0,.55);backdrop-filter:blur(14px);opacity:0;visibility:hidden;pointer-events:none;transform:translateX(-10px) scale(.985);transition:opacity .22s ease,transform .26s cubic-bezier(.18,.85,.25,1),visibility .22s ease}
+.navfly{display:none}
 .navfly.open{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0) scale(1)}
 .nfhead{padding:9px 11px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #343946;color:#fff;font-size:15px;font-weight:700}
 .nfhead small{color:#8a96ac;font-size:10px;font-weight:500}
@@ -299,88 +366,38 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 .calm .quick-orb,.calm .quick-working::after{animation:none!important}
 
 
-/* Barra integrada: somente a área vazia arrasta a janela. */
-.appbar{height:54px;position:fixed;inset:0 0 auto;z-index:90;display:flex;align-items:center;gap:14px;padding:0 16px;background:linear-gradient(110deg,#1b1e25,#171a20 65%);border-bottom:1px solid #303642}
-.appbrand{display:flex;align-items:center;gap:10px;pointer-events:none;font-size:13px;letter-spacing:.4px}.appbrand svg{width:23px;height:27px}.appbrand small{font-size:10px;font-weight:500;letter-spacing:1.5px;color:#8b97ab}
-.appdrag{flex:1;height:100%;display:flex;justify-content:center;align-items:center;cursor:default}.appdrag span{pointer-events:none;color:#8591a6;font-size:11px;letter-spacing:1.4px}
-.window-controls{display:flex;align-items:center;gap:3px;padding:4px;border:1px solid #343b47;background:#22262e;border-radius:22px}.edition{font-size:10px;color:#a4b9dc;font-weight:700;padding:0 12px;border-right:1px solid #424956;letter-spacing:.8px}
-.window-controls button{width:31px;height:28px;border:0;border-radius:14px;background:transparent;color:#aab3c3;display:grid;place-items:center;cursor:pointer;transition:background .15s,color .15s}.window-controls button:hover{background:#394251;color:#fff}.window-controls button:last-child:hover{background:#c23c50}.window-controls button:disabled{opacity:.35;cursor:default}.window-controls svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.4;fill:none}
-.shell{margin:54px 0 0;min-height:calc(100vh - 54px);border:0;border-radius:0;box-shadow:none}.side{top:54px;height:calc(100vh - 54px);border-radius:0;overflow-y:auto;overflow-x:hidden}.side>*{flex-shrink:0}.side .sp{flex:1}.main{padding-top:24px}.navfly{top:110px;max-height:calc(100vh - 126px)}
-.nav.on{animation:none;background:rgba(47,111,237,.13)}.nav svg{transition:transform .28s cubic-bezier(.2,.85,.25,1)}.nav:hover svg{transform:translateY(-2px) rotate(-5deg)}
-.view.view-out{transform:translateX(-10px);filter:blur(1px)}
-@keyframes categoriaEntrar{from{opacity:0;transform:translateX(16px) translateY(5px)}to{opacity:1;transform:none}}
-.view.view-in>*{animation-name:categoriaEntrar;animation-duration:.42s}.fps-grid .fps-card{animation:categoriaEntrar .42s both}.fps-grid .fps-card:nth-child(2){animation-delay:.055s}.fps-grid .fps-card:nth-child(3){animation-delay:.11s}.fps-grid .fps-card:nth-child(4){animation-delay:.165s}
-.fps-hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:28px;padding:30px;border:1px solid #3a4f76;border-radius:18px;background:radial-gradient(ellipse at 90% 15%,#28416d 0,transparent 65%),linear-gradient(120deg,#202936,#1d222c)}
-.fps-eyebrow{font-size:10px;letter-spacing:2px;color:#90b8ff;font-weight:700}.fps-hero h2{font-size:34px;letter-spacing:-1px;margin:8px 0}.fps-hero p{max-width:560px;color:#a8b4c8;font-size:13px;line-height:1.7}.fps-hero .btn{margin-top:20px}.fps-emblem{width:125px;height:125px;border:1px solid #5b95ff55;border-radius:32px;display:grid;place-items:center;background:#5b95ff13;transform:rotate(-8deg);flex:none;box-shadow:0 0 65px #2f6fed25}.fps-emblem svg.i{width:65px;height:65px;stroke-width:1;color:#a6c7ff;transform:rotate(8deg)}
-.fps-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.fps-metric{padding:18px 20px;background:#20242c;border:1px solid var(--line);border-radius:13px}.fps-metric small{display:block;color:#98a5b9;font-size:11px;margin-bottom:7px}.fps-metric b{font-size:18px;font-weight:600}.fps-metric b.plan-name{font-size:14px}
-.fps-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.fps-card{padding:22px;background:#20242c;border:1px solid #343b48;border-radius:15px;display:flex;flex-direction:column;gap:14px;transition:transform .22s,border-color .22s}.fps-card:hover{border-color:#50688e;transform:translateY(-2px)}.fps-card-head{display:flex;align-items:center;gap:12px}.fps-icon{width:39px;height:39px;border-radius:12px;background:#2d3b52;display:grid;place-items:center;color:#8bb6ff}.fps-card h3{font-size:14px;font-weight:600}.fps-card p{font-size:12px;color:#99a6b9;line-height:1.65;flex:1}.fps-card button{align-self:flex-start}.fps-card .fps-card-head .tg{margin-left:auto}.fps-status{font-size:11px;color:#8fb4f0;min-height:16px}.fps-note{color:#8794a9;font-size:11px;line-height:1.6;padding:0 3px}
-@media(max-width:1050px){.fps-hero{padding:24px}.fps-emblem{width:95px;height:95px}.appdrag span{display:none}}
-@media(max-width:650px){.fps-grid,.fps-metrics{grid-template-columns:1fr}.fps-emblem{display:none}.edition{display:none}.appbar{padding:0 10px;gap:8px}}
-@media(prefers-reduced-motion:reduce){.fps-grid .fps-card{animation:none}.nav svg,.fps-card{transition:none}}
-
-.ui-opt-wrap{display:grid;grid-template-columns:258px minmax(0,1fr);gap:18px;align-items:start;min-width:0}
-.ui-opt-nav{background:#171a20;border:1px solid #303642;border-radius:16px;padding:10px;display:grid;gap:7px}
-.ui-opt-cat{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px;border:1px solid transparent;border-radius:11px;color:#d8deeb;background:transparent;font:600 12px Inter,"Segoe UI",sans-serif;text-align:left;min-height:47px}
-button.ui-opt-cat{cursor:pointer}button.ui-opt-cat:hover{background:#252a35;transform:translateX(2px)}
-.ui-opt-cat.on{background:linear-gradient(130deg,#2674f3,#1459d9);color:white;box-shadow:0 7px 22px #174b9c44}
-.ui-opt-cat .ui-ci{height:32px;width:32px;border-radius:8px;display:grid;place-items:center;font-size:17px;background:#2a303b;font-weight:700}
-.ui-opt-cat.on .ui-ci{background:#ffffff24}.ui-opt-cat small{font-size:10px;font-weight:700;color:#8c9bb3}
-.ui-opt-cat.on small{color:#dcecff}.ui-opt-cat .ui-line{display:block;background:#353b48;border-radius:4px;height:3px;margin-top:7px;overflow:hidden}
-.ui-opt-cat .ui-line i{display:block;height:100%;width:var(--pct,0%);border-radius:inherit;background:#4286ff}
-.ui-opt-cat.on .ui-line i{background:#a9c8ff}
-.ui-opt-content{min-width:0;background:#22252c;border:1px solid #343b45;border-radius:16px;overflow:hidden}
-.ui-opt-title{display:flex;align-items:center;gap:12px;padding:17px;border-bottom:1px solid #343b45;background:#242830}
-.ui-opt-title .ui-ci{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;background:#303845;font-size:18px}
-.ui-opt-title strong{font-size:15px}.ui-opt-title small{display:block;color:#aab4c4;font-size:12px;margin-top:3px}
-.ui-opt-count{margin-left:auto;font-size:12px;color:#9aadd1;padding:6px 11px;border:1px solid #3c4d65;border-radius:9px}
-.ui-opt-item{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:13px;padding:14px 17px;border-top:1px solid #303640;min-height:68px}
-.ui-opt-item:first-child{border-top:0}
-.ui-opt-icon{height:34px;width:34px;border:1px solid #394453;border-radius:9px;display:grid;place-items:center;color:#88b5ff;font-size:18px;background:#29303b}
-.ui-opt-icon.applied{color:#34d399;background:#19413a77;border-color:#287b5e}
-.ui-opt-desc b{font-size:13px;display:inline;color:#f4f6fa}
-.ui-opt-desc small{display:block;color:#a8b1c0;line-height:1.5;font-size:12px;margin-top:4px}
-.ui-risk{display:inline-block;margin-left:8px;padding:4px 8px;border-radius:7px;background:#543028;border:1px solid #8c4743;color:#ffaaa5;font-size:10px;font-weight:800;white-space:nowrap}
-.ui-risk.medium{background:#493e21;border-color:#796128;color:#f3c76a}
-.ui-opt-item .ui-state{white-space:nowrap;min-width:98px;text-align:center;padding:8px 11px;border:1px solid #36455a;border-radius:9px;color:#b8c5d9;background:#2b303b;font-size:11px;font-weight:700}
-.ui-opt-item .ui-state.applied{color:#41d99c;border-color:#247457;background:#174a3c77}
-.ui-opt-item .ui-apply{min-width:97px;border:1px solid #3c82ef;border-radius:9px;background:#246adf;padding:9px 15px;color:white;font-size:12px;font-weight:700;cursor:pointer}
-.ui-opt-item .ui-apply:hover{background:#3984ff}.ui-opt-item .ui-apply.restore{background:#242d3b;color:#b8c9e5;border-color:#4d617b}
-.ui-opt-footer{padding:14px 18px;color:#aebacc;font-size:11.5px;line-height:1.6;background:#1d2026;border-top:1px solid #333842}
-@media(max-width:1060px){.ui-opt-wrap{grid-template-columns:1fr}.ui-opt-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){.ui-opt-nav{grid-template-columns:1fr}.ui-opt-item{grid-template-columns:32px 1fr}.ui-opt-item .ui-state,.ui-opt-item .ui-apply{grid-column:2;justify-self:start}.ui-risk{margin-left:0;margin-top:5px}}
-
-
-/* Menu lateral expandido LZ: inspirado no layout da referência, sem restringir funções. */
-.shell{grid-template-columns:265px minmax(0,1fr)}
-.side{background:linear-gradient(180deg,#20242b,#1c2027);border-right:1px solid #333a45;border-radius:20px 0 0 20px;padding:14px 12px 12px;align-items:stretch;gap:3px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#39414f transparent}
-.side .logo{width:auto;height:auto;min-height:63px;margin:0 0 6px;padding:6px 7px;display:flex;align-items:center;gap:12px}
-.side .logo svg{width:35px;height:35px;flex:none}
-.side .brandtxt{min-width:0}
-.side .brandrow{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;color:#f0f3f8;line-height:1.2}
-.side .brandsub{font-size:10.5px;font-weight:700;color:#a9b1bf;letter-spacing:.08em;margin-top:4px;white-space:nowrap}
-.side .sect{font-size:10.5px;letter-spacing:.09em;font-weight:800;color:#8b94a3;padding:12px 12px 5px;margin-top:1px}
-.side .div{display:none}
-.side .nav{width:100%;min-height:38px;height:auto;display:flex;align-items:center;justify-content:flex-start;padding:10px 10px;gap:11px;border-radius:10px;color:#abb3c1;transition:background .2s ease,box-shadow .22s ease,color .22s ease,transform .22s ease}
-.side .nav svg.i{width:18px;height:18px;flex:none}
-.side .nav .nlabel{font-size:12.5px;font-weight:700;line-height:1.2;text-align:left;color:inherit}
-.side .nav .nextras{display:flex;align-items:center;gap:5px;margin-left:auto}
-.side .nav .ntag{font-size:9.5px;font-weight:800;border:1px solid #37465f;background:#293445;border-radius:6px;padding:2px 5px;color:#8db5ff;white-space:nowrap}
-.side .nav .ntag.beta{border-color:#3c5276;color:#9bb5fa}
-.side .nav:hover{background:#2b303a;color:#fff;transform:translateX(2px)}
-.side .nav.on{background:linear-gradient(120deg,#2670ef,#1d5dd5);color:#fff;box-shadow:0 10px 24px #2265e633}
-.side .nav.on::before{display:none}
-.side .nav::after{display:none}
-.side .ver{text-align:center;font-size:11px;border:0;background:transparent;color:#8e98a6;padding:13px 0 0;margin-top:7px;border-top:1px solid #343943}
-.navfly{display:none!important}
-@media(max-width:1130px){
- .shell{grid-template-columns:76px minmax(0,1fr)}
- .side{padding:12px 7px;align-items:center;gap:4px}
- .side .logo{padding:8px 0 12px;justify-content:center}
- .side .brandtxt,.side .sect,.side .nlabel,.side .nextras,.side .ver{display:none!important}
- .side .nav{width:43px;height:43px;min-height:43px;justify-content:center;padding:0;border-radius:11px}
- .side .nav::after{display:block;content:attr(data-tip);position:absolute;left:50px;top:50%;transform:translate(-4px,-50%);background:#101319;border:1px solid #3a4454;color:#fff;font-size:12px;font-weight:600;padding:7px 10px;border-radius:8px;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .15s,transform .15s;z-index:50}
- .side .nav:hover::after,.side .nav:focus-visible::after{opacity:1;transform:translate(0,-50%)}
-}
+/* FPS Boost — layout inspirado na segunda referência */
+.fpsx-page{display:grid;gap:18px}
+.fpsx-top{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+.fpsx-hero{display:grid;grid-template-columns:136px minmax(0,1fr) 240px;gap:18px;align-items:center;background:linear-gradient(180deg,#20252f,#1e232c);border:1px solid #334154;border-radius:18px;padding:20px}
+.fpsx-ring{--pct:50;position:relative;width:110px;height:110px;border-radius:50%;background:conic-gradient(#4f8dff calc(var(--pct)*1%), #2b313c 0);display:grid;place-items:center}
+.fpsx-ring::after{content:"";position:absolute;inset:11px;border-radius:50%;background:#20252f;border:1px solid #36404f}
+.fpsx-ring b,.fpsx-ring span{position:relative;z-index:1}.fpsx-ring b{font-size:24px}.fpsx-ring span{font-size:12px;color:var(--mut)}
+.fpsx-head small{display:block;color:#8ea2c7;font-size:12px;font-weight:800;letter-spacing:.16em;margin-bottom:10px}
+.fpsx-head h3{font-size:18px;line-height:1.1;margin:0 0 8px}.fpsx-head p{margin:0;color:#b6becb;line-height:1.6}
+.fpsx-head .fpsx-mini{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;color:#d4dae4;font-size:13px}.fpsx-head .fpsx-mini span{display:inline-flex;align-items:center;gap:7px}
+.fpsx-side{border:1px solid #2e3846;border-radius:14px;background:#21262f;padding:16px;display:grid;gap:12px}
+.fpsx-side .fpsx-row{display:flex;justify-content:space-between;gap:12px;color:#bcc5d3;font-size:13px}.fpsx-side .fpsx-row b{color:#fff}.fpsx-side .fpsx-btn{width:100%}
+.fpsx-grid{display:grid;grid-template-columns:285px minmax(0,1fr);gap:18px;align-items:start}
+.fpsx-cats{display:grid;gap:10px;padding:10px;border:1px solid #313947;border-radius:16px;background:#1d2128}
+.fpsx-cat{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 11px;border-radius:12px;background:transparent;border:1px solid transparent;color:#d7dce6;text-align:left;cursor:pointer;transition:transform .18s ease,background .18s ease,border-color .18s ease}
+.fpsx-cat:hover{transform:translateX(2px);background:#272c35}.fpsx-cat.on{background:linear-gradient(130deg,#286fe8,#1f5ed7);border-color:#3f81f4;box-shadow:0 10px 22px rgba(35,93,212,.22)}
+.fpsx-cicon{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:#29303b;color:#d8e6ff;font-weight:800}.fpsx-cat.on .fpsx-cicon{background:rgba(255,255,255,.14)}
+.fpsx-ctxt b{display:block;font-size:13px;line-height:1.2}.fpsx-ctxt small{display:block;color:#9aa5b6;font-size:11px;margin-top:4px}.fpsx-cat.on .fpsx-ctxt small{color:#dce8ff}
+.fpsx-meter{display:block;margin-top:7px;height:4px;border-radius:999px;background:#354052;overflow:hidden}.fpsx-meter i{display:block;height:100%;width:var(--pct,0%);background:#4f8dff;border-radius:inherit}.fpsx-cat.on .fpsx-meter i{background:#c7dbff}
+.fpsx-count{font-size:11px;font-weight:800;color:#9fb7e6;white-space:nowrap}.fpsx-cat.on .fpsx-count{color:#fff}
+.fpsx-panel{border:1px solid #313947;border-radius:16px;background:#20252d;overflow:hidden}
+.fpsx-panel-h{display:flex;align-items:center;gap:12px;padding:17px;border-bottom:1px solid #323a46;background:#242931}.fpsx-panel-h .fpsx-cicon{width:34px;height:34px}.fpsx-panel-h strong{font-size:16px;display:block}.fpsx-panel-h p{margin:4px 0 0;color:#9da8b9;font-size:12px}.fpsx-chip{margin-left:auto;font-size:11px;padding:7px 10px;border-radius:10px;border:1px solid #395246;background:#16392d;color:#48d59b;font-weight:800}
+.fpsx-list{display:grid}.fpsx-item{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:13px;align-items:center;padding:14px 17px;border-top:1px solid #303743}.fpsx-item:first-child{border-top:0}
+.fpsx-item .fpsx-icon{width:34px;height:34px;border-radius:9px;border:1px solid #3a4655;background:#2a313c;color:#88b5ff;display:grid;place-items:center;font-size:17px}.fpsx-item .fpsx-icon.ok{color:#34d399;background:#19413a77;border-color:#287b5e}
+.fpsx-item .ttl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.fpsx-item .ttl b{font-size:13px}.fpsx-item .ttl .risk{font-size:10px;font-weight:800;padding:4px 8px;border-radius:7px;background:#5b302a;border:1px solid #914640;color:#ffafaa}.fpsx-item .ttl .risk.med{background:#4a3d21;border-color:#816627;color:#f2c66a}
+.fpsx-item p{margin:4px 0 0;color:#a7b0bf;font-size:12px;line-height:1.55}
+.fpsx-item .act{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.fpsx-item .state{white-space:nowrap;min-width:96px;text-align:center;padding:8px 11px;border:1px solid #36455a;border-radius:9px;color:#b8c5d9;background:#2b303b;font-size:11px;font-weight:700}.fpsx-item .state.ok{color:#41d99c;border-color:#247457;background:#174a3c77}
+.fpsx-item .btnx,.fpsx-side .fpsx-btn{min-width:96px;border:1px solid #3c82ef;border-radius:9px;background:#246adf;padding:9px 14px;color:#fff;font-size:12px;font-weight:700;cursor:pointer}.fpsx-item .btnx.alt{background:#242d3b;color:#bfd0ec;border-color:#4d617b}.fpsx-item .btnx:hover,.fpsx-side .fpsx-btn:hover{background:#3b83fb}
+.fpsx-foot{padding:14px 18px;color:#aebacc;font-size:11.5px;line-height:1.6;background:#1c2026;border-top:1px solid #313844}
+@media(max-width:1100px){.fpsx-hero{grid-template-columns:110px minmax(0,1fr)}.fpsx-side{grid-column:1/-1}.fpsx-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.fpsx-hero{grid-template-columns:1fr}.fpsx-ring{margin:auto}.fpsx-item{grid-template-columns:34px 1fr}.fpsx-item .act{grid-column:2;justify-content:flex-start}.fpsx-panel-h{flex-wrap:wrap}.fpsx-chip{margin-left:0}}
 
 </style>
 </head>
@@ -414,42 +431,50 @@ button.ui-opt-cat{cursor:pointer}button.ui-opt-cat:hover{background:#252a35;tran
 <symbol id="refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.500-5.800M20 4v5h-5"/></symbol>
 <symbol id="target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.500"/></symbol>
 <symbol id="monitor" viewBox="0 0 24 24"><path d="M3 5h18v11H3zM8 20h8M12 16v4"/></symbol>
+<symbol id="min" viewBox="0 0 24 24"><path d="M6 12.500h12"/></symbol>
+<symbol id="max" viewBox="0 0 24 24"><rect x="6.500" y="6.500" width="11" height="11" rx="1.500"/></symbol>
+<symbol id="closex" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17"/></symbol>
 </defs>
 </svg>
 
-<header class="appbar" aria-label="Barra da janela">
- <div class="appbrand"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="#7aabff"/></svg><b>LZ PAINEL</b><small>DESKTOP</small></div>
- <div class="appdrag pywebview-drag-region" id="appdrag" title="Arraste para mover · clique duas vezes para maximizar"><span>SEU PC, NO CONTROLE</span></div>
- <div class="window-controls"><span class="edition">GRÁTIS</span>
- <button id="winMin" aria-label="Minimizar janela" title="Minimizar" disabled><svg viewBox="0 0 16 16"><path d="M3 8h10"/></svg></button>
- <button id="winMax" aria-label="Maximizar janela" title="Maximizar" disabled><svg viewBox="0 0 16 16"><path id="winMaxIcon" d="M3 3h10v10H3z"/></svg></button>
- <button id="winClose" aria-label="Fechar janela" title="Fechar" disabled><svg viewBox="0 0 16 16"><path d="m3 3 10 10M13 3 3 13"/></svg></button>
- </div>
-</header>
 <div class="shell">
 <aside class="side" aria-label="Menu">
- <div class="logo"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="#e8eefc"/></svg><div class="brandtxt"><div class="brandrow">LZ Painel <span class="ntag beta">BETA</span></div><div class="brandsub">OTIMIZAÇÃO INTELIGENTE</div></div></div>
- <button class="nav on" data-v="dash" data-tip="Dashboard" aria-label="Dashboard"><svg class="i"><use href="#dash"/></svg><span class="nlabel">Dashboard</span></button>
-<div class="sect">OTIMIZAÇÃO</div>
-<button class="nav " data-v="jogos" data-tip="FPS Boost" aria-label="FPS Boost"><svg class="i"><use href="#bolt"/></svg><span class="nlabel">FPS Boost</span></button>
-<button class="nav " data-v="input" data-tip="Input Lag" aria-label="Input Lag"><svg class="i"><use href="#pulse"/></svg><span class="nlabel">Input Lag</span><span class="nextras"><span class="ntag ">PRO</span></span></button>
-<button class="nav " data-v="game" data-tip="Game Boost" aria-label="Game Boost"><svg class="i"><use href="#pad"/></svg><span class="nlabel">Game Boost</span><span class="nextras"><span class="ntag ">PRO</span><span class="ntag beta">BETA</span></span></button>
-<button class="nav " data-v="apps" data-tip="Apps" aria-label="Apps"><svg class="i"><use href="#box"/></svg><span class="nlabel">Apps</span></button>
-<button class="nav " data-v="mem" data-tip="Memória" aria-label="Memória"><svg class="i"><use href="#ram"/></svg><span class="nlabel">Memória</span></button>
-<button class="nav " data-v="rede" data-tip="Rede" aria-label="Rede"><svg class="i"><use href="#wifi"/></svg><span class="nlabel">Rede</span></button>
-<button class="nav " data-v="bios" data-tip="BIOS" aria-label="BIOS"><svg class="i"><use href="#cpu"/></svg><span class="nlabel">BIOS</span></button>
-<div class="sect">SISTEMA</div>
-<button class="nav " data-v="limpeza" data-tip="Limpeza" aria-label="Limpeza"><svg class="i"><use href="#trash"/></svg><span class="nlabel">Limpeza</span></button>
-<button class="nav " data-v="debloat" data-tip="Debloat" aria-label="Debloat"><svg class="i"><use href="#svc"/></svg><span class="nlabel">Debloat</span></button>
-<button class="nav " data-v="updates" data-tip="Atualizações" aria-label="Atualizações"><svg class="i"><use href="#refresh"/></svg><span class="nlabel">Atualizações</span><span class="nextras"><span class="ntag ">PRO</span></span></button>
-<button class="nav " data-v="proc" data-tip="Processos" aria-label="Processos"><svg class="i"><use href="#monitor"/></svg><span class="nlabel">Processos</span></button>
-<button class="nav " data-v="pers" data-tip="Personalização" aria-label="Personalização"><svg class="i"><use href="#gear"/></svg><span class="nlabel">Personalização</span><span class="nextras"><span class="ntag ">PRO</span></span></button>
-<button class="nav " data-v="config" data-tip="Configurações" aria-label="Configurações"><svg class="i"><use href="#gear"/></svg><span class="nlabel">Configurações</span></button>
- <div class="sp"></div><div class="ver">LZ Painel • v1.0</div>
+  <div class="logo"><svg viewBox="0 0 44 44"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="#e8eefc"/></svg><div class="brandtxt"><div class="brandttl">LZ Painel <span class="beta">BETA</span></div><div class="brandsub">Otimização inteligente</div></div></div>
+  <button class="nav on" data-v="dash" data-tip="Dashboard" aria-label="Dashboard"><svg class="i"><use href="#dash"/></svg><span class="lbl">Dashboard</span></button>
+  <div class="sec">Otimização</div>
+  <button class="nav" data-v="jogos" data-tip="FPS Boost" aria-label="FPS Boost"><svg class="i"><use href="#bolt"/></svg><span class="lbl">FPS Boost</span></button>
+  <button class="nav" data-v="input" data-tip="Input Lag" aria-label="Input Lag"><svg class="i"><use href="#pulse"/></svg><span class="lbl">Input Lag</span><span class="meta"><span class="mini-badge pro">PRO</span></span></button>
+  <button class="nav" data-v="game" data-tip="Game Boost" aria-label="Game Boost"><svg class="i"><use href="#pad"/></svg><span class="lbl">Game Boost</span><span class="meta"><span class="mini-badge pro">PRO</span><span class="mini-badge beta">BETA</span></span></button>
+  <button class="nav" data-v="apps" data-tip="Apps" aria-label="Apps"><svg class="i"><use href="#box"/></svg><span class="lbl">Apps</span></button>
+  <button class="nav" data-v="mem" data-tip="Memória" aria-label="Memória"><svg class="i"><use href="#ram"/></svg><span class="lbl">Memória</span></button>
+  <button class="nav" data-v="rede" data-tip="Rede" aria-label="Rede"><svg class="i"><use href="#wifi"/></svg><span class="lbl">Rede</span></button>
+  <button class="nav" data-v="bios" data-tip="BIOS" aria-label="BIOS"><svg class="i"><use href="#wrench"/></svg><span class="lbl">BIOS</span></button>
+  <div class="sec">Sistema</div>
+  <button class="nav" data-v="limpeza" data-tip="Limpeza" aria-label="Limpeza"><svg class="i"><use href="#trash"/></svg><span class="lbl">Limpeza</span></button>
+  <button class="nav" data-v="debloat" data-tip="Debloat" aria-label="Debloat"><svg class="i"><use href="#svc"/></svg><span class="lbl">Debloat</span></button>
+  <button class="nav" data-v="updates" data-tip="Atualizações" aria-label="Atualizações"><svg class="i"><use href="#refresh"/></svg><span class="lbl">Atualizações</span><span class="meta"><span class="mini-badge pro">PRO</span></span></button>
+  <button class="nav" data-v="proc" data-tip="Processos" aria-label="Processos"><svg class="i"><use href="#monitor"/></svg><span class="lbl">Processos</span></button>
+  <button class="nav" data-v="pers" data-tip="Personalização" aria-label="Personalização"><svg class="i"><use href="#gear"/></svg><span class="lbl">Personalização</span><span class="meta"><span class="mini-badge pro">PRO</span></span></button>
+  <div class="sp"></div>
+  <button class="nav" data-v="config" data-tip="Configurações" aria-label="Configurações"><svg class="i"><use href="#gear"/></svg><span class="lbl">Configurações</span></button>
+  <div class="ver">LZ Painel • v1.0</div>
 </aside>
 <div id="navfly" class="navfly" aria-label="Menu expandido" aria-hidden="true"></div>
 
 <main class="main">
+  <div class="appbar">
+    <div class="appdrag" aria-hidden="true"></div>
+    <div class="apppromo"><b>▻</b><span>Cupom de 10% OFF</span><button type="button">Aproveitar</button></div>
+    <div class="appbar-right">
+      <div class="userchip"><div class="userav">LZ</div><div class="userplan">GRÁTIS</div></div>
+      <button class="appmini" id="appPulse" aria-label="Central de novidades"><svg class="i"><use href="#refresh"/></svg><span class="badge">7</span></button>
+      <div class="winset">
+        <button class="winbtn" id="winMin" aria-label="Minimizar"><svg class="i"><use href="#min"/></svg></button>
+        <button class="winbtn" id="winMax" aria-label="Maximizar ou restaurar"><svg class="i"><use href="#max"/></svg></button>
+        <button class="winbtn close" id="winClose" aria-label="Fechar"><svg class="i"><use href="#closex"/></svg></button>
+      </div>
+    </div>
+  </div>
   <header class="hd">
     <div><h1 id="h1">Dashboard</h1><div class="sub" id="sub">Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.</div></div>
     <div class="hr">
@@ -545,7 +570,6 @@ function smooth(p){if(p.length<2)return'';let d=`M${p[0][0]},${p[0][1]}`;for(let
 const MB=2**20,MJ=[1.1*2**30,.8*2**30,.5*2**30];
 const MA=['7-Zip','Discord','Google Chrome','Microsoft Visual C++ 2015-2022 Redistributable (x64)','Spotify','Steam','Visual Studio Code'].map(n=>({name:n,ver:'1.0.0',pub:'Fabricante',can:true}));
 const MS=[['DiagTrack','Telemetria do Windows','Envia dados de diagnóstico e uso à Microsoft.',1],['WerSvc','Relatório de erros do Windows','Envia relatórios de falhas à Microsoft.',1],['Fax','Fax','Envio e recebimento de fax.',1],['SysMain','SysMain (Superfetch)','Pré-carrega apps na memória. Pode ser desativado em SSD; em HD costuma ajudar.',0],['Spooler','Spooler de impressão','Necessário para imprimir. Desative só se não usa impressora.',0]].map(x=>({name:x[0],title:x[1],desc:x[2],safe:!!x[3],on:true,running:true}));
-const demoPlans=[{id:'a',name:'Equilibrado',on:true},{id:'b',name:'Alto desempenho',on:false},{id:'c',name:'Economia de energia',on:false}];
 const MOCK={
 stats:()=>({cpu:R(15,40),ram_used:R(6.2,6.8),ram_total:16,disk:68,disk_free:164e9,disk_total:512e9,temp:Math.round(R(46,50))}),
 info:()=>({os:'Windows 11',cpu:'Processador de exemplo',cores:'8 núcleos / 16 threads',ram:16,disk_total:512e9,disk_free:164e9,uptime:19800}),
@@ -555,8 +579,8 @@ ping:()=>[['Cloudflare (1.1.1.1)',Math.round(R(9,18))],['Google DNS (8.8.8.8)',M
 flushdns:()=>true,
 startup:()=>['Discord','Spotify','Steam','OneDrive','Teams'].map(n=>({name:n,cmd:'C:\\Programs\\'+n+'\\'+n+'.exe',hive:'HKCU',on:true})),
 set_startup:()=>true,
-plans:()=>demoPlans.map(p=>({...p})),
-setplan:id=>{id=({high:'b',balanced:'a'})[id]||id;if(!demoPlans.some(p=>p.id===id))return false;demoPlans.forEach(p=>p.on=p.id===id);return true},
+plans:()=>[{id:'a',name:'Equilibrado',on:true},{id:'b',name:'Alto desempenho',on:false},{id:'c',name:'Economia de energia',on:false}],
+setplan:()=>true,
 scan:()=>[['Arquivos temporários do usuário',MJ[0]],['Temp do Windows',MJ[1]],['Cache de internet',MJ[2]]],
 clean:()=>{const t=MJ.reduce((a,b)=>a+b,0);MJ.fill(0);return t},
 freemem:()=>R(300,900)*MB,
@@ -570,31 +594,6 @@ abrir:()=>{toast('Disponível apenas no programa .exe');return true},
 restore:()=>'Ponto de restauração criado (simulado)'};
 const A=(n,...a)=>{let p;try{const f=!DEMO&&window.pywebview&&pywebview.api&&pywebview.api[n];p=f?f(...a):(DEMO||!window.pywebview)&&MOCK[n]&&MOCK[n](...a)}catch(e){}return Promise.resolve(p).catch(()=>null).then(v=>v===undefined?null:v)};
 
-/* Controles da janela não usam a API de demonstração. */
-window.setWindowMaximized=value=>{
- const b=$('#winMax');b.title=value?'Restaurar':'Maximizar';
- b.setAttribute('aria-label',value?'Restaurar janela':'Maximizar janela');
- $('#winMaxIcon').setAttribute('d',value?'M5 3h8v8M3 5h8v8H3z':'M3 3h10v10H3z');
-};
-async function windowAction(action){
- const api=window.pywebview?.api;if(!api?.window_action)return;
- try{await api.window_action(action)}catch(e){if(action!=='close')toast('Não foi possível alterar a janela')}
-}
-function initWindowControls(){
- const api=window.pywebview?.api;if(!api?.window_action)return;
- ['winMin','winMax','winClose'].forEach(id=>$('#'+id).disabled=false);
- api.window_state().then(s=>window.setWindowMaximized(!!s?.maximized)).catch(()=>{});
-}
-$('#winMin').onclick=()=>windowAction('minimize');
-$('#winMax').onclick=()=>windowAction('maximize');
-$('#winClose').onclick=async()=>{
- if(quickBusy&&!await ask('Fechar durante a otimização?','As etapas em andamento podem ficar incompletas. Deseja fechar o painel?','Fechar'))return;
- windowAction('close');
-};
-$('#appdrag').ondblclick=()=>windowAction('maximize');
-window.addEventListener('pywebviewready',initWindowControls);
-initWindowControls();
-
 /* ---------- interface básica ---------- */
 let tt;
 function toast(t){$('#tt').textContent=t;const e=$('#toast');e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),3000);LOG.unshift({t,at:new Date()});LOG.length=Math.min(LOG.length,20);$('#bellb').classList.add('un');if(!$('#np').hidden)npRender()}
@@ -605,6 +604,9 @@ const row=(l,r='',s='')=>`<div class="rw"><div>${l}${s?`<small>${s}</small>`:''}
 const tg=(id,on)=>`<label class="tg"><input type="checkbox" id="${id}" ${on?'checked':''}><i></i></label>`;
 const bt=(t,id,c='')=>`<button class="ghost ${c}" id="${id}">${t}</button>`;
 const ob=(t,k)=>`<button class="ghost" data-open="${k}">${t}</button>`;
+const fpsTab=(id,title,sub,icon='▸')=>`<button class="fps-tab" data-fps-tab="${id}"><span><b>${title}</b><small>${sub}</small></span><i>${icon}</i></button>`;
+const fpsGauge=(label,value,max,color,desc)=>{const pct=max?Math.max(0,Math.min(100,Math.round(value/max*100))):0;return `<div class="fps-stat"><h4>${label}</h4><div class="fps-gauge"><div class="fps-ring" style="--pct:${pct};--g:${color}"><span>${Math.round(value)}<small>/${Math.round(max)}</small></span></div><div><b>Nível atual</b><strong>${Math.round(value)} / ${Math.round(max)}</strong><p>${desc}</p></div></div></div>`};
+function bindWindowChrome(){const map=[['#winMin','win_minimize'],['#winMax','win_toggle_maximize'],['#winClose','win_close']];map.forEach(([sel,fn])=>{$(sel)?.addEventListener('click',async ev=>{ev.preventDefault();await A(fn)})});$('#appPulse')?.addEventListener('click',()=>toast('Novidades e atalhos rápidos em breve'));}
 
 /* ---------- tarefas de otimização (usadas no Dashboard e na tela Otimização) ---------- */
 const TASKS={
@@ -673,124 +675,104 @@ function skeletonMarkup(k){
 function initFlyout(){}
 
 /* ---------- telas ---------- */
-const T={dash:['Dashboard','Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.'],otim:['Otimização','Escolha o que otimizar e execute tudo de uma vez.'],jogos:['FPS Boost','Prepare seu PC para jogar com ajustes de energia, memória e gráficos.'],monitor:['Monitoramento','Uso em tempo real e processos ativos.'],rede:['Rede e internet','Conexão, latência e DNS.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],config:['Configurações','Preferências do painel.']};
-
-Object.assign(T,{
- input:['Input Lag','Ajustes e ferramentas para melhorar a responsividade.'],
- game:['Game Boost','Ferramentas para preparar o computador antes de jogar.'],
- mem:['Memória','Acompanhe e gerencie a memória do PC.'],
- bios:['BIOS','Atalhos para informações do hardware e configurações.'],
- debloat:['Debloat','Revise serviços e aplicativos sem remover componentes essenciais.'],
- updates:['Atualizações','Acompanhe e configure o Windows Update.'],
- proc:['Processos','Uso de recursos e processos ativos.'],
- pers:['Personalização','Preferências visuais e de privacidade.']
-});
-
+const T={dash:['Dashboard','Visão geral do seu PC.'],jogos:['FPS Boost','Perfil de desempenho para jogos e FPS.'],input:['Input Lag','Ajustes focados em responsividade e latência do sistema.'],game:['Game Boost','Aplique melhorias rápidas para uma sessão de jogo mais limpa.'],apps:['Apps','Gerencie programas instalados e desinstale o que não usa.'],mem:['Memória','Veja o uso atual da RAM e libere memória quando necessário.'],rede:['Rede','Conexão, latência e DNS.'],bios:['BIOS','Ferramentas e atalhos úteis para sistema e hardware.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],debloat:['Debloat','Reduza bloat e serviços desnecessários com segurança.'],updates:['Atualizações','Revise opções e preferências ligadas ao Windows Update.'],proc:['Processos','Uso em tempo real e processos ativos.'],pers:['Personalização','Preferências visuais do painel e ajustes de interface.'],config:['Configurações','Preferências gerais do painel.']};
 const V={};
-
-/* Desempenho e Interface: estado real, sem aplicar ajustes de risco. */
-const UI_OPT_META=[
- ['startup_delay','◷','Remover atraso de inicialização','Remove a espera artificial de alguns aplicativos ao iniciar com Windows.','auto'],
- ['menu_delay','↗','Reduzir atraso de menus','Reduz o intervalo de abertura dos menus do Windows.','auto'],
- ['perf_counters','▥','Desativar contadores de desempenho','Pode atrapalhar o monitoramento e o diagnóstico de problemas.','high'],
- ['kernel_ram','≋','Manter o núcleo do Windows na RAM','Alteração do arquivo de paginação que pode prejudicar estabilidade.','review'],
- ['memory_compression','⇄','Desativar compressão de memória','Pode aumentar consumo de RAM e não garante aumento de FPS.','medium']
-];
-const UI_OPT_CATS=[
- ['priv','◈','Privacidade e Telemetria'],
- ['jogos','♧','Jogos'],
- ['ferr','▣','CPU e Kernel'],
- ['jogos','▤','GPU'],
- [null,'◉','Desempenho e Interface'],
- ['rede','⌁','Rede'],
- ['limpeza','▱','Armazenamento / SSD'],
- ['servicos','▤','Serviços'],
- ['config','⌁','Mouse e Teclado'],
- ['config','▱','Explorer e Barra de Tarefas'],
- ['energia','ϟ','Energia']
-];
-function uiOptSection(st){
- st=st||{};
- const applied=UI_OPT_META.filter(function(x){return st[x[0]]&&st[x[0]].applied===true}).length;
- const nav=UI_OPT_CATS.map(function(x){
-  const dest=x[0],active=!dest;
-  return '<'+(dest?'button':'div')+' class="ui-opt-cat '+(active?'on':'')+'"'+(dest?' data-go="'+dest+'" type="button"':'')+'>'+
-   '<span class="ui-ci">'+x[1]+'</span><span>'+esc(x[2])+'<span class="ui-line"><i style="--pct:'+(active?Math.round(applied/5*100):25)+'%"></i></span></span>'+
-   (active?'<small>'+applied+'/5</small>':'')+'</'+(dest?'button':'div')+'>'
- }).join('');
- const rows=UI_OPT_META.map(function(x){
-  const id=x[0],status=st[id]||{},mode=x[4];
-  const risk=mode==='high'?'<span class="ui-risk">RISCO ALTO</span>':mode==='medium'?'<span class="ui-risk medium">RISCO MÉDIO</span>':mode==='review'?'<span class="ui-risk medium">REVISÃO MANUAL</span>':'';
-  let action='<span class="ui-state">Revisão manual</span>';
-  if(mode==='auto'){
-   if(status.applied===true&&status.restorable)action='<button class="ui-apply restore" data-ui-opt="'+id+'" data-ui-method="restore">Restaurar</button>';
-   else if(status.applied===true)action='<span class="ui-state applied">✓ Aplicado</span>';
-   else if(status.supported===true)action='<button class="ui-apply" data-ui-opt="'+id+'" data-ui-method="apply">Aplicar</button>';
-   else action='<span class="ui-state">Indisponível</span>';
-  }
-  return '<div class="ui-opt-item"><span class="ui-opt-icon '+(status.applied?'applied':'')+'">'+x[1]+'</span><span class="ui-opt-desc"><b>'+esc(x[2])+'</b>'+risk+
-    '<small>'+esc(x[3])+'</small></span>'+action+'</div>'
- }).join('');
- return '<section class="ui-opt-wrap"><aside class="ui-opt-nav" aria-label="Categorias de otimização">'+nav+
- '</aside><div class="ui-opt-content"><div class="ui-opt-title"><span class="ui-ci">◉</span><div><strong>Desempenho e Interface</strong><small>Configurações e ferramentas</small></div><span class="ui-opt-count">'+
- applied+'/5 aplicados</span></div>'+rows+'<div class="ui-opt-footer">Opções com risco ficam em revisão manual, sem aplicação automática. As configurações leves são reversíveis quando existe backup; Defender, Update e Store permanecem inalterados.</div></div></section>'
-}
-document.addEventListener('click',async function(e){
- const b=e.target.closest('[data-ui-opt]');if(!b||b.disabled)return;
- const id=b.dataset.uiOpt,method=b.dataset.uiMethod;
- const meta=UI_OPT_META.find(function(x){return x[0]===id});
- if(!meta||meta[4]!=='auto')return;
- const title=method==='restore'?'Restaurar configuração':'Aplicar configuração';
- const msg=method==='restore'?'Restaurar o valor anterior de '+meta[2]+'?':'Aplicar '+meta[2]+'? A mudança é reversível e seu resultado depende do computador.';
- if(!await ask(title,msg,method==='restore'?'Restaurar':'Aplicar'))return;
- b.disabled=true;
- const result=await A(method==='restore'?'interface_restore':'interface_apply',id);
- toast(result&&result.ok?(method==='restore'?'Configuração restaurada':'Configuração aplicada')+(result.reboot?' · novo login ou reinício pode ser necessário':''):(result&&result.error)||'Não foi possível aplicar');
- go('otim')
-});
-
 V.otim=async()=>{const ids=['temp','dns','ram','plan','serv'],def={temp:1,dns:1,ram:1};
-return [uiOptSection(await A('interface_status'))+card('Otimizar tudo',`<p class="nt">Execute limpeza de temporários, renovação do DNS e verificação de inicialização, serviços e desempenho. No final, veja o relatório como no vídeo.</p><button class="btn sm" data-act="fullopt">✧ Otimizar tudo</button>`) +card('Ajustes individuais','<div class="opt-track" aria-hidden="true"><span id="optline"></span></div>'+ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
+return [card('Otimizar tudo',`<p class="nt">Execute limpeza de temporários, renovação do DNS e verificação de inicialização, serviços e desempenho. No final, veja o relatório como no vídeo.</p><button class="btn sm" data-act="fullopt">✧ Otimizar tudo</button>`) +card('Ajustes individuais','<div class="opt-track" aria-hidden="true"><span id="optline"></span></div>'+ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
 if(sel.includes('serv')&&!await ask('Desativar serviços seguros','Isso desliga os serviços marcados como Seguro. Você pode restaurar na tela Serviços.','Continuar'))return;
 const b=$('#ex');b.disabled=true;const line=$('#optline');if(line)line.style.width='0%';ids.forEach(id=>$('#r_'+id).textContent='');let n=0;
 for(const id of sel){const e=$('#r_'+id);if(!e)return;e.className='st-run is-busy';e.textContent='Executando…';let m;try{m=await TASKS[id].run()}catch(x){m='Falhou'}if($('#r_'+id)){e.className='st-ok';e.textContent='✓ '+m}n++;if(line)line.style.width=Math.round(n/sel.length*100)+'%'}
 if($('#ex'))b.disabled=false;toast(n+' otimizações concluídas');analyze()}}]};
-let fpsPreviousPlan=null;
+
 V.jogos=async()=>{
- const [plans,stats]=await Promise.all([A('plans'),A('stats')]);
- const pl=plans||[],active=pl.find(p=>p.on),hi=!!active&&/alto|high|ultimate|máximo/i.test(active.name);
- const s=stats||{},cpu=Number.isFinite(s.cpu)?Math.round(s.cpu)+'%':'Indisponível';
- const ram=Number.isFinite(s.ram_used)&&s.ram_total?Math.round(s.ram_used/s.ram_total*100)+'%':'Indisponível';
- return [`<section class="fps-hero"><div><span class="fps-eyebrow">PERFORMANCE • GAMING</span><h2>Seu próximo jogo começa aqui.</h2><p>Ajuste o desempenho do Windows e prepare a memória antes de entrar na partida. Você escolhe o que aplicar.</p><button class="btn sm" data-open="gaming-gamemode"><svg class="i"><use href="#pad"/></svg>Abrir Modo de Jogo</button></div><div class="fps-emblem" aria-hidden="true"><svg class="i"><use href="#pad"/></svg></div></section>
- <section class="fps-metrics" aria-label="Uso do PC ao abrir a categoria"><div class="fps-metric"><small>CPU • USO ATUAL</small><b>${cpu}</b></div><div class="fps-metric"><small>MEMÓRIA • USO ATUAL</small><b>${ram}</b></div><div class="fps-metric"><small>PLANO DE ENERGIA</small><b class="plan-name" id="fpsPlanName">${esc(active?.name||'Indisponível')}</b></div></section>
- <section class="fps-grid" aria-label="Ajustes para jogos">
- <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#bolt"/></svg></span><h3>Alto desempenho</h3><label class="tg"><input type="checkbox" id="gm" aria-label="Ativar plano de alto desempenho" ${hi?'checked':''}><i></i></label></div><p>Priorize desempenho no plano de energia. Pode aumentar o consumo e a temperatura. Ao desativar, restaura o plano anterior desta sessão.</p><div class="fps-status" id="fpsPlanStatus" role="status">${hi?'Plano de alto desempenho ativo':'Ative quando precisar'}</div></article>
- <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#ram"/></svg></span><h3>Memória disponível</h3></div><p>Solicite a liberação de memória sem encerrar programas. O resultado depende do uso do computador.</p><button class="ghost" id="fm">Liberar memória</button><div class="fps-status" id="fpsMemoryStatus" role="status"></div></article>
- <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#monitor"/></svg></span><h3>Preferências de gráficos</h3></div><p>Escolha a GPU de alto desempenho para cada jogo nas configurações oficiais do Windows.</p><button class="ghost" data-open="display-advancedgraphics">Configurar gráficos ↗</button></article>
- <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#pad"/></svg></span><h3>Modo de Jogo do Windows</h3></div><p>Abra os ajustes do Windows para verificar e ativar o Modo de Jogo.</p><button class="ghost" data-open="gaming-gamemode">Configurar Modo de Jogo ↗</button></article>
- </section><p class="fps-note">O painel não mede FPS durante os jogos. Os resultados variam conforme o hardware e o jogo; não há ganho de FPS garantido. Os indicadores acima são atualizados ao abrir esta categoria.</p>`,()=>{
- const toggle=$('#gm'),status=$('#fpsPlanStatus'),name=$('#fpsPlanName'),memory=$('#fm'),memoryStatus=$('#fpsMemoryStatus');
- toggle.disabled=!active;
- toggle.onchange=async()=>{
-  const on=toggle.checked;toggle.disabled=true;status.textContent='Aplicando plano…';
-  const current=(await A('plans')||[]).find(p=>p.on);
-  const target=on?'high':fpsPreviousPlan||'balanced';
-  const ok=!!current&&await A('setplan',target);
-  if(ok){if(on)fpsPreviousPlan=current.id;else fpsPreviousPlan=null;
-   const updated=(await A('plans')||[]).find(p=>p.on);
-   name.textContent=updated?.name||(on?'Alto desempenho':'Plano restaurado');
-   status.textContent=on?'Alto desempenho ativado':target==='balanced'?'Plano equilibrado ativado':'Plano anterior restaurado';
-  }else{toggle.checked=!on;status.textContent='Não foi possível alterar o plano neste PC.'}
-  toggle.disabled=false;toast(status.textContent);
+ const [plans,stats,startup,dns,svcs,scan,iface]=await Promise.all([
+   A('plans'),A('stats'),A('startup'),A('dns_status'),A('services'),A('scan'),A('interface_status')
+ ]);
+ const planList=plans||[], st=stats||{}, startupList=startup||[], serviceList=svcs||[], scanList=scan||[], ifaceStatus=iface||{};
+ const hi=planList.some(p=>p.on&&/alto|high|ultimate|máximo/i.test(p.name));
+ const ifaceApplied=['startup_delay','menu_delay','perf_counters','kernel_ram','memory_compression'].filter(k=>ifaceStatus[k]&&ifaceStatus[k].applied===true).length;
+ const safeDisabled=serviceList.filter(s=>s.safe&&!s.on).length;
+ const startupOn=startupList.filter(x=>x.on).length;
+ const ramPct=st.ram_total?Math.round(st.ram_used/st.ram_total*100):0;
+ const freeable=scanList.reduce((a,x)=>a+(Array.isArray(x)?Number(x[1]||0):0),0);
+ const categories={
+   priv:{icon:'◈',title:'Privacidade e Telemetria',sub:'5 atalhos para revisão',done:0,total:5,accent:0,desc:'Abra rapidamente as preferências oficiais de privacidade do Windows.',items:[
+     {icon:'◉',title:'Câmera',desc:'Revise quais aplicativos podem usar a câmera.',btn:'Revisar',open:'privacy-webcam'},
+     {icon:'◎',title:'Microfone',desc:'Confira os apps com permissão para gravar áudio.',btn:'Revisar',open:'privacy-microphone'},
+     {icon:'⌁',title:'Localização',desc:'Veja quais aplicativos podem acessar sua localização.',btn:'Revisar',open:'privacy-location'},
+     {icon:'◌',title:'Geral',desc:'Preferências gerais do Windows, como ID de publicidade.',btn:'Revisar',open:'privacy-general'},
+     {icon:'✦',title:'Diagnóstico e comentários',desc:'Controle os dados enviados à Microsoft.',btn:'Revisar',open:'privacy-feedback'}
+   ]},
+   games:{icon:'♧',title:'Jogos',sub:'ações rápidas antes da partida',done:hi?1:0,total:4,accent:hi?30:10,desc:'Reúna os ajustes mais usados para preparar seu PC para jogar.',items:[
+     {icon:'ϟ',title:'Alto desempenho',desc:'Ative o plano de energia de alto desempenho quando quiser priorizar FPS.',btn:hi?'Ativado':'Aplicar',run:hi?'balanced':'high',ok:hi},
+     {icon:'↺',title:'Aplicar tudo',desc:'Executa o fluxo de otimização segura com animação e relatório.',btn:'Aplicar tudo',run:'quickopt'},
+     {icon:'✧',title:'Modo de Jogo do Windows',desc:'Abra as configurações oficiais do Game Mode.',btn:'Abrir',open:'gaming-gamemode'},
+     {icon:'◎',title:'Preferências de gráficos',desc:'Escolha alto desempenho para cada jogo instalado.',btn:'Configurar',open:'display-advancedgraphics'}
+   ]},
+   cpu:{icon:'▣',title:'CPU e Kernel',sub:'revisão manual segura',done:hi?1:0,total:3,accent:hi?25:8,desc:'Ferramentas e verificações para desempenho de CPU, sem aplicar ajustes arriscados automaticamente.',items:[
+     {icon:'⌁',title:'Plano de energia',desc:'O plano Alto desempenho pode ajudar em cargas curtas e jogos.',btn:hi?'Ativado':'Aplicar',run:hi?'balanced':'high',ok:hi},
+     {icon:'▥',title:'Contadores de desempenho',desc:'Alteração avançada. Mantenha em revisão manual para não atrapalhar diagnósticos.',state:'Revisão manual',risk:'high'},
+     {icon:'≋',title:'Núcleo do Windows na RAM',desc:'Opção avançada relacionada ao arquivo de paginação. Avalie manualmente antes de alterar.',state:'Revisão manual',risk:'med'}
+   ]},
+   gpu:{icon:'▤',title:'GPU',sub:'atalhos e monitoramento',done:0,total:3,accent:12,desc:'Atalhos úteis para gráficos e monitoramento do sistema.',items:[
+     {icon:'◎',title:'Preferências de gráficos',desc:'Defina GPU de alto desempenho por aplicativo nas opções do Windows.',btn:'Abrir',open:'display-advancedgraphics'},
+     {icon:'◴',title:'Monitoramento',desc:'Veja CPU, memória e processos ativos em tempo real.',btn:'Abrir',go:'monitor'},
+     {icon:'◈',title:'Informações do sistema',desc:'Consulte GPU, drivers e hardware via ferramentas do Windows.',btn:'Abrir',go:'ferr'}
+   ]},
+   interface:{icon:'◉',title:'Desempenho e Interface',sub:`${ifaceApplied}/5 aplicados`,done:ifaceApplied,total:5,accent:Math.round((ifaceApplied/5)*100),desc:'Ajustes leves de interface e revisões manuais de desempenho.',items:[
+     {icon:'◷',title:'Remover atraso de inicialização',desc:'Remove a espera artificial aplicada a alguns apps na entrada do Windows.',iface:'startup_delay'},
+     {icon:'↗',title:'Reduzir atraso de menus',desc:'Deixa a interface mais responsiva ao abrir menus e listas do sistema.',iface:'menu_delay'},
+     {icon:'▥',title:'Desativar contadores de desempenho',desc:'Pode reduzir overhead de monitoramento, mas também prejudicar diagnósticos.',state:'Revisão manual',risk:'high'},
+     {icon:'≋',title:'Manter o núcleo do Windows na RAM',desc:'Impede que partes do kernel e dos drivers vão para paginação. Requer análise manual.',state:'Revisão manual'},
+     {icon:'⇄',title:'Desativar compressão de memória',desc:'Pode aumentar o consumo de RAM e não garante ganhos. Avalie manualmente.',state:'Revisão manual',risk:'med'}
+   ]},
+   rede:{icon:'⌁',title:'Rede',sub:'cache DNS e atalhos',done:dns?1:0,total:3,accent:dns?34:10,desc:'Ferramentas rápidas para melhorar a resolução de nomes e revisar a conexão.',items:[
+     {icon:'⇄',title:'Limpar cache DNS',desc:'Renova o cache DNS antes de entrar em partidas online.',btn:'Executar',run:'flushdns'},
+     {icon:'◌',title:'DNS atual',desc:'DNS detectado neste momento: '+esc(dns||'Não foi possível ler')+'.',state:'Informativo'},
+     {icon:'✦',title:'Abrir categoria Rede',desc:'Veja testes de latência, troca de DNS e opções adicionais.',btn:'Abrir',go:'rede'}
+   ]},
+   storage:{icon:'▱',title:'Armazenamento / SSD',sub:freeable?('até '+fmt(freeable)+' localizados'):'limpeza disponível',done:freeable?1:0,total:3,accent:freeable?28:8,desc:'Libere arquivos temporários e abra ferramentas nativas do Windows.',items:[
+     {icon:'⌂',title:'Arquivos temporários',desc:'Itens encontrados para limpeza: '+fmt(freeable)+'.',btn:'Limpar agora',run:'clean'},
+     {icon:'◴',title:'Limpeza detalhada',desc:'Abra a categoria Limpeza para ver o total por área.',btn:'Abrir',go:'limpeza'},
+     {icon:'▣',title:'Limpeza de Disco',desc:'Ferramenta nativa do Windows para manutenção de unidades.',btn:'Abrir',open:'cleanmgr'}
+   ]},
+   services:{icon:'▤',title:'Serviços',sub:`${safeDisabled} seguros já desativados`,done:safeDisabled,total:Math.max(3,serviceList.filter(s=>s.safe).length||3),accent:serviceList.filter(s=>s.safe).length?Math.min(100,Math.round((safeDisabled/Math.max(1,serviceList.filter(s=>s.safe).length))*100)):0,desc:'Revise serviços opcionais e preserve Defender, Update e Store.',items:[
+     {icon:'✓',title:'Desativar serviços seguros',desc:'Aplica somente nos serviços marcados como seguros na sua lista.',btn:'Aplicar',run:'safe-services'},
+     {icon:'↺',title:'Restaurar padrão',desc:'Reativa serviços anteriormente desativados nesta lista.',btn:'Restaurar',run:'restore-services'},
+     {icon:'◈',title:'Abrir categoria Serviços',desc:'Veja cada serviço, descrição e chave segura/atenção.',btn:'Abrir',go:'servicos'}
+   ]}
  };
- memory.onclick=async()=>{
-  memory.disabled=true;memoryStatus.textContent='Liberando memória…';
-  const freed=await A('freemem');
-  memoryStatus.textContent=typeof freed==='number'?'Memória liberada: '+fmt(freed):'Não foi possível liberar memória.';
-  memory.disabled=false;toast(memoryStatus.textContent);
- };
- }];
-};
+ const order=['priv','games','cpu','gpu','interface','rede','storage','services'];
+ const overallTotal=order.reduce((a,k)=>a+categories[k].total,0);
+ const overallDone=order.reduce((a,k)=>a+categories[k].done,0);
+ const overallPct=overallTotal?Math.round((overallDone/overallTotal)*100):0;
+ const summaryRows=[
+   ['Ajustes detectados',`${overallDone}/${overallTotal}`],
+   ['Memória em uso',`${ramPct}%`],
+   ['Inicialização ativa',`${startupOn} apps`],
+   ['Plano atual',hi?'Alto desempenho':'Equilibrado']
+ ];
+ const renderCategory=(key,selected)=>{const c=categories[key]; return `<button class="fpsx-cat ${selected?'on':''}" data-fpscat="${key}"><span class="fpsx-cicon">${c.icon}</span><span class="fpsx-ctxt"><b>${esc(c.title)}</b><small>${esc(c.sub)}</small><span class="fpsx-meter"><i style="--pct:${c.accent}%"></i></span></span><span class="fpsx-count">${c.done}/${c.total}</span></button>`};
+ const renderIfaceAction=(id)=>{const s=ifaceStatus[id]||{}; if(s.applied===true&&s.restorable)return `<button class="btnx alt" data-iface="${id}" data-method="restore">Restaurar</button>`; if(s.applied===true)return `<span class="state ok">✓ Aplicado</span>`; if(s.supported===true)return `<button class="btnx" data-iface="${id}" data-method="apply">Aplicar</button>`; return `<span class="state">Indisponível</span>`};
+ const renderItem=(item)=>{const risk=item.risk==='high'?'<span class="risk">RISCO ALTO</span>':item.risk==='med'?'<span class="risk med">RISCO MÉDIO</span>':''; let action=''; if(item.iface) action=renderIfaceAction(item.iface); else if(item.btn&&item.run) action=`<button class="btnx ${item.run==='balanced'||item.run==='restore-services'?'alt':''}" data-run="${item.run}">${esc(item.btn)}</button>`; else if(item.btn&&item.go) action=`<button class="btnx alt" data-go="${item.go}">${esc(item.btn)}</button>`; else if(item.btn&&item.open) action=`<button class="btnx alt" data-open="${item.open}">${esc(item.btn)}</button>`; else if(item.state) action=`<span class="state ${item.ok?'ok':''}">${esc(item.state)}</span>`; return `<div class="fpsx-item"><span class="fpsx-icon ${item.ok?'ok':''}">${item.icon}</span><div><div class="ttl"><b>${esc(item.title)}</b>${risk}</div><p>${item.desc}</p></div><div class="act">${action}</div></div>`};
+ return [`<section class="fpsx-page"><div class="fpsx-top"><div class="fpsx-hero"><div class="fpsx-ring" style="--pct:${overallPct}"><div><b>${overallPct}%</b><span>pronto</span></div></div><div class="fpsx-head"><small>PERFORMANCE • GAMING</small><h3>FPS Boost com categorias rápidas.</h3><p>Layout inspirado na segunda foto: ajuste por categoria, veja o estado atual e aplique ações seguras antes de abrir seu jogo.</p><div class="fpsx-mini"><span>✦ Tudo reversível quando houver backup</span><span>◈ Ajustes manuais separados</span><span>◎ Nada desativa Defender ou Update</span></div></div><div class="fpsx-side">${summaryRows.map(r=>`<div class="fpsx-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}<button class="fpsx-btn" id="fpsApplyAllTop">Aplicar tudo</button><small class="fps-mini-note">Alguns ajustes permanecem em revisão manual por segurança.</small></div></div></div><div class="fpsx-grid"><aside class="fpsx-cats">${order.map((k,i)=>renderCategory(k,i===4)).join('')}</aside><div class="fpsx-panel"><div class="fpsx-panel-h"><span class="fpsx-cicon" id="fpsPaneIcon">${categories.interface.icon}</span><div><strong id="fpsPaneTitle">${esc(categories.interface.title)}</strong><p id="fpsPaneDesc">${esc(categories.interface.desc)}</p></div><span class="fpsx-chip" id="fpsPaneChip">${categories.interface.done}/${categories.interface.total} prontos</span></div><div class="fpsx-list" id="fpsPaneList">${categories.interface.items.map(renderItem).join('')}</div><div class="fpsx-foot">Use a coluna da esquerda para trocar entre categorias. Os ajustes realmente aplicados aparecem como “Aplicado”; os demais ficam como ação disponível ou revisão manual.</div></div></div></section>`,()=>{
+   let active='interface';
+   const paint=()=>{document.querySelectorAll('[data-fpscat]').forEach(b=>b.classList.toggle('on',b.dataset.fpscat===active)); const c=categories[active]; if(!c)return; $('#fpsPaneIcon').textContent=c.icon; $('#fpsPaneTitle').textContent=c.title; $('#fpsPaneDesc').textContent=c.desc; $('#fpsPaneChip').textContent=`${c.done}/${c.total} prontos`; const list=$('#fpsPaneList'); list.classList.remove('view-in'); void list.offsetWidth; list.innerHTML=c.items.map(renderItem).join(''); list.classList.add('view-in'); bindActions(); };
+   const bindActions=()=>{
+     document.querySelectorAll('[data-fpscat]').forEach(b=>b.onclick=()=>{active=b.dataset.fpscat; paint()});
+     document.querySelectorAll('[data-iface]').forEach(b=>b.onclick=async()=>{const id=b.dataset.iface,method=b.dataset.method; const title=method==='restore'?'Restaurar configuração':'Aplicar configuração'; if(!await ask(title, (method==='restore'?'Restaurar ':'Aplicar ')+id.replace('_',' ')+'?','Continuar'))return; b.disabled=true; const ret=await A(method==='restore'?'interface_restore':'interface_apply',id); toast(ret&&ret.ok?(method==='restore'?'Configuração restaurada':'Configuração aplicada')+(ret.reboot?' · novo login ou reinício pode ser necessário':''):(ret&&ret.error)||'Não foi possível concluir'); go('jogos')});
+     document.querySelectorAll('[data-run]').forEach(b=>b.onclick=async()=>{const run=b.dataset.run; if(run==='high'||run==='balanced'){const ok=await A('setplan',run==='high'?'high':'balanced'); toast(ok?(run==='high'?'Modo alto desempenho ativado':'Plano equilibrado ativado'):'Plano indisponível neste PC'); if(ok)go('jogos'); return}
+       if(run==='freemem'){toast('Liberando memória…'); toast('Liberados '+fmt(await A('freemem')||0)); return}
+       if(run==='flushdns'){toast('Limpando DNS…'); toast(await A('flushdns')?'Cache DNS limpo':'Não foi possível limpar o DNS'); return}
+       if(run==='clean'){if(!freeable)return toast('Não há arquivos temporários para limpar'); if(!await ask('Limpar temporários','Remover '+fmt(freeable)+' de arquivos temporários?','Limpar'))return; toast('Limpando…'); const f=await A('clean')||0; toast('Liberados '+fmt(f)); go('jogos'); return}
+       if(run==='safe-services'){const safe=serviceList.filter(s=>s.safe&&s.on); if(!safe.length)return toast('Os serviços seguros já estão desativados'); if(!await ask('Desativar serviços seguros','Desativar '+safe.length+' serviços marcados como seguros?','Desativar'))return; let n=0; for(const s of safe) if(await A('set_service',s.name,false)) n++; toast(n+' de '+safe.length+' serviços desativados'); go('jogos'); return}
+       if(run==='restore-services'){const off=serviceList.filter(s=>!s.on); if(!off.length)return toast('Todos os serviços já estão no padrão'); let n=0; for(const s of off) if(await A('set_service',s.name,true)) n++; toast(n+' de '+off.length+' serviços restaurados'); go('jogos'); return}
+       if(run==='quickopt'){startQuickOptimization(); return}
+     });
+     $('#fpsApplyAllTop').onclick=()=>startQuickOptimization();
+   };
+   paint();
+ } ]};
 
 V.monitor=async()=>{const i=await A('info')||{},pr=await A('procs')||[],up=i.uptime?`${Math.floor(i.uptime/3600)} h ${Math.floor(i.uptime%3600/60)} min`:'—';
 return [`<div class="g2">${card('CPU','<svg class="chart" id="mc" viewBox="0 0 600 150"></svg>','<b id="mcv"></b>')}${card('Memória RAM','<svg class="chart" id="mr" viewBox="0 0 600 150"></svg>','<b id="mrv"></b>')}</div>`+
@@ -826,39 +808,14 @@ V.ferr=async()=>[card('Utilitários do Windows',[['taskmgr','Gerenciador de Tare
 V.config=async()=>[card('Preferências',row('Atualizar valores em tempo real',tg('cl1',S.live!==false),'CPU, memória, disco e temperatura no Dashboard.')+row('Reduzir animações',tg('cl2',!!S.calm),'Deixa o painel mais leve em PCs fracos.')+row('Versão','1.0')),()=>{$('#cl1').onchange=e=>{S.live=e.target.checked;save();if(S.live)tick()};$('#cl2').onchange=e=>{S.calm=e.target.checked;save();document.body.classList.toggle('calm',S.calm)}}];
 
 
-/* As novas categorias reutilizam ações existentes e mantêm o acesso às antigas. */
-V.input=async()=>[card('Input Lag',
- row('Processos ativos','<button class="ghost" data-go="proc">Abrir processos</button>','Revise programas que estejam consumindo CPU e memória.')+
- row('Plano de energia','<button class="ghost" data-go="energia">Configurar</button>','Confira o plano de desempenho, consumo e temperatura.')+
- row('Modo de Jogo do Windows',ob('Abrir','gaming-gamemode'),'Use as preferências oficiais do sistema.'))];
-V.game=async()=>{const r=await V.jogos();return [r[0]+card('Otimização geral',
- row('Otimizar tudo','<button class="ghost" data-go="otim">Abrir</button>','Abre o fluxo com animação, confirmação e relatório de etapas.')),r[1]]};
-const originalJogos=V.jogos;
-V.jogos=async()=>{const r=await originalJogos();return [r[0]+card('Otimização geral',
- row('Otimizar tudo','<button class="ghost" data-go="otim">Abrir</button>','Mantém o acesso à otimização geral e aos ajustes avançados.')),r[1]]};
-V.mem=async()=>{const st=await A('stats')||{};const used=Number(st.ram_used)||0,total=Number(st.ram_total)||0;return [
- card('Memória RAM',row('Memória em uso','<span class="mono">'+(total?Math.round(used/total*100)+'%':'N/D')+'</span>',total?used.toFixed(1)+' de '+total.toFixed(1)+' GB':'Leitura indisponível')+
- row('Liberar memória','<button class="ghost" id="memoryQuick">Executar</button>','Solicita a liberação de memória disponível sem fechar programas.')+
- row('Processos que mais consomem memória','<button class="ghost" data-go="proc">Ver</button>','Consulte os aplicativos e os processos ativos.')),()=>{
- const b=$('#memoryQuick');if(b)b.onclick=async()=>{b.disabled=true;const n=await A('freemem');toast(typeof n==='number'?'Memória liberada: '+fmt(n):'Não foi possível liberar memória');b.disabled=false}
- }]};
-V.bios=async()=>[card('BIOS e hardware',
- row('Informações do sistema',ob('Abrir','msinfo'),'Consulte processador, BIOS, placa-mãe e demais informações oficiais.')+
- row('Gerenciador de Dispositivos',ob('Abrir','devmgmt'),'Revise drivers e dispositivos.')+
- row('Ferramentas e diagnóstico','<button class="ghost" data-go="ferr">Abrir</button>','Outros utilitários do Windows.')+
- row('Atenção','<span class="mono">Somente consulta</span>','Alterações na BIOS precisam ser feitas no firmware; este painel não força overclock.'))];
-V.debloat=async()=>{const r=await V.servicos();return [card('Debloat seguro',row('Aplicativos instalados','<button class="ghost" data-go="apps">Gerenciar</button>','Desinstale manualmente apenas os aplicativos que você conhece.')+
- row('Serviços opcionais','<button class="ghost" data-go="servicos">Revisar</button>','Mudanças em serviços exigem escolha consciente. Defender, Update e Store são preservados.'))+r[0],r[1]]};
-V.updates=async()=>[card('Windows Update',
- row('Verificar atualizações',ob('Abrir Windows Update','windowsupdate'),'Abre a página oficial do Windows para instalar atualizações.')+
- row('Proteção do sistema','<span class="mono">Preservada</span>','Este painel não desativa automaticamente o Windows Update nem o Defender.'))];
+V.input=async()=>{const s=await A('stats')||{}; return [card('Input Lag', row('Reduzir processos em segundo plano', bt('Abrir Processos','ilgoproc','pri'),'Revise o que está pesando no sistema antes de jogar.')+row('Plano de energia', bt('Abrir Energia','ilgoener'),'Cheque o modo de energia quando quiser máximo desempenho.')+row('Uso atual da CPU', `<span class="mono">${Number.isFinite(s.cpu)?Math.round(s.cpu)+'%':'Indisponível'}</span>`, 'A latência tende a piorar quando a CPU já está muito ocupada.')),()=>{$('#ilgoproc').onclick=()=>go('proc');$('#ilgoener').onclick=()=>go('jogos')}]};
+V.game=async()=>V.jogos();
+V.mem=async()=>{const st=await A('stats')||{}; const pct=st.ram_total?Math.round(st.ram_used/st.ram_total*100):0; return [card('Memória', row('Uso atual da RAM', `<span class="mono">${pct}%</span>`, `Em uso: ${(Number(st.ram_used)||0).toFixed(1).replace('.',',')} de ${(Number(st.ram_total)||0).toFixed(1).replace('.',',')} GB.`)+row('Liberar memória', bt('Executar agora','memfree','pri'),'Tenta devolver RAM disponível sem fechar seus apps.')+row('Monitoramento', bt('Abrir Processos','memproc'),'Veja quais processos mais consomem memória.')),()=>{$('#memfree').onclick=async()=>{toast('Liberando memória…');toast('Liberados '+fmt(await A('freemem')||0))};$('#memproc').onclick=()=>go('proc')}]};
+V.bios=async()=>V.ferr();
+V.debloat=async()=>V.servicos();
+V.updates=async()=>[card('Atualizações', row('Windows Update', ob('Abrir opções','windowsupdate'),'Abra a tela oficial do Windows Update.')+row('Observação', '<small style="color:var(--mut)">Esta categoria é apenas de revisão. O painel não desativa Windows Update automaticamente.</small>','Mantenha o Windows em dia quando quiser estabilidade e segurança.'))];
 V.proc=async()=>V.monitor();
-V.pers=async()=>[card('Personalização',
- row('Preferências visuais','<button class="ghost" data-go="config">Configurar</button>','Ajuste as animações e os valores em tempo real do painel.')+
- row('Privacidade do Windows','<button class="ghost" data-go="priv">Revisar</button>','Confira as permissões de câmera, microfone e localização.'))];
-const baseApps=V.apps;
-V.apps=async()=>{const r=await baseApps();return [r[0]+card('Inicialização',
- row('Aplicativos que iniciam com o Windows','<button class="ghost" data-go="init">Gerenciar</button>','Mantém acesso às configurações de inicialização.')),r[1]]};
+V.pers=async()=>V.config();
 
 async function go(k){
  const n=++gn;clearInterval(timer);
@@ -986,7 +943,7 @@ $('#quickClose').onclick=()=>{if(quickBusy)return;$('#quickOverlay').hidden=true
 let booted=false;
 async function boot(){if(booted)return;booted=true;DEMO=!(window.pywebview&&window.pywebview.api);
 if(DEMO){$('#demo').hidden=false;for(let i=0;i<MAXH;i++){HL.cpu.push(clamp(30+Math.sin(i/4)*18+R(-6,6)));HL.ram.push(R(40,43));HL.dsk.push(68);HL.tmp.push(R(46,50))}}
-bars(0);radar();INFO=await A('info')||{};chips();await tick(true);lv();setTimeout(()=>$('#splash').classList.add('out'),200);initFlyout();setInterval(tick,2000);analyze()}
+bindWindowChrome();bars(0);radar();INFO=await A('info')||{};chips();await tick(true);lv();setTimeout(()=>$('#splash').classList.add('out'),200);initFlyout();setInterval(tick,2000);analyze()}
 window.addEventListener('pywebviewready',boot);setTimeout(boot,2200);
 </script>
 </body>
