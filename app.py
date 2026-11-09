@@ -1,5 +1,6 @@
 import os
 import re
+import json
 import sys
 import time
 import socket
@@ -163,6 +164,7 @@ class Api:
         self._window = None
         self._maximized = False
         self._window_lock = threading.Lock()
+        self._interface_lock = threading.RLock()
 
     def window_state(self):
         return {"maximized": self._maximized}
@@ -423,6 +425,111 @@ class Api:
             return True
         except Exception:
             return False
+
+    # Ajustes de interface que exigem apenas HKCU; nunca mexe em proteções do Windows.
+    _INTERFACE_ITEMS = {
+        "startup_delay": (r"Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize",
+                          "StartupDelayInMSec", 0, 4),
+        "menu_delay": (r"Control Panel\Desktop", "MenuShowDelay", "100", 1),
+    }
+
+    def _interface_backup_path(self):
+        folder = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),
+                              "LZPainel")
+        return os.path.join(folder, "interface_backup.json")
+
+    def _interface_load_backup(self):
+        try:
+            with open(self._interface_backup_path(), "r", encoding="utf-8") as handle:
+                data = json.load(handle)
+                return data if isinstance(data, dict) else {}
+        except (FileNotFoundError, OSError, ValueError, TypeError):
+            return {}
+
+    def _interface_save_backup(self, data):
+        path = self._interface_backup_path()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        temp = path + ".tmp"
+        try:
+            with open(temp, "w", encoding="utf-8") as handle:
+                json.dump(data, handle, ensure_ascii=False, indent=2)
+            os.replace(temp, path)
+        finally:
+            if os.path.exists(temp):
+                os.remove(temp)
+
+    def _interface_current(self, name):
+        path, key, target, datatype = self._INTERFACE_ITEMS[name]
+        try:
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, path, 0, winreg.KEY_READ) as k:
+                value, value_type = winreg.QueryValueEx(k, key)
+                return {"exists": True, "value": value, "type": value_type}
+        except OSError:
+            return {"exists": False, "value": None, "type": datatype}
+
+    def interface_status(self):
+        if os.name != "nt" or winreg is None:
+            return {"startup_delay": {"applied": None, "supported": False, "restorable": False},
+                    "menu_delay": {"applied": None, "supported": False, "restorable": False},
+                    "perf_counters": {"applied": None, "supported": False},
+                    "kernel_ram": {"applied": None, "supported": False},
+                    "memory_compression": {"applied": None, "supported": False}}
+        backups = self._interface_load_backup()
+        output = {}
+        for name, (_, _, target, _) in self._INTERFACE_ITEMS.items():
+            current = self._interface_current(name)
+            output[name] = {"applied": current["exists"] and str(current["value"]) == str(target),
+                            "supported": True, "restorable": name in backups}
+        # Alterações em contadores, paginação do kernel ou compressão de memória
+        # precisam de revisão manual: sem aplicação automática ou estado inventado.
+        for key in ("perf_counters", "kernel_ram", "memory_compression"):
+            output[key] = {"applied": None, "supported": False, "restorable": False}
+        return output
+
+    def interface_apply(self, name):
+        if name not in self._INTERFACE_ITEMS or os.name != "nt" or winreg is None:
+            return {"ok": False, "error": "Ajuste não disponível para aplicação automática."}
+        with self._interface_lock:
+            path, value_name, target, data_type = self._INTERFACE_ITEMS[name]
+            before = self._interface_current(name)
+            backups = self._interface_load_backup()
+            if name not in backups:
+                backups[name] = before
+                try:
+                    self._interface_save_backup(backups)
+                except OSError:
+                    return {"ok": False, "error": "Não foi possível salvar o backup."}
+            try:
+                with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, path, 0, winreg.KEY_SET_VALUE) as key:
+                    winreg.SetValueEx(key, value_name, 0, data_type, target)
+                state = self.interface_status().get(name, {})
+                return {"ok": bool(state.get("applied")), "reboot": name == "startup_delay"}
+            except (OSError, TypeError):
+                return {"ok": False, "error": "Não foi possível gravar a configuração."}
+
+    def interface_restore(self, name):
+        if name not in self._INTERFACE_ITEMS or os.name != "nt" or winreg is None:
+            return {"ok": False, "error": "Ajuste não disponível."}
+        with self._interface_lock:
+            backups = self._interface_load_backup()
+            if name not in backups:
+                return {"ok": False, "error": "Não existe backup para restaurar."}
+            old = backups[name]
+            path, value_name, _, _ = self._INTERFACE_ITEMS[name]
+            try:
+                with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, path, 0, winreg.KEY_SET_VALUE) as key:
+                    if old.get("exists"):
+                        winreg.SetValueEx(key, value_name, 0, old["type"], old["value"])
+                    else:
+                        try:
+                            winreg.DeleteValue(key, value_name)
+                        except FileNotFoundError:
+                            pass
+                backups.pop(name, None)
+                self._interface_save_backup(backups)
+                return {"ok": True, "reboot": name == "startup_delay"}
+            except (OSError, KeyError, TypeError):
+                return {"ok": False, "error": "Não foi possível restaurar a configuração."}
 
     def restore(self):
         code, _ = run(["powershell", "-NoProfile", "-Command",
