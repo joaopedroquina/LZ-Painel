@@ -159,6 +159,39 @@ def iter_apps():
 
 
 class Api:
+    def __init__(self):
+        self._window = None
+        self._maximized = False
+        self._window_lock = threading.Lock()
+
+    def window_state(self):
+        return {"maximized": self._maximized}
+
+    def window_action(self, action):
+        if self._window is None or action not in {"minimize", "maximize", "close"}:
+            return False
+        with self._window_lock:
+            if action == "minimize":
+                self._window.minimize()
+            elif action == "maximize":
+                if self._maximized:
+                    self._window.restore()
+                else:
+                    self._window.maximize()
+            else:
+                self._window.destroy()
+        return True
+
+    def _set_maximized(self, value):
+        self._maximized = value
+        try:
+            self._window.evaluate_js(
+                "window.setWindowMaximized && window.setWindowMaximized(%s)"
+                % ("true" if value else "false")
+            )
+        except Exception:
+            pass  # A página pode ainda estar carregando ou fechando.
+
     def stats(self):
         vm = psutil.virtual_memory()
         return {"cpu": psutil.cpu_percent(interval=None),
@@ -403,9 +436,14 @@ def main():
     psutil.cpu_percent(interval=None)
     if os.name == "nt":
         threading.Thread(target=temp_loop, daemon=True).start()
-    webview.create_window("Painel", os.path.join(base(), "index.html"),
-                          js_api=Api(), width=1440, height=900, min_size=(1000, 700),
-                          background_color="#0b0c10")
+    api = Api()
+    window = webview.create_window("LZ Painel", os.path.join(base(), "index.html"),
+                          js_api=api, width=1440, height=900, min_size=(1000, 700),
+                          frameless=True, easy_drag=False, resizable=True,
+                          background_color="#171a20")
+    api._window = window
+    window.events.maximized += lambda: api._set_maximized(True)
+    window.events.restored += lambda: api._set_maximized(False)
     webview.start()
 
 
