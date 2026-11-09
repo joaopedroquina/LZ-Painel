@@ -317,6 +317,38 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 @media(max-width:1050px){.fps-hero{padding:24px}.fps-emblem{width:95px;height:95px}.appdrag span{display:none}}
 @media(max-width:650px){.fps-grid,.fps-metrics{grid-template-columns:1fr}.fps-emblem{display:none}.edition{display:none}.appbar{padding:0 10px;gap:8px}}
 @media(prefers-reduced-motion:reduce){.fps-grid .fps-card{animation:none}.nav svg,.fps-card{transition:none}}
+
+.ui-opt-wrap{display:grid;grid-template-columns:258px minmax(0,1fr);gap:18px;align-items:start;min-width:0}
+.ui-opt-nav{background:#171a20;border:1px solid #303642;border-radius:16px;padding:10px;display:grid;gap:7px}
+.ui-opt-cat{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px;border:1px solid transparent;border-radius:11px;color:#d8deeb;background:transparent;font:600 12px Inter,"Segoe UI",sans-serif;text-align:left;min-height:47px}
+button.ui-opt-cat{cursor:pointer}button.ui-opt-cat:hover{background:#252a35;transform:translateX(2px)}
+.ui-opt-cat.on{background:linear-gradient(130deg,#2674f3,#1459d9);color:white;box-shadow:0 7px 22px #174b9c44}
+.ui-opt-cat .ui-ci{height:32px;width:32px;border-radius:8px;display:grid;place-items:center;font-size:17px;background:#2a303b;font-weight:700}
+.ui-opt-cat.on .ui-ci{background:#ffffff24}.ui-opt-cat small{font-size:10px;font-weight:700;color:#8c9bb3}
+.ui-opt-cat.on small{color:#dcecff}.ui-opt-cat .ui-line{display:block;background:#353b48;border-radius:4px;height:3px;margin-top:7px;overflow:hidden}
+.ui-opt-cat .ui-line i{display:block;height:100%;width:var(--pct,0%);border-radius:inherit;background:#4286ff}
+.ui-opt-cat.on .ui-line i{background:#a9c8ff}
+.ui-opt-content{min-width:0;background:#22252c;border:1px solid #343b45;border-radius:16px;overflow:hidden}
+.ui-opt-title{display:flex;align-items:center;gap:12px;padding:17px;border-bottom:1px solid #343b45;background:#242830}
+.ui-opt-title .ui-ci{width:34px;height:34px;display:grid;place-items:center;border-radius:8px;background:#303845;font-size:18px}
+.ui-opt-title strong{font-size:15px}.ui-opt-title small{display:block;color:#aab4c4;font-size:12px;margin-top:3px}
+.ui-opt-count{margin-left:auto;font-size:12px;color:#9aadd1;padding:6px 11px;border:1px solid #3c4d65;border-radius:9px}
+.ui-opt-item{display:grid;grid-template-columns:36px minmax(0,1fr) auto;align-items:center;gap:13px;padding:14px 17px;border-top:1px solid #303640;min-height:68px}
+.ui-opt-item:first-child{border-top:0}
+.ui-opt-icon{height:34px;width:34px;border:1px solid #394453;border-radius:9px;display:grid;place-items:center;color:#88b5ff;font-size:18px;background:#29303b}
+.ui-opt-icon.applied{color:#34d399;background:#19413a77;border-color:#287b5e}
+.ui-opt-desc b{font-size:13px;display:inline;color:#f4f6fa}
+.ui-opt-desc small{display:block;color:#a8b1c0;line-height:1.5;font-size:12px;margin-top:4px}
+.ui-risk{display:inline-block;margin-left:8px;padding:4px 8px;border-radius:7px;background:#543028;border:1px solid #8c4743;color:#ffaaa5;font-size:10px;font-weight:800;white-space:nowrap}
+.ui-risk.medium{background:#493e21;border-color:#796128;color:#f3c76a}
+.ui-opt-item .ui-state{white-space:nowrap;min-width:98px;text-align:center;padding:8px 11px;border:1px solid #36455a;border-radius:9px;color:#b8c5d9;background:#2b303b;font-size:11px;font-weight:700}
+.ui-opt-item .ui-state.applied{color:#41d99c;border-color:#247457;background:#174a3c77}
+.ui-opt-item .ui-apply{min-width:97px;border:1px solid #3c82ef;border-radius:9px;background:#246adf;padding:9px 15px;color:white;font-size:12px;font-weight:700;cursor:pointer}
+.ui-opt-item .ui-apply:hover{background:#3984ff}.ui-opt-item .ui-apply.restore{background:#242d3b;color:#b8c9e5;border-color:#4d617b}
+.ui-opt-footer{padding:14px 18px;color:#aebacc;font-size:11.5px;line-height:1.6;background:#1d2026;border-top:1px solid #333842}
+@media(max-width:1060px){.ui-opt-wrap{grid-template-columns:1fr}.ui-opt-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.ui-opt-nav{grid-template-columns:1fr}.ui-opt-item{grid-template-columns:32px 1fr}.ui-opt-item .ui-state,.ui-opt-item .ui-apply{grid-column:2;justify-self:start}.ui-risk{margin-left:0;margin-top:5px}}
+
 </style>
 </head>
 <body>
@@ -627,8 +659,70 @@ function initFlyout(){
 /* ---------- telas ---------- */
 const T={dash:['Dashboard','Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.'],otim:['Otimização','Escolha o que otimizar e execute tudo de uma vez.'],jogos:['FPS Boost','Prepare seu PC para jogar com ajustes de energia, memória e gráficos.'],monitor:['Monitoramento','Uso em tempo real e processos ativos.'],rede:['Rede e internet','Conexão, latência e DNS.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],config:['Configurações','Preferências do painel.']};
 const V={};
+
+/* Desempenho e Interface: estado real, sem aplicar ajustes de risco. */
+const UI_OPT_META=[
+ ['startup_delay','◷','Remover atraso de inicialização','Remove a espera artificial de alguns aplicativos ao iniciar com Windows.','auto'],
+ ['menu_delay','↗','Reduzir atraso de menus','Reduz o intervalo de abertura dos menus do Windows.','auto'],
+ ['perf_counters','▥','Desativar contadores de desempenho','Pode atrapalhar o monitoramento e o diagnóstico de problemas.','high'],
+ ['kernel_ram','≋','Manter o núcleo do Windows na RAM','Alteração do arquivo de paginação que pode prejudicar estabilidade.','review'],
+ ['memory_compression','⇄','Desativar compressão de memória','Pode aumentar consumo de RAM e não garante aumento de FPS.','medium']
+];
+const UI_OPT_CATS=[
+ ['priv','◈','Privacidade e Telemetria'],
+ ['jogos','♧','Jogos'],
+ ['ferr','▣','CPU e Kernel'],
+ ['jogos','▤','GPU'],
+ [null,'◉','Desempenho e Interface'],
+ ['rede','⌁','Rede'],
+ ['limpeza','▱','Armazenamento / SSD'],
+ ['servicos','▤','Serviços'],
+ ['config','⌁','Mouse e Teclado'],
+ ['config','▱','Explorer e Barra de Tarefas'],
+ ['energia','ϟ','Energia']
+];
+function uiOptSection(st){
+ st=st||{};
+ const applied=UI_OPT_META.filter(function(x){return st[x[0]]&&st[x[0]].applied===true}).length;
+ const nav=UI_OPT_CATS.map(function(x){
+  const dest=x[0],active=!dest;
+  return '<'+(dest?'button':'div')+' class="ui-opt-cat '+(active?'on':'')+'"'+(dest?' data-go="'+dest+'" type="button"':'')+'>'+
+   '<span class="ui-ci">'+x[1]+'</span><span>'+esc(x[2])+'<span class="ui-line"><i style="--pct:'+(active?Math.round(applied/5*100):25)+'%"></i></span></span>'+
+   (active?'<small>'+applied+'/5</small>':'')+'</'+(dest?'button':'div')+'>'
+ }).join('');
+ const rows=UI_OPT_META.map(function(x){
+  const id=x[0],status=st[id]||{},mode=x[4];
+  const risk=mode==='high'?'<span class="ui-risk">RISCO ALTO</span>':mode==='medium'?'<span class="ui-risk medium">RISCO MÉDIO</span>':mode==='review'?'<span class="ui-risk medium">REVISÃO MANUAL</span>':'';
+  let action='<span class="ui-state">Revisão manual</span>';
+  if(mode==='auto'){
+   if(status.applied===true&&status.restorable)action='<button class="ui-apply restore" data-ui-opt="'+id+'" data-ui-method="restore">Restaurar</button>';
+   else if(status.applied===true)action='<span class="ui-state applied">✓ Aplicado</span>';
+   else if(status.supported===true)action='<button class="ui-apply" data-ui-opt="'+id+'" data-ui-method="apply">Aplicar</button>';
+   else action='<span class="ui-state">Indisponível</span>';
+  }
+  return '<div class="ui-opt-item"><span class="ui-opt-icon '+(status.applied?'applied':'')+'">'+x[1]+'</span><span class="ui-opt-desc"><b>'+esc(x[2])+'</b>'+risk+
+    '<small>'+esc(x[3])+'</small></span>'+action+'</div>'
+ }).join('');
+ return '<section class="ui-opt-wrap"><aside class="ui-opt-nav" aria-label="Categorias de otimização">'+nav+
+ '</aside><div class="ui-opt-content"><div class="ui-opt-title"><span class="ui-ci">◉</span><div><strong>Desempenho e Interface</strong><small>Configurações e ferramentas</small></div><span class="ui-opt-count">'+
+ applied+'/5 aplicados</span></div>'+rows+'<div class="ui-opt-footer">Opções com risco ficam em revisão manual, sem aplicação automática. As configurações leves são reversíveis quando existe backup; Defender, Update e Store permanecem inalterados.</div></div></section>'
+}
+document.addEventListener('click',async function(e){
+ const b=e.target.closest('[data-ui-opt]');if(!b||b.disabled)return;
+ const id=b.dataset.uiOpt,method=b.dataset.uiMethod;
+ const meta=UI_OPT_META.find(function(x){return x[0]===id});
+ if(!meta||meta[4]!=='auto')return;
+ const title=method==='restore'?'Restaurar configuração':'Aplicar configuração';
+ const msg=method==='restore'?'Restaurar o valor anterior de '+meta[2]+'?':'Aplicar '+meta[2]+'? A mudança é reversível e seu resultado depende do computador.';
+ if(!await ask(title,msg,method==='restore'?'Restaurar':'Aplicar'))return;
+ b.disabled=true;
+ const result=await A(method==='restore'?'interface_restore':'interface_apply',id);
+ toast(result&&result.ok?(method==='restore'?'Configuração restaurada':'Configuração aplicada')+(result.reboot?' · novo login ou reinício pode ser necessário':''):(result&&result.error)||'Não foi possível aplicar');
+ go('otim')
+});
+
 V.otim=async()=>{const ids=['temp','dns','ram','plan','serv'],def={temp:1,dns:1,ram:1};
-return [card('Otimizar tudo',`<p class="nt">Execute limpeza de temporários, renovação do DNS e verificação de inicialização, serviços e desempenho. No final, veja o relatório como no vídeo.</p><button class="btn sm" data-act="fullopt">✧ Otimizar tudo</button>`) +card('Ajustes individuais','<div class="opt-track" aria-hidden="true"><span id="optline"></span></div>'+ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
+return [uiOptSection(await A('interface_status'))+card('Otimizar tudo',`<p class="nt">Execute limpeza de temporários, renovação do DNS e verificação de inicialização, serviços e desempenho. No final, veja o relatório como no vídeo.</p><button class="btn sm" data-act="fullopt">✧ Otimizar tudo</button>`) +card('Ajustes individuais','<div class="opt-track" aria-hidden="true"><span id="optline"></span></div>'+ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
 if(sel.includes('serv')&&!await ask('Desativar serviços seguros','Isso desliga os serviços marcados como Seguro. Você pode restaurar na tela Serviços.','Continuar'))return;
 const b=$('#ex');b.disabled=true;const line=$('#optline');if(line)line.style.width='0%';ids.forEach(id=>$('#r_'+id).textContent='');let n=0;
 for(const id of sel){const e=$('#r_'+id);if(!e)return;e.className='st-run is-busy';e.textContent='Executando…';let m;try{m=await TASKS[id].run()}catch(x){m='Falhou'}if($('#r_'+id)){e.className='st-ok';e.textContent='✓ '+m}n++;if(line)line.style.width=Math.round(n/sel.length*100)+'%'}
