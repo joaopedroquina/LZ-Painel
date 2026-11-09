@@ -214,19 +214,9 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 .sk.title{height:22px;width:27%}.sk.w1{width:75%}.sk.w2{width:47%}.sk.w3{width:100%}
 .sk.box{height:100px;flex:1;border-radius:12px}.sk.short{width:34%}
 .sk-panel .sk-row{align-items:center}
-.navfly{position:fixed;top:66px;left:64px;z-index:80;width:222px;max-height:calc(100vh - 84px);overflow-y:auto;overflow-x:hidden;padding:9px;background:rgba(27,30,37,.97);border:1px solid #384252;border-radius:14px;box-shadow:0 22px 70px rgba(0,0,0,.55);backdrop-filter:blur(14px);opacity:0;visibility:hidden;pointer-events:none;transform:translateX(-10px) scale(.985);transition:opacity .22s ease,transform .26s cubic-bezier(.18,.85,.25,1),visibility .22s ease}
-.navfly.open{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0) scale(1)}
-.nfhead{padding:9px 11px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #343946;color:#fff;font-size:15px;font-weight:700}
-.nfhead small{color:#8a96ac;font-size:10px;font-weight:500}
-.nfl{width:100%;border:0;background:transparent;color:#bcc6d7;display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px;border-radius:8px;font:500 13px Inter,"Segoe UI",sans-serif;cursor:pointer;transition:background .17s,color .17s,transform .17s}
-.nfl svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.nfl:hover{background:#303745;color:#fff;transform:translateX(3px)}
-.nfl.on{background:#2f6fed;color:#fff;font-weight:600}
-@media(max-width:900px){.navfly{display:none}}
 @media(prefers-reduced-motion:reduce){
   .view.view-in>*,.view .rw,.md:not([hidden]),.md:not([hidden]) .mb,.toast.on,.st-ok{animation:none!important}
   .sk,.st-run.is-busy::before{animation:none!important}
-  .navfly{transition:none}
 }
 .calm .view.view-in>*,.calm .view .rw,.calm .nav.on{animation:none!important}
 
@@ -305,18 +295,33 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 .appdrag{flex:1;height:100%;display:flex;justify-content:center;align-items:center;cursor:default}.appdrag span{pointer-events:none;color:#8591a6;font-size:11px;letter-spacing:1.4px}
 .window-controls{display:flex;align-items:center;gap:3px;padding:4px;border:1px solid #343b47;background:#22262e;border-radius:22px}.edition{font-size:10px;color:#a4b9dc;font-weight:700;padding:0 12px;border-right:1px solid #424956;letter-spacing:.8px}
 .window-controls button{width:31px;height:28px;border:0;border-radius:14px;background:transparent;color:#aab3c3;display:grid;place-items:center;cursor:pointer;transition:background .15s,color .15s}.window-controls button:hover{background:#394251;color:#fff}.window-controls button:last-child:hover{background:#c23c50}.window-controls button:disabled{opacity:.35;cursor:default}.window-controls svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.4;fill:none}
-.shell{margin:54px 0 0;min-height:calc(100vh - 54px);border:0;border-radius:0;box-shadow:none}.side{top:54px;height:calc(100vh - 54px);border-radius:0;overflow-y:auto;overflow-x:hidden}.side>*{flex-shrink:0}.side .sp{flex:1}.main{padding-top:24px}.navfly{top:110px;max-height:calc(100vh - 126px)}
+.shell{margin:54px 0 0;min-height:calc(100vh - 54px);border:0;border-radius:0;box-shadow:none}.side{top:54px;height:calc(100vh - 54px);border-radius:0;overflow-y:auto;overflow-x:hidden}.side>*{flex-shrink:0}.side .sp{flex:1}.main{padding-top:24px}
 .nav.on{animation:none;background:rgba(47,111,237,.13)}.nav svg{transition:transform .28s cubic-bezier(.2,.85,.25,1)}.nav:hover svg{transform:translateY(-2px) rotate(-5deg)}
 .view.view-out{transform:translateX(-10px);filter:blur(1px)}
 @keyframes categoriaEntrar{from{opacity:0;transform:translateX(16px) translateY(5px)}to{opacity:1;transform:none}}
 .view.view-in>*{animation-name:categoriaEntrar;animation-duration:.42s}.fps-grid .fps-card{animation:categoriaEntrar .42s both}.fps-grid .fps-card:nth-child(2){animation-delay:.055s}.fps-grid .fps-card:nth-child(3){animation-delay:.11s}.fps-grid .fps-card:nth-child(4){animation-delay:.165s}
-.fps-hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:28px;padding:30px;border:1px solid #3a4f76;border-radius:18px;background:radial-gradient(ellipse at 90% 15%,#28416d 0,transparent 65%),linear-gradient(120deg,#202936,#1d222c)}
-.fps-eyebrow{font-size:10px;letter-spacing:2px;color:#90b8ff;font-weight:700}.fps-hero h2{font-size:34px;letter-spacing:-1px;margin:8px 0}.fps-hero p{max-width:560px;color:#a8b4c8;font-size:13px;line-height:1.7}.fps-hero .btn{margin-top:20px}.fps-emblem{width:125px;height:125px;border:1px solid #5b95ff55;border-radius:32px;display:grid;place-items:center;background:#5b95ff13;transform:rotate(-8deg);flex:none;box-shadow:0 0 65px #2f6fed25}.fps-emblem svg.i{width:65px;height:65px;stroke-width:1;color:#a6c7ff;transform:rotate(8deg)}
-.fps-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.fps-metric{padding:18px 20px;background:#20242c;border:1px solid var(--line);border-radius:13px}.fps-metric small{display:block;color:#98a5b9;font-size:11px;margin-bottom:7px}.fps-metric b{font-size:18px;font-weight:600}.fps-metric b.plan-name{font-size:14px}
-.fps-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.fps-card{padding:22px;background:#20242c;border:1px solid #343b48;border-radius:15px;display:flex;flex-direction:column;gap:14px;transition:transform .22s,border-color .22s}.fps-card:hover{border-color:#50688e;transform:translateY(-2px)}.fps-card-head{display:flex;align-items:center;gap:12px}.fps-icon{width:39px;height:39px;border-radius:12px;background:#2d3b52;display:grid;place-items:center;color:#8bb6ff}.fps-card h3{font-size:14px;font-weight:600}.fps-card p{font-size:12px;color:#99a6b9;line-height:1.65;flex:1}.fps-card button{align-self:flex-start}.fps-card .fps-card-head .tg{margin-left:auto}.fps-status{font-size:11px;color:#8fb4f0;min-height:16px}.fps-note{color:#8794a9;font-size:11px;line-height:1.6;padding:0 3px}
-@media(max-width:1050px){.fps-hero{padding:24px}.fps-emblem{width:95px;height:95px}.appdrag span{display:none}}
-@media(max-width:650px){.fps-grid,.fps-metrics{grid-template-columns:1fr}.fps-emblem{display:none}.edition{display:none}.appbar{padding:0 10px;gap:8px}}
-@media(prefers-reduced-motion:reduce){.fps-grid .fps-card{animation:none}.nav svg,.fps-card{transition:none}}
+/* FPS Boost: resumo, categorias e lista de ajustes da referência. */
+.boost-summary{background:#262a31;border:1px solid #303640;border-radius:16px;padding:25px;display:flex;align-items:center;gap:28px;min-height:210px}
+.boost-ring{width:120px;height:120px;position:relative;flex:none}.boost-ring svg{width:100%;height:100%;transform:rotate(-90deg)}.boost-ring circle{fill:none;stroke-width:8}.ring-track{stroke:#2d323a}.ring-value{stroke:#528fff;stroke-linecap:round;transition:stroke-dasharray .65s cubic-bezier(.2,.8,.2,1)}.boost-ring b{position:absolute;inset:0;display:grid;place-content:center;font-size:27px;grid-auto-flow:column;align-items:baseline}.boost-ring small{font-size:15px}
+.boost-summary-text{flex:1;min-width:0}.boost-kicker{font-size:11px;letter-spacing:1.1px;color:#aab1bd;font-weight:700}.boost-summary-text h2{font-size:32px;margin:5px 0 8px}.boost-summary-text h2 small{font-size:20px;color:#aab1bd}.boost-summary-text p{font-size:13px;color:#aeb5c1}.boost-meta{display:flex;gap:18px;margin-top:18px;color:#aeb5c1;font-size:12px}.boost-meta span{display:flex;align-items:center;gap:6px}.boost-meta svg{width:13px;height:13px}.boost-meta span:last-child svg{color:#2fce83}
+.boost-summary-actions{width:224px;padding:16px;border:1px solid #2d333b;border-radius:10px;flex:none}.boost-summary-actions p{display:flex;align-items:center;gap:9px;font-size:12px;color:#aeb5c1;margin:0 0 11px}.boost-summary-actions p b{color:#e5e8ee;min-width:28px}.boost-summary-actions i{width:6px;height:6px;border-radius:50%;background:#515865}.boost-summary-actions i.blue-dot{background:#528fff}.boost-apply{width:100%;border:0;background:#265fd0;border-radius:8px;color:#fff;padding:8px;display:flex;justify-content:center;align-items:center;gap:7px;font-weight:600;cursor:pointer}.boost-apply svg{width:15px;height:15px}.boost-apply:disabled{opacity:.45;cursor:default}.boost-summary-actions small{font-size:10px;line-height:1.6;color:#8fa4c6;display:block;margin-top:9px}
+.boost-workspace{display:grid;grid-template-columns:255px minmax(0,1fr);gap:20px;align-items:start}.boost-categories{display:grid;gap:4px;padding-right:15px;border-right:1px solid #30363f;position:sticky;top:72px}.boost-category{display:flex;align-items:center;gap:10px;border:0;border-radius:8px;background:transparent;text-align:left;padding:9px 10px;cursor:pointer;min-height:51px;transition:background .2s,transform .2s;width:100%}.boost-category:hover{background:#262d37}.boost-category.selected{background:linear-gradient(100deg,#236be7,#1857cb);box-shadow:0 5px 16px #1263df26}.boost-cat-icon{width:32px;height:32px;border-radius:7px;display:grid;place-items:center;background:#282e36;color:#afb8c6;flex:none}.boost-cat-icon svg{width:16px;height:16px}.selected .boost-cat-icon{background:#ffffff24;color:white}.boost-cat-text{flex:1;min-width:0;display:grid;gap:8px;font-weight:600;font-size:12px;white-space:nowrap}.boost-category small{font-size:10px;color:#9aa5b7;align-self:flex-start;padding-top:3px}.boost-category.selected small{color:white}.boost-track{height:4px;border-radius:4px;background:#2b313a;overflow:hidden}.boost-track i{display:block;height:100%;background:#3379ee;transition:width .4s}.selected .boost-track{background:#ffffff26}.selected .boost-track i{background:white}
+.boost-detail{border:1px solid #303740;border-radius:15px;background:#22262d;overflow:hidden;min-width:0}.boost-detail-head{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid #303640}.boost-detail-head h3{font-size:13px;font-weight:650}.boost-detail-head small{font-size:11px;color:#adb6c4;display:block;margin-top:3px}.boost-badge{margin-left:auto;font-size:10px;letter-spacing:.3px;padding:4px 7px;border-radius:6px;border:1px solid #465266;color:#9cb5d8;white-space:nowrap}.boost-badge.complete{color:#2fd18a;background:#133f2c80;border-color:#1d6f48}
+.boost-row{display:flex;gap:14px;align-items:center;margin:0 16px;padding:17px 0;border-bottom:1px solid #2c323b;min-height:85px}.boost-row:last-child{border-bottom:0}.boost-row-icon{width:35px;height:35px;border-radius:6px;background:#2b323e;border:1px solid #3b475a;display:grid;place-items:center;color:#7ea7e7;flex:none}.boost-row-icon.active{color:#32cf86;background:#1c3e30;border-color:#286746}.boost-row-icon svg{width:16px;height:16px}.boost-row-copy{flex:1;min-width:0}.boost-row h4{font-size:12.5px;font-weight:600;margin-bottom:5px}.boost-row p{font-size:12px;color:#aeb7c4;line-height:1.6}.boost-row-actions{display:flex;align-items:flex-end;flex-direction:column;gap:6px;flex:none}.boost-state{display:flex;align-items:center;justify-content:center;gap:7px;border:1px solid #48566e;border-radius:7px;background:#2a3546;color:#a9c5f1;padding:6px 12px;font-size:11px;white-space:nowrap;cursor:pointer}.boost-state svg{width:13px;height:13px}.boost-state.active{background:#1c3e3080;border-color:#247a4e;color:#38d087}.boost-state:disabled{cursor:default}.boost-state:disabled:not(.active){opacity:.45}.boost-undo{font-size:10px;border:0;background:none;color:#acb8cc;text-decoration:underline;cursor:pointer}.boost-restart{display:block;color:#e6b14a;font-size:10px;margin-top:5px}.boost-footnote{font-size:11px;color:#8795aa;line-height:1.6}
+@keyframes boostRows{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}.boost-rows-enter .boost-row{animation:boostRows .28s both}.boost-rows-enter .boost-row:nth-child(2){animation-delay:.035s}.boost-rows-enter .boost-row:nth-child(3){animation-delay:.07s}
+@media(max-width:1150px){.boost-workspace{grid-template-columns:225px minmax(0,1fr);gap:16px}.boost-category{padding:8px 6px;gap:7px}.boost-cat-text{font-size:11px}.boost-summary{gap:20px;padding:20px}.boost-summary-actions{width:190px}.boost-row{gap:10px}.boost-row-actions{max-width:130px}.boost-meta{gap:10px}}
+@media(max-width:900px){.boost-summary{flex-wrap:wrap}.boost-summary-actions{width:100%}.boost-workspace{grid-template-columns:1fr}.boost-categories{position:static;border:0;padding:0;grid-template-columns:repeat(2,minmax(0,1fr))}.boost-row{flex-wrap:wrap}.boost-row-copy{min-width:150px}}
+@media(prefers-reduced-motion:reduce){.boost-rows-enter .boost-row{animation:none}.ring-value,.boost-category,.boost-track i{transition:none}}
+
+
+/* A própria barra cresce sobre o conteúdo; a coluna da página continua com 70px. */
+.side{width:70px;align-items:stretch;overflow-x:hidden;z-index:85;transition:width .3s cubic-bezier(.22,.8,.25,1),box-shadow .3s;background:#1b1e25}
+.side.expanded{width:244px;box-shadow:18px 0 35px #00000038}
+.side .logo{margin-left:13px}.side .div{margin-left:22px}.side .ver{align-self:flex-start;margin-left:12px}
+.side .nav{margin-left:13px;width:42px;min-height:42px;display:flex;justify-content:flex-start;gap:14px;padding:0 11px;border-radius:9px;flex-shrink:0;overflow:hidden;transition:width .3s cubic-bezier(.22,.8,.25,1),background .2s,color .2s}
+.side .nav::after{display:none}.side .nav::before{display:none}.side .nav:hover,.side .nav:active{transform:none}.side .nav svg.i{flex:0 0 19px;width:19px;transform:none}.side.expanded .nav{width:218px}.side .nav.on{box-shadow:none;background:#2369df;color:white}
+.nav-label{white-space:nowrap;font-size:12px;font-weight:500;opacity:0;transform:translateX(-5px);transition:opacity .18s ease,transform .24s ease}.side.expanded .nav-label{opacity:1;transform:none;transition-delay:.065s}
+@media(prefers-reduced-motion:reduce){.side,.side .nav,.nav-label{transition:none}}
 </style>
 </head>
 <body>
@@ -382,7 +387,7 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
   <button class="nav" data-v="config" data-tip="Configurações" aria-label="Configurações"><svg class="i"><use href="#gear"/></svg></button>
   <div class="ver">v1.0</div>
 </aside>
-<div id="navfly" class="navfly" aria-label="Menu expandido" aria-hidden="true"></div>
+
 
 <main class="main">
   <header class="hd">
@@ -505,6 +510,11 @@ abrir:()=>{toast('Disponível apenas no programa .exe');return true},
 restore:()=>'Ponto de restauração criado (simulado)'};
 const A=(n,...a)=>{let p;try{const f=!DEMO&&window.pywebview&&pywebview.api&&pywebview.api[n];p=f?f(...a):(DEMO||!window.pywebview)&&MOCK[n]&&MOCK[n](...a)}catch(e){}return Promise.resolve(p).catch(()=>null).then(v=>v===undefined?null:v)};
 
+
+const demoFpsBackups={};
+MOCK.fps_status=()=>({items:[...MS.filter(s=>s.safe).map(s=>({id:s.name,title:'Desativar '+s.title,desc:s.desc,group:['DiagTrack','WerSvc'].includes(s.name)?'priv':'serv',active:!s.on,saved:!!demoFpsBackups[s.name],restart:false})),{id:'energy',title:'Plano de alto desempenho',desc:'Pode aumentar o consumo de energia.',group:'energia',active:demoPlans.find(p=>p.on)?.id==='b',saved:!!demoFpsBackups.energy,restart:false}],error:null});
+MOCK.fps_set=(id,apply)=>{if(apply){if(id==='energy'){demoFpsBackups[id]??={plan:demoPlans.find(p=>p.on).id};MOCK.setplan('high')}else{const s=MS.find(s=>s.name===id&&s.safe);if(!s)return {ok:false};demoFpsBackups[id]??={on:s.on};s.on=false}}else{const backup=demoFpsBackups[id];if(!backup)return {ok:false};if(id==='energy')MOCK.setplan(backup.plan);else MS.find(s=>s.name===id).on=backup.on;delete demoFpsBackups[id]}return {ok:true}};
+
 /* Controles da janela não usam a API de demonstração. */
 window.setWindowMaximized=value=>{
  const b=$('#winMax');b.title=value?'Restaurar':'Maximizar';
@@ -606,26 +616,21 @@ function skeletonMarkup(k){
  </div>`
 }
 function initFlyout(){
- const side=$('.side'),menu=$('#navfly');
- if(!side||!menu)return;
- const navs=[...side.querySelectorAll('.nav[data-v]')];
- menu.innerHTML='<div class="nfhead">PAINEL <small>NAVEGAÇÃO</small></div>'+
- navs.map(b=>`<button class="nfl ${b.classList.contains('on')?'on':''}" data-v="${b.dataset.v}" aria-label="${esc(b.getAttribute('data-tip')||b.dataset.v)}">${b.querySelector('svg')?.outerHTML||''}<span>${esc(b.getAttribute('data-tip')||b.dataset.v)}</span></button>`).join('');
- let ct;
- const hide=()=>{clearTimeout(ct);menu.classList.remove('open');menu.setAttribute('aria-hidden','true')};
- const show=()=>{if(window.innerWidth<=900)return;clearTimeout(ct);menu.classList.add('open');menu.setAttribute('aria-hidden','false')};
- const later=()=>{clearTimeout(ct);ct=setTimeout(hide,170)};
- navs.forEach(b=>{b.addEventListener('mouseenter',show);b.addEventListener('focus',show)});
- side.addEventListener('mouseleave',later);
- menu.addEventListener('mouseenter',()=>clearTimeout(ct));
- menu.addEventListener('mouseleave',later);
- menu.addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(!b)return;e.stopPropagation();hide();go(b.dataset.v)});
- window.addEventListener('resize',()=>{if(window.innerWidth<=900)hide()});
- window.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
+ const side=$('.side');if(!side)return;
+ side.querySelectorAll('.nav[data-v]').forEach(b=>{const label=document.createElement('span');label.className='nav-label';label.textContent=b.dataset.tip;b.appendChild(label)});
+ let closeTimer;
+ const open=()=>{clearTimeout(closeTimer);side.classList.add('expanded')};
+ const close=()=>{clearTimeout(closeTimer);side.classList.remove('expanded')};
+ side.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch')open()});
+ side.addEventListener('pointerleave',()=>{clearTimeout(closeTimer);closeTimer=setTimeout(close,140)});
+ side.addEventListener('focusin',open);
+ side.addEventListener('focusout',e=>{if(!side.contains(e.relatedTarget))close()});
+ side.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+ side.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',close));
 }
 
 /* ---------- telas ---------- */
-const T={dash:['Dashboard','Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.'],otim:['Otimização','Escolha o que otimizar e execute tudo de uma vez.'],jogos:['FPS Boost','Prepare seu PC para jogar com ajustes de energia, memória e gráficos.'],monitor:['Monitoramento','Uso em tempo real e processos ativos.'],rede:['Rede e internet','Conexão, latência e DNS.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],config:['Configurações','Preferências do painel.']};
+const T={dash:['Dashboard','Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.'],otim:['Otimização','Escolha o que otimizar e execute tudo de uma vez.'],jogos:['FPS Boost','Selecione e aplique os ajustes. O estado anterior é salvo para restauração.'],monitor:['Monitoramento','Uso em tempo real e processos ativos.'],rede:['Rede e internet','Conexão, latência e DNS.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],config:['Configurações','Preferências do painel.']};
 const V={};
 V.otim=async()=>{const ids=['temp','dns','ram','plan','serv'],def={temp:1,dns:1,ram:1};
 return [card('Otimizar tudo',`<p class="nt">Execute limpeza de temporários, renovação do DNS e verificação de inicialização, serviços e desempenho. No final, veja o relatório como no vídeo.</p><button class="btn sm" data-act="fullopt">✧ Otimizar tudo</button>`) +card('Ajustes individuais','<div class="opt-track" aria-hidden="true"><span id="optline"></span></div>'+ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
@@ -633,40 +638,70 @@ if(sel.includes('serv')&&!await ask('Desativar serviços seguros','Isso desliga 
 const b=$('#ex');b.disabled=true;const line=$('#optline');if(line)line.style.width='0%';ids.forEach(id=>$('#r_'+id).textContent='');let n=0;
 for(const id of sel){const e=$('#r_'+id);if(!e)return;e.className='st-run is-busy';e.textContent='Executando…';let m;try{m=await TASKS[id].run()}catch(x){m='Falhou'}if($('#r_'+id)){e.className='st-ok';e.textContent='✓ '+m}n++;if(line)line.style.width=Math.round(n/sel.length*100)+'%'}
 if($('#ex'))b.disabled=false;toast(n+' otimizações concluídas');analyze()}}]};
-let fpsPreviousPlan=null;
+const FPS_GROUPS=[
+ ['priv','Privacidade e Telemetria','shield'],['jogos','Jogos','pad'],['cpu','CPU e Kernel','cpu'],
+ ['gpu','GPU','monitor'],['interface','Desempenho e Interface','pulse'],['rede','Rede','wifi'],
+ ['ssd','Armazenamento / SSD','hdd'],['serv','Serviços','svc'],['init','Inicialização','pwr'],
+ ['energia','Energia','bolt'],['ferr','Ferramentas','wrench']
+];
+let fpsGroup='priv',fpsBusy=false;
+const fpsIcon=id=>`<svg class="i" aria-hidden="true"><use href="#${id}"/></svg>`;
+const fpsExtras={
+ priv:[['Permissões de privacidade','Revise câmera, microfone e preferências nas configurações do Windows.','Revisar','go','priv']],
+ jogos:[['Modo de Jogo do Windows','Verifique o Modo de Jogo nas configurações oficiais.','Configurar','open','gaming-gamemode'],['Liberar memória antes de jogar','Solicita a liberação de memória sem fechar programas.','Liberar memória','memory','']],
+ cpu:[['Monitorar CPU e processos','Confira o uso do processador e os programas em execução.','Monitorar','go','monitor']],
+ gpu:[['Preferências de gráficos','Escolha a placa de vídeo para cada jogo no Windows.','Configurar','open','display-advancedgraphics']],
+ interface:[['Reduzir animações do painel','Ajuste a preferência de movimento da interface.','Configurar','go','config']],
+ rede:[['DNS e conexão','Configure DNS, limpe o cache e teste a conexão.','Configurar rede','go','rede']],
+ ssd:[['Limpeza de arquivos temporários','Analise o espaço ocupado antes de decidir o que remover.','Analisar','go','limpeza']],
+ serv:[['Outros serviços do Windows','Revise os serviços adicionais e suas dependências.','Revisar','go','servicos']],
+ init:[['Aplicativos de inicialização','Escolha quais aplicativos devem iniciar com o Windows.','Gerenciar','go','init']],
+ energia:[['Todos os planos de energia','Confira os planos disponíveis e escolha o adequado para seu PC.','Ver planos','go','energia']],
+ ferr:[['Ferramentas de diagnóstico','Acesse utilitários do Windows e a criação de ponto de restauração.','Abrir ferramentas','go','ferr']]
+};
 V.jogos=async()=>{
- const [plans,stats]=await Promise.all([A('plans'),A('stats')]);
- const pl=plans||[],active=pl.find(p=>p.on),hi=!!active&&/alto|high|ultimate|máximo/i.test(active.name);
- const s=stats||{},cpu=Number.isFinite(s.cpu)?Math.round(s.cpu)+'%':'Indisponível';
- const ram=Number.isFinite(s.ram_used)&&s.ram_total?Math.round(s.ram_used/s.ram_total*100)+'%':'Indisponível';
- return [`<section class="fps-hero"><div><span class="fps-eyebrow">PERFORMANCE • GAMING</span><h2>Seu próximo jogo começa aqui.</h2><p>Ajuste o desempenho do Windows e prepare a memória antes de entrar na partida. Você escolhe o que aplicar.</p><button class="btn sm" data-open="gaming-gamemode"><svg class="i"><use href="#pad"/></svg>Abrir Modo de Jogo</button></div><div class="fps-emblem" aria-hidden="true"><svg class="i"><use href="#pad"/></svg></div></section>
- <section class="fps-metrics" aria-label="Uso do PC ao abrir a categoria"><div class="fps-metric"><small>CPU • USO ATUAL</small><b>${cpu}</b></div><div class="fps-metric"><small>MEMÓRIA • USO ATUAL</small><b>${ram}</b></div><div class="fps-metric"><small>PLANO DE ENERGIA</small><b class="plan-name" id="fpsPlanName">${esc(active?.name||'Indisponível')}</b></div></section>
- <section class="fps-grid" aria-label="Ajustes para jogos">
- <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#bolt"/></svg></span><h3>Alto desempenho</h3><label class="tg"><input type="checkbox" id="gm" aria-label="Ativar plano de alto desempenho" ${hi?'checked':''}><i></i></label></div><p>Priorize desempenho no plano de energia. Pode aumentar o consumo e a temperatura. Ao desativar, restaura o plano anterior desta sessão.</p><div class="fps-status" id="fpsPlanStatus" role="status">${hi?'Plano de alto desempenho ativo':'Ative quando precisar'}</div></article>
- <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#ram"/></svg></span><h3>Memória disponível</h3></div><p>Solicite a liberação de memória sem encerrar programas. O resultado depende do uso do computador.</p><button class="ghost" id="fm">Liberar memória</button><div class="fps-status" id="fpsMemoryStatus" role="status"></div></article>
- <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#monitor"/></svg></span><h3>Preferências de gráficos</h3></div><p>Escolha a GPU de alto desempenho para cada jogo nas configurações oficiais do Windows.</p><button class="ghost" data-open="display-advancedgraphics">Configurar gráficos ↗</button></article>
- <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#pad"/></svg></span><h3>Modo de Jogo do Windows</h3></div><p>Abra os ajustes do Windows para verificar e ativar o Modo de Jogo.</p><button class="ghost" data-open="gaming-gamemode">Configurar Modo de Jogo ↗</button></article>
- </section><p class="fps-note">O painel não mede FPS durante os jogos. Os resultados variam conforme o hardware e o jogo; não há ganho de FPS garantido. Os indicadores acima são atualizados ao abrir esta categoria.</p>`,()=>{
- const toggle=$('#gm'),status=$('#fpsPlanStatus'),name=$('#fpsPlanName'),memory=$('#fm'),memoryStatus=$('#fpsMemoryStatus');
- toggle.disabled=!active;
- toggle.onchange=async()=>{
-  const on=toggle.checked;toggle.disabled=true;status.textContent='Aplicando plano…';
-  const current=(await A('plans')||[]).find(p=>p.on);
-  const target=on?'high':fpsPreviousPlan||'balanced';
-  const ok=!!current&&await A('setplan',target);
-  if(ok){if(on)fpsPreviousPlan=current.id;else fpsPreviousPlan=null;
-   const updated=(await A('plans')||[]).find(p=>p.on);
-   name.textContent=updated?.name||(on?'Alto desempenho':'Plano restaurado');
-   status.textContent=on?'Alto desempenho ativado':target==='balanced'?'Plano equilibrado ativado':'Plano anterior restaurado';
-  }else{toggle.checked=!on;status.textContent='Não foi possível alterar o plano neste PC.'}
-  toggle.disabled=false;toast(status.textContent);
- };
- memory.onclick=async()=>{
-  memory.disabled=true;memoryStatus.textContent='Liberando memória…';
-  const freed=await A('freemem');
-  memoryStatus.textContent=typeof freed==='number'?'Memória liberada: '+fmt(freed):'Não foi possível liberar memória.';
-  memory.disabled=false;toast(memoryStatus.textContent);
- };
+ const state=await A('fps_status');
+ if(!state||!Array.isArray(state.items))throw Error('FPS status unavailable');
+ const items=state.items,total=items.length,active=items.filter(x=>x.active).length,percent=total?Math.round(active/total*100):0;
+ const saved=items.filter(x=>x.saved).length;
+ return [`<section class="boost-summary" aria-label="Resumo dos ajustes">
+  <div class="boost-ring" role="img" aria-label="${percent}% dos ajustes ativos"><svg viewBox="0 0 120 120"><circle class="ring-track" cx="60" cy="60" r="51"/><circle class="ring-value" cx="60" cy="60" r="51" style="stroke-dasharray:${percent*3.2044} 320.44"/></svg><b>${percent}<small>%</small></b></div>
+  <div class="boost-summary-text"><span class="boost-kicker">AJUSTES ATIVOS</span><h2>${active}<small> / ${total}</small></h2><p>Backup do estado original antes de aplicar cada ajuste por aqui.</p><div class="boost-meta"><span>${fpsIcon('svc')}11 categorias</span><span>${fpsIcon('shield')}${saved} backups disponíveis</span></div></div>
+  <div class="boost-summary-actions"><p><i class="blue-dot"></i><b>${active}</b> ativos neste PC</p><p><i></i><b>${total-active}</b> disponíveis</p><button class="boost-apply" id="fpsApplyAll" ${fpsBusy||!total||active===total||state.error?'disabled':''}>${fpsIcon('bolt')}Aplicar tudo</button><small id="fpsMessage" role="status">${esc(state.error||'Você confirma os ajustes antes de aplicar.')}</small></div>
+ </section>
+ <div class="boost-workspace"><nav class="boost-categories" aria-label="Categorias FPS Boost">${FPS_GROUPS.map(([id,title,icon])=>{
+  const group=items.filter(x=>x.group===id),n=group.filter(x=>x.active).length;
+  return `<button class="boost-category ${fpsGroup===id?'selected':''}" data-fps-group="${id}" aria-pressed="${fpsGroup===id}"><span class="boost-cat-icon">${fpsIcon(icon)}</span><span class="boost-cat-text"><span>${title}</span><span class="boost-track"><i style="width:${group.length?n/group.length*100:0}%"></i></span></span><small>${group.length?`${n}/${group.length}`:'↗'}</small></button>`;
+ }).join('')}</nav><section class="boost-detail" id="fpsDetail" aria-label="Ajustes da categoria"></section></div>
+ <p class="boost-footnote">Somente ajustes compatíveis detectados neste PC entram no contador. Os atalhos abrem configurações para revisão e não contam como ajustes aplicados. Não há promessa de ganho de FPS.</p>`,()=>{
+ const root=$('#view');
+ function paintGroup(){
+  if(!root.isConnected||!root.querySelector('#fpsDetail'))return;
+  const [,title,icon]=FPS_GROUPS.find(g=>g[0]===fpsGroup),group=items.filter(x=>x.group===fpsGroup),count=group.filter(x=>x.active).length;
+  root.querySelectorAll('[data-fps-group]').forEach(b=>{const on=b.dataset.fpsGroup===fpsGroup;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on))});
+  const detail=root.querySelector('#fpsDetail');
+  detail.innerHTML=`<header class="boost-detail-head"><span class="boost-cat-icon">${fpsIcon(icon)}</span><div><h3>${title}</h3><small>${group.length?`${count}/${group.length} ativos`:'Configurações e ferramentas'}</small></div><span class="boost-badge ${group.length&&count===group.length?'complete':''}">${group.length?(count===group.length?'CATEGORIA COMPLETA':`${count}/${group.length} ATIVOS`):'REVISÃO MANUAL'}</span></header><div class="boost-rows">${group.map(x=>`<article class="boost-row"><span class="boost-row-icon ${x.active?'active':''}">${fpsIcon(x.restart?'refresh':icon)}</span><div class="boost-row-copy"><h4>${esc(x.title)}</h4><p>${esc(x.desc)}</p>${x.restart?'<small class="boost-restart">O serviço ainda está em execução; pode ser necessário reiniciar.</small>':''}</div><div class="boost-row-actions"><button class="boost-state ${x.active?'active':''}" data-fps-apply="${esc(x.id)}" ${fpsBusy||x.active||state.error?'disabled':''}>${fpsIcon(x.active?'ck':'bolt')}${x.active?'Ativo':'Aplicar'}</button>${x.saved?`<button class="boost-undo" data-fps-undo="${esc(x.id)}" ${fpsBusy||state.error?'disabled':''}>Restaurar</button>`:''}</div></article>`).join('')}${(fpsExtras[fpsGroup]||[]).map(([title,desc,label,type,key])=>`<article class="boost-row"><span class="boost-row-icon">${fpsIcon(icon)}</span><div class="boost-row-copy"><h4>${title}</h4><p>${desc}</p></div><button class="boost-state" ${type==='go'?`data-go="${key}"`:type==='open'?`data-open="${key}"`:'id="fpsFreeMemory"'}>${label} ↗</button></article>`).join('')}</div>`;
+  const rows=detail.querySelector('.boost-rows');
+  if(motionOn())rows.classList.add('boost-rows-enter');
+  detail.querySelectorAll('[data-fps-apply]').forEach(b=>b.onclick=()=>change([b.dataset.fpsApply],true));
+  detail.querySelectorAll('[data-fps-undo]').forEach(b=>b.onclick=()=>change([b.dataset.fpsUndo],false));
+  const mem=detail.querySelector('#fpsFreeMemory');if(mem)mem.onclick=async()=>{mem.disabled=true;const result=await A('freemem');toast(typeof result==='number'?'Memória liberada: '+fmt(result):'Não foi possível liberar memória');mem.disabled=false};
+ }
+ async function change(ids,apply){
+  if(fpsBusy)return;
+  const names=ids.map(id=>items.find(x=>x.id===id)?.title).filter(Boolean);
+  if(!await ask(apply?'Aplicar ajustes selecionados?':'Restaurar estado anterior?',(apply?'O estado atual será salvo antes de alterar: ':'Restaurar o backup de: ')+names.join('; ')+'.',apply?'Aplicar':'Restaurar'))return;
+  if(fpsBusy)return;fpsBusy=true;
+  root.querySelectorAll('[data-fps-apply],[data-fps-undo],#fpsApplyAll').forEach(b=>b.disabled=true);
+  let ok=0,fail=[];
+  try{for(const id of ids){const r=await A('fps_set',id,apply);if(r?.ok)ok++;else fail.push(r?.message||'Ajuste indisponível')}}
+  finally{fpsBusy=false}
+  toast(fail.length?`${ok}/${ids.length} concluídos. ${fail[0]}`:apply?'Ajustes aplicados':'Estado anterior restaurado');
+  if($('#h1').textContent==='FPS Boost')await go('jogos');
+ }
+ root.querySelectorAll('[data-fps-group]').forEach(b=>b.onclick=()=>{fpsGroup=b.dataset.fpsGroup;paintGroup()});
+ $('#fpsApplyAll').onclick=()=>change(items.filter(x=>!x.active).map(x=>x.id),true);
+ paintGroup();
  }];
 };
 
@@ -707,12 +742,10 @@ async function go(k){
  const n=++gn;clearInterval(timer);
  const dash=$('#v-dash'),v=$('#view'),old=dash.hidden?v:dash;
  const animate=motionOn();
- $('#navfly')?.classList.remove('open');
- $('#navfly')?.setAttribute('aria-hidden','true');
  if(animate){old.classList.add('view-out');await sleep(110);if(n!==gn)return}
- document.querySelectorAll('.nav,.nfl').forEach(b=>b.classList.toggle('on',b.dataset.v===k));
+ document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on',b.dataset.v===k));
  const o=k==='dash';$('#h1').textContent=T[k][0];$('#sub').textContent=T[k][1];
- dash.hidden=!o;v.hidden=o;$('#np').hidden=true;scrollTo(0,0);
+ dash.hidden=!o;v.hidden=o;$('#np').hidden=true;scrollTo({top:0,behavior:'instant'});
  dash.classList.remove('view-out');v.classList.remove('view-out');
  if(o){dash.classList.add('view-in');lv();setTimeout(()=>{if(n===gn)dash.classList.remove('view-in')},650);return}
  const started=performance.now();

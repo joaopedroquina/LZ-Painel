@@ -7,6 +7,7 @@ import platform
 import threading
 import traceback
 import subprocess
+import json
 
 # Em programas sem console (--noconsole) stdout/stderr não existem; evita erros ao imprimir.
 if sys.stdout is None:
@@ -163,6 +164,121 @@ class Api:
         self._window = None
         self._maximized = False
         self._window_lock = threading.Lock()
+        self._fps_lock = threading.Lock()
+
+    def _fps_backup_path(self):
+        folder = os.environ.get("LOCALAPPDATA")
+        if not folder:
+            raise OSError("Pasta de dados local indisponível")
+        return os.path.join(folder, "LZPainel", "fps-backup.json")
+
+    def _fps_backups(self):
+        try:
+            with open(self._fps_backup_path(), encoding="utf-8") as f:
+                data = json.load(f)
+            if not isinstance(data, dict):
+                raise ValueError("Backup inválido")
+            return data
+        except FileNotFoundError:
+            return {}
+
+    def _fps_save(self, data):
+        path = self._fps_backup_path()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        temporary = path + ".tmp"
+        with open(temporary, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(temporary, path)
+
+    def fps_status(self):
+        try:
+            backups = self._fps_backups()
+            error = None
+        except (OSError, ValueError):
+            backups, error = {}, "Não foi possível ler o backup dos ajustes."
+        items = []
+        for s in self.services():
+            if not s["safe"]:
+                continue
+            name = s["name"]
+            items.append({"id": name, "title": "Desativar " + s["title"],
+                          "desc": s["desc"], "group": "priv" if name in
+                          {"DiagTrack", "dmwappushservice", "WerSvc"} else "serv",
+                          "active": not s["on"], "saved": name in backups,
+                          "restart": not s["on"] and s["running"]})
+        plans = self.plans()
+        current = next((p for p in plans if p["on"]), None)
+        if current:
+            items.append({"id": "energy", "title": "Plano de alto desempenho",
+                          "desc": "Prioriza desempenho; pode aumentar consumo e temperatura.",
+                          "group": "energia", "active": bool(re.search(
+                              r"alto|high|ultimate|máximo", current["name"], re.I)) or
+                              current["id"].lower() == "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c",
+                          "saved": "energy" in backups, "restart": False})
+        return {"items": items, "error": error}
+
+    def fps_set(self, key, apply):
+        """Only existing safe-service/energy actions, with original state saved first."""
+        if key != "energy" and (key not in SERVICES or not SERVICES[key][3]):
+            return {"ok": False, "message": "Ajuste inválido"}
+        if not isinstance(apply, bool):
+            return {"ok": False, "message": "Estado inválido"}
+        with self._fps_lock:
+            try:
+                backups = self._fps_backups()
+                if apply:
+                    if key not in backups:
+                        if key == "energy":
+                            current = next((p for p in self.plans() if p["on"]), None)
+                            if not current:
+                                raise ValueError("Plano atual indisponível")
+                            snapshot = {"plan": current["id"]}
+                        else:
+                            service = psutil.win_service_get(key)
+                            kind = service.start_type()
+                            if kind == "disabled":
+                                return {"ok": True, "message": "Ajuste já ativo antes do painel"}
+                            start = {"automatic": "auto", "manual": "demand"}.get(kind)
+                            if not start:
+                                raise ValueError("Tipo de inicialização não suportado")
+                            if start == "auto" and winreg:
+                                with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
+                                        "SYSTEM\\CurrentControlSet\\Services\\" + key) as registry:
+                                    if rval(registry, "DelayedAutoStart") == 1:
+                                        start = "delayed-auto"
+                            snapshot = {"start": start, "running": service.status() == "running"}
+                        backups[key] = snapshot
+                        self._fps_save(backups)  # Never change Windows if saving fails.
+                    ok = self.setplan("high") if key == "energy" else self.set_service(key, False)
+                else:
+                    snapshot = backups.get(key)
+                    if not snapshot:
+                        return {"ok": False, "message": "Sem backup anterior para restaurar"}
+                    if key == "energy":
+                        plan = snapshot.get("plan", "")
+                        if not GUID.fullmatch(plan):
+                            raise ValueError("Plano do backup inválido")
+                        ok = self.setplan(plan)
+                    else:
+                        start = snapshot.get("start")
+                        if start not in {"auto", "delayed-auto", "demand"}:
+                            raise ValueError("Backup do serviço inválido")
+                        ok = run(["sc", "config", key, "start=", start])[0] == 0
+                        if ok:
+                            running = psutil.win_service_get(key).status() == "running"
+                            wanted = snapshot.get("running") is True
+                            if running != wanted:
+                                ok = run(["sc", "start" if wanted else "stop", key])[0] == 0
+                    if ok:
+                        del backups[key]
+                        self._fps_save(backups)
+                return {"ok": bool(ok), "message": ("Ajuste aplicado" if apply else
+                        "Estado anterior restaurado") if ok else
+                        "Não foi possível concluir. Verifique as permissões de administrador."}
+            except (OSError, ValueError, KeyError, TypeError) as e:
+                return {"ok": False, "message": "Ajuste não concluído: " + str(e)}
 
     def window_state(self):
         return {"maximized": self._maximized}
