@@ -165,6 +165,70 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 @media(max-width:900px){.main{padding:16px}.qgrid,.g2,.live{grid-template-columns:1fr}.hd{flex-direction:column}.np{right:auto;left:0}}
 @media(max-height:780px){.side{gap:1px}.nav{height:38px;width:38px}.div{margin:5px 0}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* Movimento inspirado na referência: painéis suaves, carregamento e menu deslizante. */
+@keyframes painelEntrar{from{opacity:0;transform:translateY(12px) scale(.992);filter:blur(3px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes linhaEntrar{from{opacity:0;transform:translateX(-9px)}to{opacity:1;transform:none}}
+@keyframes esqueleto{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes surgirMenu{from{opacity:0;transform:translateX(-14px) scale(.98);filter:blur(3px)}to{opacity:1;transform:translateX(0) scale(1);filter:blur(0)}}
+@keyframes abrirModal{from{opacity:0;transform:translateY(9px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes marcarCheck{0%{transform:scale(.8)}60%{transform:scale(1.13)}100%{transform:scale(1)}}
+@keyframes halo{50%{box-shadow:0 0 0 6px rgba(47,111,237,.06),0 0 24px rgba(47,111,237,.1)}}
+@keyframes spinner360{to{transform:rotate(360deg)}}
+.view{transition:opacity .16s ease,transform .16s ease,filter .16s ease;will-change:opacity}
+.view.view-out{opacity:0;transform:translateY(6px);filter:blur(2px);pointer-events:none}
+.view.view-in>*{animation:painelEntrar .48s cubic-bezier(.18,.82,.22,1) both}
+.view.view-in>*:nth-child(2){animation-delay:.045s}
+.view.view-in>*:nth-child(3){animation-delay:.09s}
+.view.view-in>*:nth-child(4){animation-delay:.13s}
+.view.view-in>*:nth-child(5){animation-delay:.17s}
+.view .rw{animation:linhaEntrar .33s cubic-bezier(.17,.85,.3,1) both}
+.view .rw:nth-of-type(2){animation-delay:.025s}.view .rw:nth-of-type(3){animation-delay:.05s}
+.view .rw:nth-of-type(4){animation-delay:.075s}.view .rw:nth-of-type(5){animation-delay:.1s}
+.view .rw:nth-of-type(6){animation-delay:.125s}
+.nav{transition:background .2s ease,color .2s ease,transform .22s cubic-bezier(.2,.9,.2,1),box-shadow .2s ease}
+.nav:hover{transform:scale(1.075)}
+.nav:active{transform:scale(.92)}
+.nav.on{animation:halo 3.5s ease-in-out infinite}
+.card{transition:transform .23s ease,border-color .23s ease,box-shadow .23s ease}
+.card:hover{border-color:#404c61}
+.qc:hover{transform:translateY(-3px)}
+.qc:active,.btn:active,.ghost:active{transform:scale(.974)}
+.sr svg.bars rect{transition:fill .25s ease,opacity .3s ease}
+.radar .pl{transition:opacity .45s ease,filter .45s ease}
+.radar .pl{filter:drop-shadow(0 0 7px rgba(91,149,255,.3))}
+.md:not([hidden]){animation:fadeOverlay .22s ease both}
+.md:not([hidden]) .mb{animation:abrirModal .3s cubic-bezier(.2,.9,.2,1) both}
+@keyframes fadeOverlay{from{opacity:0}to{opacity:1}}
+.toast.on{animation:abrirModal .29s cubic-bezier(.2,.9,.2,1)}
+.tg input:checked+i::after{animation:marcarCheck .25s ease}
+.opt-track{height:5px;background:#353a45;border-radius:4px;overflow:hidden;margin:10px 0 18px}
+.opt-track>span{display:block;width:0;height:100%;background:linear-gradient(90deg,#326df1,#60c5ff);border-radius:4px;box-shadow:0 0 12px #326df1;transition:width .42s cubic-bezier(.15,.85,.25,1)}
+.st-run.is-busy{display:inline-flex;align-items:center;gap:8px}
+.st-run.is-busy::before{content:"";display:block;width:12px;height:12px;border-radius:50%;border:2px solid #3e4654;border-top-color:#6ea0ff;animation:spinner360 .65s linear infinite}
+.st-ok{animation:linhaEntrar .32s ease both}
+.screenloading{display:grid;gap:16px;align-content:start}
+.sk-panel{padding:18px 22px;display:grid;gap:14px;min-height:140px}
+.sk-row{display:flex;gap:12px}
+.sk{height:14px;display:block;border-radius:7px;background:linear-gradient(105deg,#292d36 12%,#343b48 36%,#444d5d 50%,#343b48 64%,#292d36 88%);background-size:200% 100%;animation:esqueleto 1.15s linear infinite}
+.sk.title{height:22px;width:27%}.sk.w1{width:75%}.sk.w2{width:47%}.sk.w3{width:100%}
+.sk.box{height:100px;flex:1;border-radius:12px}.sk.short{width:34%}
+.sk-panel .sk-row{align-items:center}
+.navfly{position:fixed;top:66px;left:64px;z-index:80;width:222px;max-height:calc(100vh - 84px);overflow-y:auto;overflow-x:hidden;padding:9px;background:rgba(27,30,37,.97);border:1px solid #384252;border-radius:14px;box-shadow:0 22px 70px rgba(0,0,0,.55);backdrop-filter:blur(14px);opacity:0;visibility:hidden;pointer-events:none;transform:translateX(-10px) scale(.985);transition:opacity .22s ease,transform .26s cubic-bezier(.18,.85,.25,1),visibility .22s ease}
+.navfly.open{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0) scale(1)}
+.nfhead{padding:9px 11px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #343946;color:#fff;font-size:15px;font-weight:700}
+.nfhead small{color:#8a96ac;font-size:10px;font-weight:500}
+.nfl{width:100%;border:0;background:transparent;color:#bcc6d7;display:flex;align-items:center;gap:10px;text-align:left;padding:10px 12px;border-radius:8px;font:500 13px Inter,"Segoe UI",sans-serif;cursor:pointer;transition:background .17s,color .17s,transform .17s}
+.nfl svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nfl:hover{background:#303745;color:#fff;transform:translateX(3px)}
+.nfl.on{background:#2f6fed;color:#fff;font-weight:600}
+@media(max-width:900px){.navfly{display:none}}
+@media(prefers-reduced-motion:reduce){
+  .view.view-in>*,.view .rw,.md:not([hidden]),.md:not([hidden]) .mb,.toast.on,.st-ok{animation:none!important}
+  .sk,.st-run.is-busy::before{animation:none!important}
+  .navfly{transition:none}
+}
+.calm .view.view-in>*,.calm .view .rw,.calm .nav.on{animation:none!important}
 </style>
 </head>
 <body>
@@ -221,6 +285,7 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
   <button class="nav" data-v="config" data-tip="Configurações" aria-label="Configurações"><svg class="i"><use href="#gear"/></svg></button>
   <div class="ver">v1.0</div>
 </aside>
+<div id="navfly" class="navfly" aria-label="Menu expandido" aria-hidden="true"></div>
 
 <main class="main">
   <header class="hd">
@@ -384,14 +449,44 @@ finally{analyzing=false;sp.textContent='Otimizar agora';b.disabled=false;$('#rea
 function chips(){const i=INFO,short=s=>String(s||'').replace(/\((R|TM)\)|CPU|Processor/gi,'').replace(/\s+/g,' ').trim();$('#chips').innerHTML=`<span><svg class="i"><use href="#cpu"/></svg>${esc(short(i.cpu).slice(0,34)||'Processador')}</span><span><svg class="i"><use href="#ram"/></svg>${i.ram?Math.round(i.ram)+' GB de RAM':'RAM'}</span><span><svg class="i"><use href="#monitor"/></svg>${esc(i.os||'Windows')}</span>`}
 async function runTasks(ids){const out=[];for(const id of ids){try{out.push(await TASKS[id].run())}catch(e){out.push('Falhou')}}return out}
 
+
+/* ---------- animações e menu expansível (referência em vídeo) ---------- */
+function motionOn(){return !S.calm && !(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)}
+function skeletonMarkup(k){
+ const title=esc((T[k]&&T[k][0])||'Painel');
+ return `<div class="screenloading" role="status" aria-label="Carregando ${title}">
+  <div class="card sk-panel"><span class="sk title"></span><span class="sk w1"></span><span class="sk w2"></span><div class="sk-row"><span class="sk box"></span><span class="sk box"></span></div></div>
+  <div class="g2"><div class="card sk-panel"><span class="sk title"></span><span class="sk w3"></span><span class="sk w2"></span><span class="sk w1"></span></div>
+  <div class="card sk-panel"><span class="sk title"></span><span class="sk w2"></span><span class="sk w1"></span><span class="sk w3"></span></div></div>
+ </div>`
+}
+function initFlyout(){
+ const side=$('.side'),menu=$('#navfly');
+ if(!side||!menu)return;
+ const navs=[...side.querySelectorAll('.nav[data-v]')];
+ menu.innerHTML='<div class="nfhead">PAINEL <small>NAVEGAÇÃO</small></div>'+
+ navs.map(b=>`<button class="nfl ${b.classList.contains('on')?'on':''}" data-v="${b.dataset.v}" aria-label="${esc(b.getAttribute('data-tip')||b.dataset.v)}">${b.querySelector('svg')?.outerHTML||''}<span>${esc(b.getAttribute('data-tip')||b.dataset.v)}</span></button>`).join('');
+ let ct;
+ const hide=()=>{clearTimeout(ct);menu.classList.remove('open');menu.setAttribute('aria-hidden','true')};
+ const show=()=>{if(window.innerWidth<=900)return;clearTimeout(ct);menu.classList.add('open');menu.setAttribute('aria-hidden','false')};
+ const later=()=>{clearTimeout(ct);ct=setTimeout(hide,170)};
+ navs.forEach(b=>{b.addEventListener('mouseenter',show);b.addEventListener('focus',show)});
+ side.addEventListener('mouseleave',later);
+ menu.addEventListener('mouseenter',()=>clearTimeout(ct));
+ menu.addEventListener('mouseleave',later);
+ menu.addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(!b)return;e.stopPropagation();hide();go(b.dataset.v)});
+ window.addEventListener('resize',()=>{if(window.innerWidth<=900)hide()});
+ window.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
+}
+
 /* ---------- telas ---------- */
 const T={dash:['Dashboard','Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.'],otim:['Otimização','Escolha o que otimizar e execute tudo de uma vez.'],jogos:['Jogos e FPS','Perfil de desempenho para jogos.'],monitor:['Monitoramento','Uso em tempo real e processos ativos.'],rede:['Rede e internet','Conexão, latência e DNS.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],config:['Configurações','Preferências do painel.']};
 const V={};
 V.otim=async()=>{const ids=['temp','dns','ram','plan','serv'],def={temp:1,dns:1,ram:1};
-return [card('Otimização rápida',ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
+return [card('Otimização rápida','<div class="opt-track" aria-hidden="true"><span id="optline"></span></div>'+ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
 if(sel.includes('serv')&&!await ask('Desativar serviços seguros','Isso desliga os serviços marcados como Seguro. Você pode restaurar na tela Serviços.','Continuar'))return;
-const b=$('#ex');b.disabled=true;ids.forEach(id=>$('#r_'+id).textContent='');let n=0;
-for(const id of sel){const e=$('#r_'+id);if(!e)return;e.className='st-run';e.textContent='Executando…';let m;try{m=await TASKS[id].run()}catch(x){m='Falhou'}if($('#r_'+id)){e.className='st-ok';e.textContent='✓ '+m}n++}
+const b=$('#ex');b.disabled=true;const line=$('#optline');if(line)line.style.width='0%';ids.forEach(id=>$('#r_'+id).textContent='');let n=0;
+for(const id of sel){const e=$('#r_'+id);if(!e)return;e.className='st-run is-busy';e.textContent='Executando…';let m;try{m=await TASKS[id].run()}catch(x){m='Falhou'}if($('#r_'+id)){e.className='st-ok';e.textContent='✓ '+m}n++;if(line)line.style.width=Math.round(n/sel.length*100)+'%'}
 if($('#ex'))b.disabled=false;toast(n+' otimizações concluídas');analyze()}}]};
 V.jogos=async()=>{const pl=await A('plans')||[],hi=pl.some(p=>p.on&&/alto|high|ultimate|máximo/i.test(p.name));
 return [card('Desempenho para jogos',row('Modo jogo (plano de energia de alto desempenho)',tg('gm',hi),'Mantém o processador sem economizar energia.')+row('Modo de Jogo do Windows',ob('Abrir','gaming-gamemode'),'Ajustes oficiais do Windows.')+row('Preferências de gráficos',ob('Abrir','display-advancedgraphics'),'Escolha a placa de vídeo para cada jogo.')+row('Liberar memória antes de jogar',bt('Liberar agora','fm'),'Devolve memória ao sistema sem fechar programas.')),()=>{$('#gm').onchange=async e=>{const on=e.target.checked,ok=await A('setplan',on?'high':'balanced');if(!ok){e.target.checked=!on;toast('Plano indisponível neste PC')}else toast(on?'Modo jogo ativado':'Modo jogo desativado')};$('#fm').onclick=async()=>{toast('Liberando memória…');toast('Liberados '+fmt(await A('freemem')||0))}}]};
@@ -428,12 +523,29 @@ V.priv=async()=>[card('Permissões e preferências',[['privacy-webcam','Câmera'
 V.ferr=async()=>[card('Utilitários do Windows',[['taskmgr','Gerenciador de Tarefas','Veja e encerre programas.'],['resmon','Monitor de Recursos','Uso detalhado de CPU, disco e rede.'],['cleanmgr','Limpeza de Disco','Ferramenta de limpeza do Windows.'],['devmgmt','Gerenciador de Dispositivos','Drivers e hardware.'],['diskmgmt','Gerenciamento de Disco','Partições e unidades.'],['services','Serviços','Serviços do Windows.'],['msinfo','Informações do sistema','Detalhes completos do PC.'],['cmd','Prompt de comando','Terminal do Windows.']].map(x=>row(x[1],ob('Abrir',x[0]),x[2])).join('')+row('Ponto de restauração','<button class="ghost" data-act="restore">Criar</button>','Salva o estado do Windows para voltar atrás se algo der errado.'))];
 V.config=async()=>[card('Preferências',row('Atualizar valores em tempo real',tg('cl1',S.live!==false),'CPU, memória, disco e temperatura no Dashboard.')+row('Reduzir animações',tg('cl2',!!S.calm),'Deixa o painel mais leve em PCs fracos.')+row('Versão','1.0')),()=>{$('#cl1').onchange=e=>{S.live=e.target.checked;save();if(S.live)tick()};$('#cl2').onchange=e=>{S.calm=e.target.checked;save();document.body.classList.toggle('calm',S.calm)}}];
 
-async function go(k){const n=++gn;clearInterval(timer);document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('on',b.dataset.v===k));
-const o=k==='dash';$('#h1').textContent=T[k][0];$('#sub').textContent=T[k][1];$('#v-dash').hidden=!o;$('#view').hidden=o;$('#np').hidden=true;scrollTo(0,0);
-if(o){lv();return}
-const v=$('#view');v.innerHTML='';const wt=setTimeout(()=>{if(n===gn)v.innerHTML='<div class="card ld"><i class="spn"></i>Carregando…</div>'},150);
-let r;try{r=await V[k]()}catch(e){r=[`<div class="card ld">Não foi possível carregar esta tela. <button class="ghost" data-go="${k}">Tentar de novo</button></div>`]}
-clearTimeout(wt);if(n!==gn)return;v.innerHTML=r[0];if(r[1]){try{r[1]()}catch(e){}}}
+async function go(k){
+ const n=++gn;clearInterval(timer);
+ const dash=$('#v-dash'),v=$('#view'),old=dash.hidden?v:dash;
+ const animate=motionOn();
+ $('#navfly')?.classList.remove('open');
+ $('#navfly')?.setAttribute('aria-hidden','true');
+ if(animate){old.classList.add('view-out');await sleep(110);if(n!==gn)return}
+ document.querySelectorAll('.nav,.nfl').forEach(b=>b.classList.toggle('on',b.dataset.v===k));
+ const o=k==='dash';$('#h1').textContent=T[k][0];$('#sub').textContent=T[k][1];
+ dash.hidden=!o;v.hidden=o;$('#np').hidden=true;scrollTo(0,0);
+ dash.classList.remove('view-out');v.classList.remove('view-out');
+ if(o){dash.classList.add('view-in');lv();setTimeout(()=>{if(n===gn)dash.classList.remove('view-in')},650);return}
+ const started=performance.now();
+ v.innerHTML=skeletonMarkup(k);
+ v.classList.add('view-in');
+ let r;
+ try{r=await V[k]()}catch(e){r=[`<div class="card ld">Não foi possível carregar esta tela. <button class="ghost" data-go="${k}">Tentar de novo</button></div>`]}
+ if(animate){const remaining=290-(performance.now()-started);if(remaining>0)await sleep(remaining)}
+ if(n!==gn)return;
+ v.classList.remove('view-in');v.innerHTML=r[0];
+ if(animate){void v.offsetWidth;v.classList.add('view-in');setTimeout(()=>{if(n===gn)v.classList.remove('view-in')},750)}
+ if(r[1]){try{r[1]()}catch(e){}}
+}
 document.addEventListener('click',async e=>{const g=e.target.closest('[data-go],[data-v],[data-open],[data-act]');
 if(!g){if(!e.target.closest('.hr'))$('#np').hidden=true;return}
 if(g.dataset.go||g.dataset.v)go(g.dataset.go||g.dataset.v);
@@ -450,7 +562,7 @@ $('#opt').onclick=async()=>{if(analyzing)return;const b=$('#opt'),sp=b.querySele
 let booted=false;
 async function boot(){if(booted)return;booted=true;DEMO=!(window.pywebview&&window.pywebview.api);
 if(DEMO){$('#demo').hidden=false;for(let i=0;i<MAXH;i++){HL.cpu.push(clamp(30+Math.sin(i/4)*18+R(-6,6)));HL.ram.push(R(40,43));HL.dsk.push(68);HL.tmp.push(R(46,50))}}
-bars(0);radar();INFO=await A('info')||{};chips();await tick(true);lv();setTimeout(()=>$('#splash').classList.add('out'),200);setInterval(tick,2000);analyze()}
+bars(0);radar();INFO=await A('info')||{};chips();await tick(true);lv();setTimeout(()=>$('#splash').classList.add('out'),200);initFlyout();setInterval(tick,2000);analyze()}
 window.addEventListener('pywebviewready',boot);setTimeout(boot,2200);
 </script>
 </body>
