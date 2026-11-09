@@ -399,6 +399,34 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 @media(max-width:1100px){.fpsx-hero{grid-template-columns:110px minmax(0,1fr)}.fpsx-side{grid-column:1/-1}.fpsx-grid{grid-template-columns:1fr}}
 @media(max-width:720px){.fpsx-hero{grid-template-columns:1fr}.fpsx-ring{margin:auto}.fpsx-item{grid-template-columns:34px 1fr}.fpsx-item .act{grid-column:2;justify-content:flex-start}.fpsx-panel-h{flex-wrap:wrap}.fpsx-chip{margin-left:0}}
 
+
+.gb-shell{display:grid;gap:19px;border:1px solid #255bb9;border-radius:22px;background:linear-gradient(130deg,#0d1424,#0b1935);padding:22px}
+.gb-hero{display:grid;grid-template-columns:78px 1fr 200px;gap:16px;align-items:center;min-width:0}
+.gb-appicon{display:grid;place-items:center;width:72px;height:72px;border-radius:20px;background:#1465e9;font-size:34px}
+.gb-kicker{color:#ffd06b;font-size:11px;font-weight:800;letter-spacing:.08em}
+.gb-hero h2{font-size:28px;margin:5px 0}.gb-hero p{color:#a1b4d3;font-size:13px}
+.gb-controller{text-align:center;font-size:68px;filter:drop-shadow(0 0 22px #197bfa66)}
+.gb-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.gb-tabs button{border:1px solid #31517e;border-radius:12px;padding:14px;background:#152139;color:#d7e2f5;font-weight:700;cursor:pointer}.gb-tabs button.selected{background:#166ae8;border-color:#4d9bff;color:#fff}
+.gb-heading{margin-bottom:14px}.gb-heading h3{font-size:17px}.gb-heading p,.gb-global p{color:#9cb1d3;margin-top:5px;font-size:12px}
+.gb-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.gb-card{border:1px solid #2758ad;background:#101a2e;border-radius:16px;overflow:hidden;min-width:0}
+.gb-art{height:151px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;color:#fff;text-align:center;font-size:15px}
+.gb-art span{font-size:38px}
+.gb-card.valorant .gb-art{background:linear-gradient(140deg,#260b12,#ad2241)}
+.gb-card.minecraft .gb-art{background:linear-gradient(140deg,#234623,#56aa61)}
+.gb-card.fortnite .gb-art{background:linear-gradient(140deg,#20113c,#6d3fc1)}
+.gb-card.bluestacks .gb-art{background:linear-gradient(140deg,#092440,#147fba)}
+.gb-card.discord .gb-art{background:linear-gradient(140deg,#1d2361,#5c6cdd)}
+.gb-inner{padding:13px;display:grid;gap:9px;text-align:center}.gb-inner small{font-size:11px;color:#9bb0ce}.gb-inner button,.gb-global-btn{background:#1568ec;color:#fff;border:1px solid #3a8fff;border-radius:11px;padding:11px;font-weight:800;cursor:pointer}
+.gb-global{border:1px solid #2858a5;border-radius:18px;padding:17px;margin-top:16px;background:#111e34}
+.gb-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:15px 0}.gb-options label,.gb-options button{display:flex;justify-content:space-between;align-items:center;gap:8px;border:1px solid #365177;border-radius:12px;padding:12px;background:#1a2b46;color:#f2f6ff;font-size:12px;font-weight:700}
+.gb-options button{cursor:pointer}.gb-global-btn{display:block;min-width:250px;margin:10px auto 0}
+.gb-advanced{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.gb-advanced button{border:1px solid #365584;border-radius:13px;padding:17px;background:#192c4a;color:#fff;cursor:pointer}
+.gb-history{display:grid;gap:9px}.gb-history div{display:flex;justify-content:space-between;gap:10px;padding:12px;background:#1c2e4b;border-radius:11px}.gb-history small{color:#a3badd}
+@media(max-width:1250px){.gb-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.gb-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:800px){.gb-hero{grid-template-columns:76px 1fr}.gb-controller{display:none}.gb-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.gb-tabs,.gb-grid,.gb-options,.gb-advanced{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -880,7 +908,41 @@ V.config=async()=>[card('Preferências',row('Atualizar valores em tempo real',tg
 
 
 V.input=async()=>{const s=await A('stats')||{}; return [card('Input Lag', row('Reduzir processos em segundo plano', bt('Abrir Processos','ilgoproc','pri'),'Revise o que está pesando no sistema antes de jogar.')+row('Plano de energia', bt('Abrir Energia','ilgoener'),'Cheque o modo de energia quando quiser máximo desempenho.')+row('Uso atual da CPU', `<span class="mono">${Number.isFinite(s.cpu)?Math.round(s.cpu)+'%':'Indisponível'}</span>`, 'A latência tende a piorar quando a CPU já está muito ocupada.')),()=>{$('#ilgoproc').onclick=()=>go('proc');$('#ilgoener').onclick=()=>go('jogos')}]};
-V.game=async()=>V.jogos();
+V.game=async()=>{
+ const games=[
+  ['valorant','VALORANT','🎯'],['minecraft','Minecraft','⛏'],
+  ['fortnite','Fortnite','⚡'],['bluestacks','BlueStacks','▣'],['discord','Discord','◈']
+ ];
+ const history=Array.isArray(S.gameHistory)?S.gameHistory.slice(0,12):[];
+ const cards=games.map(g=>'<article class="gb-card '+g[0]+'"><div class="gb-art"><span>'+g[2]+'</span><b>'+g[1]+'</b></div><div class="gb-inner"><strong>'+g[1]+'</strong><small>Preparação geral de sessão</small><button data-gprep="'+g[0]+'">⚡ Otimizar</button></div></article>').join('');
+ const switches='<div class="gb-options"><label><span>Alto desempenho</span><input id="gbPower" type="checkbox" checked></label><label><span>Liberar RAM</span><input id="gbRam" type="checkbox" checked></label><button data-open="display-advancedgraphics">CPU/GPU · Configurar</button><button data-open="gaming-gamemode">Input Lag · Revisar</button></div>';
+ const sections={
+  games:'<div class="gb-heading"><h3>Jogos suportados</h3><p>Escolha um jogo. A preparação utiliza recursos gerais do Windows, sem alterações específicas nos arquivos dos jogos.</p></div><div class="gb-grid">'+cards+'</div><div class="gb-global"><h3>Otimização geral de jogos</h3><p>Selecione os ajustes e aplique quando necessário.</p>'+switches+'<button class="gb-global-btn" id="gbApply">⚡ Aplicar otimização global</button></div>',
+  advanced:'<div class="gb-heading"><h3>Otimização avançada</h3><p>Recursos oficiais para revisar as preferências do Windows.</p></div><div class="gb-advanced"><button data-open="gaming-gamemode">Modo de Jogo</button><button data-open="display-advancedgraphics">Configurações gráficas</button><button data-go="monitor">Monitoramento</button><button data-go="rede">Rede e latência</button></div>',
+  history:'<div class="gb-heading"><h3>Histórico</h3><p>Ações confirmadas nesta instalação. Nenhuma medição de FPS é inventada.</p></div><div class="gb-history">'+(history.length?history.map(h=>'<div><b>'+esc(h.label)+'</b><small>'+esc(h.at)+'</small></div>').join(''):'<p>Nenhuma otimização confirmada ainda.</p>')+'</div>'
+ };
+ const tabs='<div class="gb-tabs"><button data-gbtab="games" class="selected">🎮 Jogos</button><button data-gbtab="advanced">⚙ Otimização avançada</button><button data-gbtab="history">◴ Histórico</button></div>';
+ const shell='<section class="gb-shell"><div class="gb-hero"><div class="gb-appicon">🎮</div><div><span class="gb-kicker">GAME BOOST · PRÉVIA</span><h2>Game Boost</h2><p>Prepare seus jogos e configure opções de energia, memória e gráficos.</p></div><div class="gb-controller">🎮</div></div>'+tabs+'<div id="gbContent">'+sections.games+'</div></section>';
+ return [shell,()=>{
+  const record=label=>{if(!Array.isArray(S.gameHistory))S.gameHistory=[];S.gameHistory.unshift({label,at:new Date().toLocaleString('pt-BR')});S.gameHistory=S.gameHistory.slice(0,12);save()};
+  const run=async(label,power,ram)=>{
+    if(!power&&!ram)return toast('Selecione pelo menos uma opção');
+    if(!await ask('Preparar sessão de jogo','Aplicar os ajustes escolhidos? Não serão alterados arquivos nem configurações internas dos jogos.','Aplicar'))return;
+    const results=[];
+    if(power&&await A('setplan','high'))results.push('Plano de energia');
+    if(ram){const value=await A('freemem');if(typeof value==='number')results.push('Memória: '+fmt(value))}
+    if(results.length){record(label+' · '+results.join(', '));toast('Concluído: '+results.join(', '))}
+    else toast('Nenhum ajuste pôde ser confirmado no Windows');
+  };
+  const paint=tab=>{const c=$('#gbContent');if(!c)return;c.innerHTML=sections[tab];document.querySelectorAll('[data-gbtab]').forEach(b=>b.classList.toggle('selected',b.dataset.gbtab===tab));bind()};
+  const bind=()=>{
+    document.querySelectorAll('[data-gprep]').forEach(b=>b.onclick=()=>{const g=games.find(x=>x[0]===b.dataset.gprep);run(g?.[1]||'Jogo',true,true)});
+    if($('#gbApply'))$('#gbApply').onclick=()=>run('Preparação geral',!!$('#gbPower')?.checked,!!$('#gbRam')?.checked);
+  };
+  document.querySelectorAll('[data-gbtab]').forEach(b=>b.onclick=()=>paint(b.dataset.gbtab));
+  bind();
+ }];
+};
 V.mem=async()=>{const st=await A('stats')||{}; const pct=st.ram_total?Math.round(st.ram_used/st.ram_total*100):0; return [card('Memória', row('Uso atual da RAM', `<span class="mono">${pct}%</span>`, `Em uso: ${(Number(st.ram_used)||0).toFixed(1).replace('.',',')} de ${(Number(st.ram_total)||0).toFixed(1).replace('.',',')} GB.`)+row('Liberar memória', bt('Executar agora','memfree','pri'),'Tenta devolver RAM disponível sem fechar seus apps.')+row('Monitoramento', bt('Abrir Processos','memproc'),'Veja quais processos mais consomem memória.')),()=>{$('#memfree').onclick=async()=>{toast('Liberando memória…');toast('Liberados '+fmt(await A('freemem')||0))};$('#memproc').onclick=()=>go('proc')}]};
 V.bios=async()=>V.ferr();
 V.debloat=async()=>V.servicos();
