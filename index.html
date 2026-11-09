@@ -463,7 +463,7 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 
 <main class="main">
   <div class="appbar">
-    <div class="appdrag" aria-hidden="true"></div>
+    <div class="appdrag pywebview-drag-region" id="appdrag" title="Arraste para mover o painel"></div>
     <div class="apppromo"><b>▻</b><span>Cupom de 10% OFF</span><button type="button">Aproveitar</button></div>
     <div class="appbar-right">
       <div class="userchip"><div class="userav">LZ</div><div class="userplan">GRÁTIS</div></div>
@@ -606,7 +606,31 @@ const bt=(t,id,c='')=>`<button class="ghost ${c}" id="${id}">${t}</button>`;
 const ob=(t,k)=>`<button class="ghost" data-open="${k}">${t}</button>`;
 const fpsTab=(id,title,sub,icon='▸')=>`<button class="fps-tab" data-fps-tab="${id}"><span><b>${title}</b><small>${sub}</small></span><i>${icon}</i></button>`;
 const fpsGauge=(label,value,max,color,desc)=>{const pct=max?Math.max(0,Math.min(100,Math.round(value/max*100))):0;return `<div class="fps-stat"><h4>${label}</h4><div class="fps-gauge"><div class="fps-ring" style="--pct:${pct};--g:${color}"><span>${Math.round(value)}<small>/${Math.round(max)}</small></span></div><div><b>Nível atual</b><strong>${Math.round(value)} / ${Math.round(max)}</strong><p>${desc}</p></div></div></div>`};
-function bindWindowChrome(){const map=[['#winMin','win_minimize'],['#winMax','win_toggle_maximize'],['#winClose','win_close']];map.forEach(([sel,fn])=>{$(sel)?.addEventListener('click',async ev=>{ev.preventDefault();await A(fn)})});$('#appPulse')?.addEventListener('click',()=>toast('Novidades e atalhos rápidos em breve'));}
+function bindWindowChrome(){
+ const native=typeof window.pywebview?.api?.window_action==='function';
+ const buttons=[['#winMin','minimize'],['#winMax','maximize'],['#winClose','close']];
+ for(const [selector,action] of buttons){
+  const b=$(selector);if(!b)continue;
+  b.disabled=!native;
+  b.title=!native?'Disponível somente no aplicativo Windows':(action==='minimize'?'Minimizar':action==='maximize'?'Maximizar ou restaurar':'Fechar');
+  b.onclick=async event=>{
+   event.preventDefault();
+   const fn=window.pywebview?.api?.window_action;
+   if(typeof fn!=='function')return;
+   try{await fn(action)}catch(e){toast('Não foi possível controlar a janela')}
+  };
+ }
+ const drag=$('#appdrag');if(drag)drag.ondblclick=async()=>{
+  const fn=window.pywebview?.api?.window_action;
+  if(typeof fn==='function')try{await fn('maximize')}catch(e){}
+ };
+ window.setWindowMaximized=maximized=>{
+  const b=$('#winMax');if(!b)return;
+  b.setAttribute('aria-label',maximized?'Restaurar janela':'Maximizar janela');
+  b.title=maximized?'Restaurar janela':'Maximizar janela';
+ };
+ const pulse=$('#appPulse');if(pulse)pulse.onclick=()=>toast('Novidades e atalhos rápidos em breve');
+}
 
 /* ---------- tarefas de otimização (usadas no Dashboard e na tela Otimização) ---------- */
 const TASKS={
