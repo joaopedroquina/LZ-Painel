@@ -719,13 +719,37 @@ V.jogos=async()=>{
  const startupOn=startupList.filter(x=>x.on).length;
  const ramPct=st.ram_total?Math.round(st.ram_used/st.ram_total*100):0;
  const freeable=scanList.reduce((a,x)=>a+(Array.isArray(x)?Number(x[1]||0):0),0);
+ const privStatus=await A('privacy_status')||{};
+ const privDone=['search_web','feedback','search_history'].filter(k=>privStatus[k]?.applied===true).length;
+ const svcMap=new Map(serviceList.map(x=>[x.name,x]));
+ const svcSpecs=[
+ ['SysMain','Desativar SysMain (Superfetch)','Pré-carrega aplicativos na RAM; desativar pode prejudicar o carregamento.','med'],
+ ['RemoteRegistry','Desativar Registro Remoto','Pode ser necessário para administração remota; revisão manual.','med'],
+ ['WSearch','Desativar Windows Search','Desativar a indexação prejudica a busca e o desempenho de pesquisa.','high'],
+ ['dmwappushservice','Desativar WAP Push Routing','Serviço opcional de mensagens; confirme antes de alterar.','']
+ ];
+ const svcItems=svcSpecs.map(([name,title,desc,risk])=>{
+   const x=svcMap.get(name);
+   return {icon:'▤',title,desc,risk,svc:name,svcOn:x?.on,svcAllowed:!!x?.safe,
+      state:x?(x.on?'Ativo':'Desativado'):'Indisponível'};
+ });
+ const svcAvailable=svcSpecs.filter(([name])=>svcMap.has(name));
+ const svcOff=svcAvailable.filter(([name])=>!svcMap.get(name).on).length;
+
  const categories={
-   priv:{icon:'◈',title:'Privacidade e Telemetria',sub:'5 atalhos para revisão',done:0,total:5,accent:0,desc:'Abra rapidamente as preferências oficiais de privacidade do Windows.',items:[
-     {icon:'◉',title:'Câmera',desc:'Revise quais aplicativos podem usar a câmera.',btn:'Revisar',open:'privacy-webcam'},
-     {icon:'◎',title:'Microfone',desc:'Confira os apps com permissão para gravar áudio.',btn:'Revisar',open:'privacy-microphone'},
-     {icon:'⌁',title:'Localização',desc:'Veja quais aplicativos podem acessar sua localização.',btn:'Revisar',open:'privacy-location'},
-     {icon:'◌',title:'Geral',desc:'Preferências gerais do Windows, como ID de publicidade.',btn:'Revisar',open:'privacy-general'},
-     {icon:'✦',title:'Diagnóstico e comentários',desc:'Controle os dados enviados à Microsoft.',btn:'Revisar',open:'privacy-feedback'}
+   priv:{icon:'◈',title:'Privacidade e Telemetria',sub:privDone+'/3 verificáveis',done:privDone,total:3,accent:Math.round(privDone/3*100),
+   desc:'Ajustes individuais reversíveis e revisão manual dos recursos de privacidade do Windows.',
+   items:[
+    {icon:'◈',title:'Diagnóstico e telemetria',desc:'Revise os dados de diagnóstico enviados ao Windows. Este painel não desativa a proteção do sistema.',open:'privacy-feedback'},
+    {icon:'◷',title:'Serviço DiagTrack',desc:'Alteração avançada que pode afetar o diagnóstico. Não desativado automaticamente.',state:'Revisão manual',risk:'med'},
+    {icon:'↺',title:'Histórico de atividades',desc:'Confira as configurações de atividade na privacidade do Windows.',open:'privacy-general'},
+    {icon:'✎',title:'Coleta de digitação e voz',desc:'Revise as permissões de voz e do microfone.',open:'privacy-microphone'},
+    {icon:'⌕',title:'Sugestões web no Iniciar',desc:'Reduz sugestões web na caixa de pesquisa. Estado verificado e reversível.',privacy:'search_web'},
+    {icon:'⌖',title:'Localização',desc:'Confira permissões de localização, que podem ser úteis para mapas e clima.',open:'privacy-location',risk:'med'},
+    {icon:'⌁',title:'Pedidos de feedback',desc:'Reduz solicitações periódicas de feedback do Windows.',privacy:'feedback'},
+    {icon:'◫',title:'Firmware WPBT',desc:'Ajuste avançado de inicialização, não aplicado automaticamente.',state:'Revisão manual'},
+    {icon:'⚑',title:'Microsoft Defender',desc:'A detecção e proteção do Defender permanecem preservadas.',state:'Proteção preservada'},
+    {icon:'◎',title:'Histórico da busca',desc:'Configura o histórico local da pesquisa quando suportado pelo sistema.',privacy:'search_history'}
    ]},
    games:{icon:'♧',title:'Jogos',sub:'ações rápidas antes da partida',done:hi?1:0,total:4,accent:hi?30:10,desc:'Reúna os ajustes mais usados para preparar seu PC para jogar.',items:[
      {icon:'ϟ',title:'Alto desempenho',desc:'Ative o plano de energia de alto desempenho quando quiser priorizar FPS.',btn:hi?'Ativado':'Aplicar',run:hi?'balanced':'high',ok:hi},
@@ -760,11 +784,7 @@ V.jogos=async()=>{
      {icon:'◴',title:'Limpeza detalhada',desc:'Abra a categoria Limpeza para ver o total por área.',btn:'Abrir',go:'limpeza'},
      {icon:'▣',title:'Limpeza de Disco',desc:'Ferramenta nativa do Windows para manutenção de unidades.',btn:'Abrir',open:'cleanmgr'}
    ]},
-   services:{icon:'▤',title:'Serviços',sub:`${safeDisabled} seguros já desativados`,done:safeDisabled,total:Math.max(3,serviceList.filter(s=>s.safe).length||3),accent:serviceList.filter(s=>s.safe).length?Math.min(100,Math.round((safeDisabled/Math.max(1,serviceList.filter(s=>s.safe).length))*100)):0,desc:'Revise serviços opcionais e preserve Defender, Update e Store.',items:[
-     {icon:'✓',title:'Desativar serviços seguros',desc:'Aplica somente nos serviços marcados como seguros na sua lista.',btn:'Aplicar',run:'safe-services'},
-     {icon:'↺',title:'Restaurar padrão',desc:'Reativa serviços anteriormente desativados nesta lista.',btn:'Restaurar',run:'restore-services'},
-     {icon:'◈',title:'Abrir categoria Serviços',desc:'Veja cada serviço, descrição e chave segura/atenção.',btn:'Abrir',go:'servicos'}
-   ]}
+   services:{icon:'▤',title:'Serviços',sub:svcOff+'/'+svcAvailable.length+' desativados',done:svcOff,total:Math.max(1,svcAvailable.length),accent:svcAvailable.length?Math.round(svcOff/svcAvailable.length*100):0,desc:'Situações reais do Windows. Serviços de risco ficam em revisão manual.',items:svcItems}
  };
  const order=['priv','games','cpu','gpu','interface','rede','storage','services'];
  const overallTotal=order.reduce((a,k)=>a+categories[k].total,0);
@@ -778,19 +798,46 @@ V.jogos=async()=>{
  ];
  const renderCategory=(key,selected)=>{const c=categories[key]; return `<button class="fpsx-cat ${selected?'on':''}" data-fpscat="${key}"><span class="fpsx-cicon">${c.icon}</span><span class="fpsx-ctxt"><b>${esc(c.title)}</b><small>${esc(c.sub)}</small><span class="fpsx-meter"><i style="--pct:${c.accent}%"></i></span></span><span class="fpsx-count">${c.done}/${c.total}</span></button>`};
  const renderIfaceAction=(id)=>{const s=ifaceStatus[id]||{}; if(s.applied===true&&s.restorable)return `<button class="btnx alt" data-iface="${id}" data-method="restore">Restaurar</button>`; if(s.applied===true)return `<span class="state ok">✓ Aplicado</span>`; if(s.supported===true)return `<button class="btnx" data-iface="${id}" data-method="apply">Aplicar</button>`; return `<span class="state">Indisponível</span>`};
- const renderItem=(item)=>{const risk=item.risk==='high'?'<span class="risk">RISCO ALTO</span>':item.risk==='med'?'<span class="risk med">RISCO MÉDIO</span>':''; let action=''; if(item.iface) action=renderIfaceAction(item.iface); else if(item.btn&&item.run) action=`<button class="btnx ${item.run==='balanced'||item.run==='restore-services'?'alt':''}" data-run="${item.run}">${esc(item.btn)}</button>`; else if(item.btn&&item.go) action=`<button class="btnx alt" data-go="${item.go}">${esc(item.btn)}</button>`; else if(item.btn&&item.open) action=`<button class="btnx alt" data-open="${item.open}">${esc(item.btn)}</button>`; else if(item.state) action=`<span class="state ${item.ok?'ok':''}">${esc(item.state)}</span>`; return `<div class="fpsx-item"><span class="fpsx-icon ${item.ok?'ok':''}">${item.icon}</span><div><div class="ttl"><b>${esc(item.title)}</b>${risk}</div><p>${item.desc}</p></div><div class="act">${action}</div></div>`};
- return [`<section class="fpsx-page"><div class="fpsx-top"><div class="fpsx-hero"><div class="fpsx-ring" style="--pct:${overallPct}"><div><b>${overallPct}%</b><span>pronto</span></div></div><div class="fpsx-head"><small>PERFORMANCE • GAMING</small><h3>FPS Boost com categorias rápidas.</h3><p>Layout inspirado na segunda foto: ajuste por categoria, veja o estado atual e aplique ações seguras antes de abrir seu jogo.</p><div class="fpsx-mini"><span>✦ Tudo reversível quando houver backup</span><span>◈ Ajustes manuais separados</span><span>◎ Nada desativa Defender ou Update</span></div></div><div class="fpsx-side">${summaryRows.map(r=>`<div class="fpsx-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}<button class="fpsx-btn" id="fpsApplyAllTop">Aplicar tudo</button><small class="fps-mini-note">Alguns ajustes permanecem em revisão manual por segurança.</small></div></div></div><div class="fpsx-grid"><aside class="fpsx-cats">${order.map((k,i)=>renderCategory(k,i===4)).join('')}</aside><div class="fpsx-panel"><div class="fpsx-panel-h"><span class="fpsx-cicon" id="fpsPaneIcon">${categories.interface.icon}</span><div><strong id="fpsPaneTitle">${esc(categories.interface.title)}</strong><p id="fpsPaneDesc">${esc(categories.interface.desc)}</p></div><span class="fpsx-chip" id="fpsPaneChip">${categories.interface.done}/${categories.interface.total} prontos</span></div><div class="fpsx-list" id="fpsPaneList">${categories.interface.items.map(renderItem).join('')}</div><div class="fpsx-foot">Use a coluna da esquerda para trocar entre categorias. Os ajustes realmente aplicados aparecem como “Aplicado”; os demais ficam como ação disponível ou revisão manual.</div></div></div></section>`,()=>{
-   let active='interface';
+ const renderItem=item=>{
+  const risk=item.risk==='high'?'<span class="risk">RISCO ALTO</span>':item.risk==='med'?'<span class="risk med">RISCO MÉDIO</span>':'';
+  let action='';
+  if(item.iface)action=renderIfaceAction(item.iface);
+  else if(item.privacy){
+   const state=privStatus[item.privacy]||{};
+   action=state.applied===true?(state.restorable?'<button class="btnx alt" data-privacy="'+item.privacy+'" data-method="restore">Restaurar</button>':'<span class="state ok">✓ Aplicado</span>'):(state.supported?'<button class="btnx" data-privacy="'+item.privacy+'" data-method="apply">Aplicar</button>':'<span class="state">Revisão manual</span>');
+  }else if(item.svc){
+   action=item.svcAllowed?'<button class="btnx alt" data-service="'+esc(item.svc)+'" data-on="'+(!item.svcOn)+'">'+(item.svcOn?'Desativar':'Reativar')+'</button>':'<span class="state">'+esc(item.state)+'</span>';
+  }else if(item.btn&&item.run)action='<button class="btnx" data-run="'+esc(item.run)+'">'+esc(item.btn)+'</button>';
+  else if(item.btn&&item.go)action='<button class="btnx alt" data-go="'+esc(item.go)+'">'+esc(item.btn)+'</button>';
+  else if(item.btn&&item.open)action='<button class="btnx alt" data-open="'+esc(item.open)+'">'+esc(item.btn)+'</button>';
+  else if(item.open)action='<button class="btnx alt" data-open="'+esc(item.open)+'">Revisar</button>';
+  else if(item.state)action='<span class="state">'+esc(item.state)+'</span>';
+  return '<div class="fpsx-item"><span class="fpsx-icon">'+item.icon+'</span><div><div class="ttl"><b>'+esc(item.title)+'</b>'+risk+'</div><p>'+esc(item.desc)+'</p></div><div class="act">'+action+'</div></div>';
+ };
+ return [`<section class="fpsx-page"><div class="fpsx-top"><div class="fpsx-hero"><div class="fpsx-ring" style="--pct:${overallPct}"><div><b>${overallPct}%</b><span>pronto</span></div></div><div class="fpsx-head"><small>PERFORMANCE • GAMING</small><h3>FPS Boost com categorias rápidas.</h3><p>Layout inspirado na segunda foto: ajuste por categoria, veja o estado atual e aplique ações seguras antes de abrir seu jogo.</p><div class="fpsx-mini"><span>✦ Tudo reversível quando houver backup</span><span>◈ Ajustes manuais separados</span><span>◎ Nada desativa Defender ou Update</span></div></div><div class="fpsx-side">${summaryRows.map(r=>`<div class="fpsx-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}<button class="fpsx-btn" id="fpsApplyAllTop">Aplicar tudo</button><small class="fps-mini-note">Alguns ajustes permanecem em revisão manual por segurança.</small></div></div></div><div class="fpsx-grid"><aside class="fpsx-cats">${order.map((k,i)=>renderCategory(k,i===0)).join('')}</aside><div class="fpsx-panel"><div class="fpsx-panel-h"><span class="fpsx-cicon" id="fpsPaneIcon">${categories.priv.icon}</span><div><strong id="fpsPaneTitle">${esc(categories.priv.title)}</strong><p id="fpsPaneDesc">${esc(categories.priv.desc)}</p></div><span class="fpsx-chip" id="fpsPaneChip">${categories.priv.done}/${categories.priv.total} prontos</span></div><div class="fpsx-list" id="fpsPaneList">${categories.interface.items.map(renderItem).join('')}</div><div class="fpsx-foot">Use a coluna da esquerda para trocar entre categorias. Os ajustes realmente aplicados aparecem como “Aplicado”; os demais ficam como ação disponível ou revisão manual.</div></div></div></section>`,()=>{
+   let active='priv';
    const paint=()=>{document.querySelectorAll('[data-fpscat]').forEach(b=>b.classList.toggle('on',b.dataset.fpscat===active)); const c=categories[active]; if(!c)return; $('#fpsPaneIcon').textContent=c.icon; $('#fpsPaneTitle').textContent=c.title; $('#fpsPaneDesc').textContent=c.desc; $('#fpsPaneChip').textContent=`${c.done}/${c.total} prontos`; const list=$('#fpsPaneList'); list.classList.remove('view-in'); void list.offsetWidth; list.innerHTML=c.items.map(renderItem).join(''); list.classList.add('view-in'); bindActions(); };
    const bindActions=()=>{
      document.querySelectorAll('[data-fpscat]').forEach(b=>b.onclick=()=>{active=b.dataset.fpscat; paint()});
+     document.querySelectorAll('[data-privacy]').forEach(b=>b.onclick=async()=>{
+ const name=b.dataset.privacy,restore=b.dataset.method==='restore';
+ if(!await ask('Privacidade',restore?'Restaurar valor original do Windows?':'Aplicar este ajuste reversível ao usuário atual?','Confirmar'))return;
+ b.disabled=true;const r=await A(restore?'privacy_restore':'privacy_apply',name);
+ toast(r?.ok?(restore?'Configuração restaurada':'Configuração aplicada')+(r.relogin?' · pode exigir novo login':''):(r?.error||'Não foi possível alterar'));go('jogos');
+ });
+     document.querySelectorAll('[data-service]').forEach(b=>b.onclick=async()=>{
+ const name=b.dataset.service,on=b.dataset.on==='true';
+ if(!await ask('Serviço do Windows',(on?'Reativar ':'Desativar ')+name+'? A alteração pode exigir administrador.','Confirmar'))return;
+ b.disabled=true;const ok=await A('set_service',name,on);
+ toast(ok?'Serviço atualizado':'Não foi possível alterar este serviço');go('jogos');
+ });
      document.querySelectorAll('[data-iface]').forEach(b=>b.onclick=async()=>{const id=b.dataset.iface,method=b.dataset.method; const title=method==='restore'?'Restaurar configuração':'Aplicar configuração'; if(!await ask(title, (method==='restore'?'Restaurar ':'Aplicar ')+id.replace('_',' ')+'?','Continuar'))return; b.disabled=true; const ret=await A(method==='restore'?'interface_restore':'interface_apply',id); toast(ret&&ret.ok?(method==='restore'?'Configuração restaurada':'Configuração aplicada')+(ret.reboot?' · novo login ou reinício pode ser necessário':''):(ret&&ret.error)||'Não foi possível concluir'); go('jogos')});
      document.querySelectorAll('[data-run]').forEach(b=>b.onclick=async()=>{const run=b.dataset.run; if(run==='high'||run==='balanced'){const ok=await A('setplan',run==='high'?'high':'balanced'); toast(ok?(run==='high'?'Modo alto desempenho ativado':'Plano equilibrado ativado'):'Plano indisponível neste PC'); if(ok)go('jogos'); return}
        if(run==='freemem'){toast('Liberando memória…'); toast('Liberados '+fmt(await A('freemem')||0)); return}
        if(run==='flushdns'){toast('Limpando DNS…'); toast(await A('flushdns')?'Cache DNS limpo':'Não foi possível limpar o DNS'); return}
        if(run==='clean'){if(!freeable)return toast('Não há arquivos temporários para limpar'); if(!await ask('Limpar temporários','Remover '+fmt(freeable)+' de arquivos temporários?','Limpar'))return; toast('Limpando…'); const f=await A('clean')||0; toast('Liberados '+fmt(f)); go('jogos'); return}
        if(run==='safe-services'){const safe=serviceList.filter(s=>s.safe&&s.on); if(!safe.length)return toast('Os serviços seguros já estão desativados'); if(!await ask('Desativar serviços seguros','Desativar '+safe.length+' serviços marcados como seguros?','Desativar'))return; let n=0; for(const s of safe) if(await A('set_service',s.name,false)) n++; toast(n+' de '+safe.length+' serviços desativados'); go('jogos'); return}
-       if(run==='restore-services'){const off=serviceList.filter(s=>!s.on); if(!off.length)return toast('Todos os serviços já estão no padrão'); let n=0; for(const s of off) if(await A('set_service',s.name,true)) n++; toast(n+' de '+off.length+' serviços restaurados'); go('jogos'); return}
+       if(run==='restore-services'){toast('Restaure os serviços individualmente após revisá-los.');return}
        if(run==='quickopt'){startQuickOptimization(); return}
      });
      $('#fpsApplyAllTop').onclick=()=>startQuickOptimization();
