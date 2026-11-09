@@ -298,6 +298,25 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 @media(prefers-reduced-motion:reduce){.quick-shade,.quick-window,.quick-results,.quick-orb,.quick-progress i,.quick-working::after{animation:none!important;transition:none!important}}
 .calm .quick-orb,.calm .quick-working::after{animation:none!important}
 
+
+/* Barra integrada: somente a área vazia arrasta a janela. */
+.appbar{height:54px;position:fixed;inset:0 0 auto;z-index:90;display:flex;align-items:center;gap:14px;padding:0 16px;background:linear-gradient(110deg,#1b1e25,#171a20 65%);border-bottom:1px solid #303642}
+.appbrand{display:flex;align-items:center;gap:10px;pointer-events:none;font-size:13px;letter-spacing:.4px}.appbrand svg{width:23px;height:27px}.appbrand small{font-size:10px;font-weight:500;letter-spacing:1.5px;color:#8b97ab}
+.appdrag{flex:1;height:100%;display:flex;justify-content:center;align-items:center;cursor:default}.appdrag span{pointer-events:none;color:#8591a6;font-size:11px;letter-spacing:1.4px}
+.window-controls{display:flex;align-items:center;gap:3px;padding:4px;border:1px solid #343b47;background:#22262e;border-radius:22px}.edition{font-size:10px;color:#a4b9dc;font-weight:700;padding:0 12px;border-right:1px solid #424956;letter-spacing:.8px}
+.window-controls button{width:31px;height:28px;border:0;border-radius:14px;background:transparent;color:#aab3c3;display:grid;place-items:center;cursor:pointer;transition:background .15s,color .15s}.window-controls button:hover{background:#394251;color:#fff}.window-controls button:last-child:hover{background:#c23c50}.window-controls button:disabled{opacity:.35;cursor:default}.window-controls svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.4;fill:none}
+.shell{margin:54px 0 0;min-height:calc(100vh - 54px);border:0;border-radius:0;box-shadow:none}.side{top:54px;height:calc(100vh - 54px);border-radius:0;overflow-y:auto;overflow-x:hidden}.side>*{flex-shrink:0}.side .sp{flex:1}.main{padding-top:24px}.navfly{top:110px;max-height:calc(100vh - 126px)}
+.nav.on{animation:none;background:rgba(47,111,237,.13)}.nav svg{transition:transform .28s cubic-bezier(.2,.85,.25,1)}.nav:hover svg{transform:translateY(-2px) rotate(-5deg)}
+.view.view-out{transform:translateX(-10px);filter:blur(1px)}
+@keyframes categoriaEntrar{from{opacity:0;transform:translateX(16px) translateY(5px)}to{opacity:1;transform:none}}
+.view.view-in>*{animation-name:categoriaEntrar;animation-duration:.42s}.fps-grid .fps-card{animation:categoriaEntrar .42s both}.fps-grid .fps-card:nth-child(2){animation-delay:.055s}.fps-grid .fps-card:nth-child(3){animation-delay:.11s}.fps-grid .fps-card:nth-child(4){animation-delay:.165s}
+.fps-hero{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:28px;padding:30px;border:1px solid #3a4f76;border-radius:18px;background:radial-gradient(ellipse at 90% 15%,#28416d 0,transparent 65%),linear-gradient(120deg,#202936,#1d222c)}
+.fps-eyebrow{font-size:10px;letter-spacing:2px;color:#90b8ff;font-weight:700}.fps-hero h2{font-size:34px;letter-spacing:-1px;margin:8px 0}.fps-hero p{max-width:560px;color:#a8b4c8;font-size:13px;line-height:1.7}.fps-hero .btn{margin-top:20px}.fps-emblem{width:125px;height:125px;border:1px solid #5b95ff55;border-radius:32px;display:grid;place-items:center;background:#5b95ff13;transform:rotate(-8deg);flex:none;box-shadow:0 0 65px #2f6fed25}.fps-emblem svg.i{width:65px;height:65px;stroke-width:1;color:#a6c7ff;transform:rotate(8deg)}
+.fps-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.fps-metric{padding:18px 20px;background:#20242c;border:1px solid var(--line);border-radius:13px}.fps-metric small{display:block;color:#98a5b9;font-size:11px;margin-bottom:7px}.fps-metric b{font-size:18px;font-weight:600}.fps-metric b.plan-name{font-size:14px}
+.fps-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.fps-card{padding:22px;background:#20242c;border:1px solid #343b48;border-radius:15px;display:flex;flex-direction:column;gap:14px;transition:transform .22s,border-color .22s}.fps-card:hover{border-color:#50688e;transform:translateY(-2px)}.fps-card-head{display:flex;align-items:center;gap:12px}.fps-icon{width:39px;height:39px;border-radius:12px;background:#2d3b52;display:grid;place-items:center;color:#8bb6ff}.fps-card h3{font-size:14px;font-weight:600}.fps-card p{font-size:12px;color:#99a6b9;line-height:1.65;flex:1}.fps-card button{align-self:flex-start}.fps-card .fps-card-head .tg{margin-left:auto}.fps-status{font-size:11px;color:#8fb4f0;min-height:16px}.fps-note{color:#8794a9;font-size:11px;line-height:1.6;padding:0 3px}
+@media(max-width:1050px){.fps-hero{padding:24px}.fps-emblem{width:95px;height:95px}.appdrag span{display:none}}
+@media(max-width:650px){.fps-grid,.fps-metrics{grid-template-columns:1fr}.fps-emblem{display:none}.edition{display:none}.appbar{padding:0 10px;gap:8px}}
+@media(prefers-reduced-motion:reduce){.fps-grid .fps-card{animation:none}.nav svg,.fps-card{transition:none}}
 </style>
 </head>
 <body>
@@ -333,13 +352,22 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 </defs>
 </svg>
 
+<header class="appbar" aria-label="Barra da janela">
+ <div class="appbrand"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="#7aabff"/></svg><b>LZ PAINEL</b><small>DESKTOP</small></div>
+ <div class="appdrag pywebview-drag-region" id="appdrag" title="Arraste para mover · clique duas vezes para maximizar"><span>SEU PC, NO CONTROLE</span></div>
+ <div class="window-controls"><span class="edition">GRÁTIS</span>
+ <button id="winMin" aria-label="Minimizar janela" title="Minimizar" disabled><svg viewBox="0 0 16 16"><path d="M3 8h10"/></svg></button>
+ <button id="winMax" aria-label="Maximizar janela" title="Maximizar" disabled><svg viewBox="0 0 16 16"><path id="winMaxIcon" d="M3 3h10v10H3z"/></svg></button>
+ <button id="winClose" aria-label="Fechar janela" title="Fechar" disabled><svg viewBox="0 0 16 16"><path d="m3 3 10 10M13 3 3 13"/></svg></button>
+ </div>
+</header>
 <div class="shell">
 <aside class="side" aria-label="Menu">
   <div class="logo"><svg viewBox="0 0 44 44"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="#e8eefc"/></svg></div>
   <button class="nav on" data-v="dash" data-tip="Dashboard" aria-label="Dashboard"><svg class="i"><use href="#dash"/></svg></button>
   <div class="div"></div>
   <button class="nav" data-v="otim" data-tip="Otimização" aria-label="Otimização"><svg class="i"><use href="#bolt"/></svg></button>
-  <button class="nav" data-v="jogos" data-tip="Jogos e FPS" aria-label="Jogos e FPS"><svg class="i"><use href="#pad"/></svg></button>
+  <button class="nav" data-v="jogos" data-tip="FPS Boost" aria-label="FPS Boost"><svg class="i"><use href="#pad"/></svg></button>
   <button class="nav" data-v="monitor" data-tip="Monitoramento" aria-label="Monitoramento"><svg class="i"><use href="#pulse"/></svg></button>
   <button class="nav" data-v="rede" data-tip="Rede e internet" aria-label="Rede e internet"><svg class="i"><use href="#wifi"/></svg></button>
   <button class="nav" data-v="init" data-tip="Inicialização" aria-label="Inicialização"><svg class="i"><use href="#pwr"/></svg></button>
@@ -452,6 +480,7 @@ function smooth(p){if(p.length<2)return'';let d=`M${p[0][0]},${p[0][1]}`;for(let
 const MB=2**20,MJ=[1.1*2**30,.8*2**30,.5*2**30];
 const MA=['7-Zip','Discord','Google Chrome','Microsoft Visual C++ 2015-2022 Redistributable (x64)','Spotify','Steam','Visual Studio Code'].map(n=>({name:n,ver:'1.0.0',pub:'Fabricante',can:true}));
 const MS=[['DiagTrack','Telemetria do Windows','Envia dados de diagnóstico e uso à Microsoft.',1],['WerSvc','Relatório de erros do Windows','Envia relatórios de falhas à Microsoft.',1],['Fax','Fax','Envio e recebimento de fax.',1],['SysMain','SysMain (Superfetch)','Pré-carrega apps na memória. Pode ser desativado em SSD; em HD costuma ajudar.',0],['Spooler','Spooler de impressão','Necessário para imprimir. Desative só se não usa impressora.',0]].map(x=>({name:x[0],title:x[1],desc:x[2],safe:!!x[3],on:true,running:true}));
+const demoPlans=[{id:'a',name:'Equilibrado',on:true},{id:'b',name:'Alto desempenho',on:false},{id:'c',name:'Economia de energia',on:false}];
 const MOCK={
 stats:()=>({cpu:R(15,40),ram_used:R(6.2,6.8),ram_total:16,disk:68,disk_free:164e9,disk_total:512e9,temp:Math.round(R(46,50))}),
 info:()=>({os:'Windows 11',cpu:'Processador de exemplo',cores:'8 núcleos / 16 threads',ram:16,disk_total:512e9,disk_free:164e9,uptime:19800}),
@@ -461,8 +490,8 @@ ping:()=>[['Cloudflare (1.1.1.1)',Math.round(R(9,18))],['Google DNS (8.8.8.8)',M
 flushdns:()=>true,
 startup:()=>['Discord','Spotify','Steam','OneDrive','Teams'].map(n=>({name:n,cmd:'C:\\Programs\\'+n+'\\'+n+'.exe',hive:'HKCU',on:true})),
 set_startup:()=>true,
-plans:()=>[{id:'a',name:'Equilibrado',on:true},{id:'b',name:'Alto desempenho',on:false},{id:'c',name:'Economia de energia',on:false}],
-setplan:()=>true,
+plans:()=>demoPlans.map(p=>({...p})),
+setplan:id=>{id=({high:'b',balanced:'a'})[id]||id;if(!demoPlans.some(p=>p.id===id))return false;demoPlans.forEach(p=>p.on=p.id===id);return true},
 scan:()=>[['Arquivos temporários do usuário',MJ[0]],['Temp do Windows',MJ[1]],['Cache de internet',MJ[2]]],
 clean:()=>{const t=MJ.reduce((a,b)=>a+b,0);MJ.fill(0);return t},
 freemem:()=>R(300,900)*MB,
@@ -475,6 +504,31 @@ set_service:(n,on)=>{const x=MS.find(m=>m.name===n);if(x)x.on=on;return true},
 abrir:()=>{toast('Disponível apenas no programa .exe');return true},
 restore:()=>'Ponto de restauração criado (simulado)'};
 const A=(n,...a)=>{let p;try{const f=!DEMO&&window.pywebview&&pywebview.api&&pywebview.api[n];p=f?f(...a):(DEMO||!window.pywebview)&&MOCK[n]&&MOCK[n](...a)}catch(e){}return Promise.resolve(p).catch(()=>null).then(v=>v===undefined?null:v)};
+
+/* Controles da janela não usam a API de demonstração. */
+window.setWindowMaximized=value=>{
+ const b=$('#winMax');b.title=value?'Restaurar':'Maximizar';
+ b.setAttribute('aria-label',value?'Restaurar janela':'Maximizar janela');
+ $('#winMaxIcon').setAttribute('d',value?'M5 3h8v8M3 5h8v8H3z':'M3 3h10v10H3z');
+};
+async function windowAction(action){
+ const api=window.pywebview?.api;if(!api?.window_action)return;
+ try{await api.window_action(action)}catch(e){if(action!=='close')toast('Não foi possível alterar a janela')}
+}
+function initWindowControls(){
+ const api=window.pywebview?.api;if(!api?.window_action)return;
+ ['winMin','winMax','winClose'].forEach(id=>$('#'+id).disabled=false);
+ api.window_state().then(s=>window.setWindowMaximized(!!s?.maximized)).catch(()=>{});
+}
+$('#winMin').onclick=()=>windowAction('minimize');
+$('#winMax').onclick=()=>windowAction('maximize');
+$('#winClose').onclick=async()=>{
+ if(quickBusy&&!await ask('Fechar durante a otimização?','As etapas em andamento podem ficar incompletas. Deseja fechar o painel?','Fechar'))return;
+ windowAction('close');
+};
+$('#appdrag').ondblclick=()=>windowAction('maximize');
+window.addEventListener('pywebviewready',initWindowControls);
+initWindowControls();
 
 /* ---------- interface básica ---------- */
 let tt;
@@ -571,7 +625,7 @@ function initFlyout(){
 }
 
 /* ---------- telas ---------- */
-const T={dash:['Dashboard','Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.'],otim:['Otimização','Escolha o que otimizar e execute tudo de uma vez.'],jogos:['Jogos e FPS','Perfil de desempenho para jogos.'],monitor:['Monitoramento','Uso em tempo real e processos ativos.'],rede:['Rede e internet','Conexão, latência e DNS.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],config:['Configurações','Preferências do painel.']};
+const T={dash:['Dashboard','Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.'],otim:['Otimização','Escolha o que otimizar e execute tudo de uma vez.'],jogos:['FPS Boost','Prepare seu PC para jogar com ajustes de energia, memória e gráficos.'],monitor:['Monitoramento','Uso em tempo real e processos ativos.'],rede:['Rede e internet','Conexão, latência e DNS.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],config:['Configurações','Preferências do painel.']};
 const V={};
 V.otim=async()=>{const ids=['temp','dns','ram','plan','serv'],def={temp:1,dns:1,ram:1};
 return [card('Otimizar tudo',`<p class="nt">Execute limpeza de temporários, renovação do DNS e verificação de inicialização, serviços e desempenho. No final, veja o relatório como no vídeo.</p><button class="btn sm" data-act="fullopt">✧ Otimizar tudo</button>`) +card('Ajustes individuais','<div class="opt-track" aria-hidden="true"><span id="optline"></span></div>'+ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
@@ -579,8 +633,43 @@ if(sel.includes('serv')&&!await ask('Desativar serviços seguros','Isso desliga 
 const b=$('#ex');b.disabled=true;const line=$('#optline');if(line)line.style.width='0%';ids.forEach(id=>$('#r_'+id).textContent='');let n=0;
 for(const id of sel){const e=$('#r_'+id);if(!e)return;e.className='st-run is-busy';e.textContent='Executando…';let m;try{m=await TASKS[id].run()}catch(x){m='Falhou'}if($('#r_'+id)){e.className='st-ok';e.textContent='✓ '+m}n++;if(line)line.style.width=Math.round(n/sel.length*100)+'%'}
 if($('#ex'))b.disabled=false;toast(n+' otimizações concluídas');analyze()}}]};
-V.jogos=async()=>{const pl=await A('plans')||[],hi=pl.some(p=>p.on&&/alto|high|ultimate|máximo/i.test(p.name));
-return [card('Desempenho para jogos',row('Modo jogo (plano de energia de alto desempenho)',tg('gm',hi),'Mantém o processador sem economizar energia.')+row('Modo de Jogo do Windows',ob('Abrir','gaming-gamemode'),'Ajustes oficiais do Windows.')+row('Preferências de gráficos',ob('Abrir','display-advancedgraphics'),'Escolha a placa de vídeo para cada jogo.')+row('Liberar memória antes de jogar',bt('Liberar agora','fm'),'Devolve memória ao sistema sem fechar programas.')),()=>{$('#gm').onchange=async e=>{const on=e.target.checked,ok=await A('setplan',on?'high':'balanced');if(!ok){e.target.checked=!on;toast('Plano indisponível neste PC')}else toast(on?'Modo jogo ativado':'Modo jogo desativado')};$('#fm').onclick=async()=>{toast('Liberando memória…');toast('Liberados '+fmt(await A('freemem')||0))}}]};
+let fpsPreviousPlan=null;
+V.jogos=async()=>{
+ const [plans,stats]=await Promise.all([A('plans'),A('stats')]);
+ const pl=plans||[],active=pl.find(p=>p.on),hi=!!active&&/alto|high|ultimate|máximo/i.test(active.name);
+ const s=stats||{},cpu=Number.isFinite(s.cpu)?Math.round(s.cpu)+'%':'Indisponível';
+ const ram=Number.isFinite(s.ram_used)&&s.ram_total?Math.round(s.ram_used/s.ram_total*100)+'%':'Indisponível';
+ return [`<section class="fps-hero"><div><span class="fps-eyebrow">PERFORMANCE • GAMING</span><h2>Seu próximo jogo começa aqui.</h2><p>Ajuste o desempenho do Windows e prepare a memória antes de entrar na partida. Você escolhe o que aplicar.</p><button class="btn sm" data-open="gaming-gamemode"><svg class="i"><use href="#pad"/></svg>Abrir Modo de Jogo</button></div><div class="fps-emblem" aria-hidden="true"><svg class="i"><use href="#pad"/></svg></div></section>
+ <section class="fps-metrics" aria-label="Uso do PC ao abrir a categoria"><div class="fps-metric"><small>CPU • USO ATUAL</small><b>${cpu}</b></div><div class="fps-metric"><small>MEMÓRIA • USO ATUAL</small><b>${ram}</b></div><div class="fps-metric"><small>PLANO DE ENERGIA</small><b class="plan-name" id="fpsPlanName">${esc(active?.name||'Indisponível')}</b></div></section>
+ <section class="fps-grid" aria-label="Ajustes para jogos">
+ <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#bolt"/></svg></span><h3>Alto desempenho</h3><label class="tg"><input type="checkbox" id="gm" aria-label="Ativar plano de alto desempenho" ${hi?'checked':''}><i></i></label></div><p>Priorize desempenho no plano de energia. Pode aumentar o consumo e a temperatura. Ao desativar, restaura o plano anterior desta sessão.</p><div class="fps-status" id="fpsPlanStatus" role="status">${hi?'Plano de alto desempenho ativo':'Ative quando precisar'}</div></article>
+ <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#ram"/></svg></span><h3>Memória disponível</h3></div><p>Solicite a liberação de memória sem encerrar programas. O resultado depende do uso do computador.</p><button class="ghost" id="fm">Liberar memória</button><div class="fps-status" id="fpsMemoryStatus" role="status"></div></article>
+ <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#monitor"/></svg></span><h3>Preferências de gráficos</h3></div><p>Escolha a GPU de alto desempenho para cada jogo nas configurações oficiais do Windows.</p><button class="ghost" data-open="display-advancedgraphics">Configurar gráficos ↗</button></article>
+ <article class="fps-card"><div class="fps-card-head"><span class="fps-icon"><svg class="i"><use href="#pad"/></svg></span><h3>Modo de Jogo do Windows</h3></div><p>Abra os ajustes do Windows para verificar e ativar o Modo de Jogo.</p><button class="ghost" data-open="gaming-gamemode">Configurar Modo de Jogo ↗</button></article>
+ </section><p class="fps-note">O painel não mede FPS durante os jogos. Os resultados variam conforme o hardware e o jogo; não há ganho de FPS garantido. Os indicadores acima são atualizados ao abrir esta categoria.</p>`,()=>{
+ const toggle=$('#gm'),status=$('#fpsPlanStatus'),name=$('#fpsPlanName'),memory=$('#fm'),memoryStatus=$('#fpsMemoryStatus');
+ toggle.disabled=!active;
+ toggle.onchange=async()=>{
+  const on=toggle.checked;toggle.disabled=true;status.textContent='Aplicando plano…';
+  const current=(await A('plans')||[]).find(p=>p.on);
+  const target=on?'high':fpsPreviousPlan||'balanced';
+  const ok=!!current&&await A('setplan',target);
+  if(ok){if(on)fpsPreviousPlan=current.id;else fpsPreviousPlan=null;
+   const updated=(await A('plans')||[]).find(p=>p.on);
+   name.textContent=updated?.name||(on?'Alto desempenho':'Plano restaurado');
+   status.textContent=on?'Alto desempenho ativado':target==='balanced'?'Plano equilibrado ativado':'Plano anterior restaurado';
+  }else{toggle.checked=!on;status.textContent='Não foi possível alterar o plano neste PC.'}
+  toggle.disabled=false;toast(status.textContent);
+ };
+ memory.onclick=async()=>{
+  memory.disabled=true;memoryStatus.textContent='Liberando memória…';
+  const freed=await A('freemem');
+  memoryStatus.textContent=typeof freed==='number'?'Memória liberada: '+fmt(freed):'Não foi possível liberar memória.';
+  memory.disabled=false;toast(memoryStatus.textContent);
+ };
+ }];
+};
+
 V.monitor=async()=>{const i=await A('info')||{},pr=await A('procs')||[],up=i.uptime?`${Math.floor(i.uptime/3600)} h ${Math.floor(i.uptime%3600/60)} min`:'—';
 return [`<div class="g2">${card('CPU','<svg class="chart" id="mc" viewBox="0 0 600 150"></svg>','<b id="mcv"></b>')}${card('Memória RAM','<svg class="chart" id="mr" viewBox="0 0 600 150"></svg>','<b id="mrv"></b>')}</div>`+
 card('Seu computador',row('Sistema',esc(i.os||'—'))+row('Processador',esc(i.cpu||'—'))+row('Núcleos',esc(i.cores||'—'))+row('Memória',(i.ram||0).toFixed(1).replace('.',',')+' GB')+row('Disco livre',fmt(i.disk_free||0)+' de '+fmt(i.disk_total||0))+row('Ligado há',up))+
