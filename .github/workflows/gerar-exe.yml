@@ -30,7 +30,7 @@ jobs:
       - name: Verificar Python e controles da janela
         run: |
           python -m py_compile app.py
-          python -m unittest discover -s tests -p test_window.py -v
+          python -m unittest discover -s tests -p "test_*.py" -v
 
       - name: Preparar Node para testar a interface
         uses: actions/setup-node@v4
