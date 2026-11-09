@@ -15,7 +15,7 @@ const fs=require('node:fs');
  assert.equal(await page.locator('#demo').isVisible(),true);
  assert.equal(await page.locator('#winClose').isDisabled(),true);
  const categories=await page.locator('.side [data-v]').evaluateAll(es=>es.map(e=>e.dataset.v));
- assert.equal(categories.length,13);
+ assert.equal(categories.length,14);
  for(const k of categories){
   await page.evaluate(k=>go(k),k);
   assert.equal(await page.locator('#h1').innerText(),await page.evaluate(k=>T[k][0],k));

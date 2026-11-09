@@ -349,6 +349,39 @@ button.ui-opt-cat{cursor:pointer}button.ui-opt-cat:hover{background:#252a35;tran
 @media(max-width:1060px){.ui-opt-wrap{grid-template-columns:1fr}.ui-opt-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.ui-opt-nav{grid-template-columns:1fr}.ui-opt-item{grid-template-columns:32px 1fr}.ui-opt-item .ui-state,.ui-opt-item .ui-apply{grid-column:2;justify-self:start}.ui-risk{margin-left:0;margin-top:5px}}
 
+
+/* Menu lateral expandido LZ: inspirado no layout da referência, sem restringir funções. */
+.shell{grid-template-columns:265px minmax(0,1fr)}
+.side{background:linear-gradient(180deg,#20242b,#1c2027);border-right:1px solid #333a45;border-radius:20px 0 0 20px;padding:14px 12px 12px;align-items:stretch;gap:3px;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#39414f transparent}
+.side .logo{width:auto;height:auto;min-height:63px;margin:0 0 6px;padding:6px 7px;display:flex;align-items:center;gap:12px}
+.side .logo svg{width:35px;height:35px;flex:none}
+.side .brandtxt{min-width:0}
+.side .brandrow{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;color:#f0f3f8;line-height:1.2}
+.side .brandsub{font-size:10.5px;font-weight:700;color:#a9b1bf;letter-spacing:.08em;margin-top:4px;white-space:nowrap}
+.side .sect{font-size:10.5px;letter-spacing:.09em;font-weight:800;color:#8b94a3;padding:12px 12px 5px;margin-top:1px}
+.side .div{display:none}
+.side .nav{width:100%;min-height:38px;height:auto;display:flex;align-items:center;justify-content:flex-start;padding:10px 10px;gap:11px;border-radius:10px;color:#abb3c1;transition:background .2s ease,box-shadow .22s ease,color .22s ease,transform .22s ease}
+.side .nav svg.i{width:18px;height:18px;flex:none}
+.side .nav .nlabel{font-size:12.5px;font-weight:700;line-height:1.2;text-align:left;color:inherit}
+.side .nav .nextras{display:flex;align-items:center;gap:5px;margin-left:auto}
+.side .nav .ntag{font-size:9.5px;font-weight:800;border:1px solid #37465f;background:#293445;border-radius:6px;padding:2px 5px;color:#8db5ff;white-space:nowrap}
+.side .nav .ntag.beta{border-color:#3c5276;color:#9bb5fa}
+.side .nav:hover{background:#2b303a;color:#fff;transform:translateX(2px)}
+.side .nav.on{background:linear-gradient(120deg,#2670ef,#1d5dd5);color:#fff;box-shadow:0 10px 24px #2265e633}
+.side .nav.on::before{display:none}
+.side .nav::after{display:none}
+.side .ver{text-align:center;font-size:11px;border:0;background:transparent;color:#8e98a6;padding:13px 0 0;margin-top:7px;border-top:1px solid #343943}
+.navfly{display:none!important}
+@media(max-width:1130px){
+ .shell{grid-template-columns:76px minmax(0,1fr)}
+ .side{padding:12px 7px;align-items:center;gap:4px}
+ .side .logo{padding:8px 0 12px;justify-content:center}
+ .side .brandtxt,.side .sect,.side .nlabel,.side .nextras,.side .ver{display:none!important}
+ .side .nav{width:43px;height:43px;min-height:43px;justify-content:center;padding:0;border-radius:11px}
+ .side .nav::after{display:block;content:attr(data-tip);position:absolute;left:50px;top:50%;transform:translate(-4px,-50%);background:#101319;border:1px solid #3a4454;color:#fff;font-size:12px;font-weight:600;padding:7px 10px;border-radius:8px;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .15s,transform .15s;z-index:50}
+ .side .nav:hover::after,.side .nav:focus-visible::after{opacity:1;transform:translate(0,-50%)}
+}
+
 </style>
 </head>
 <body>
@@ -395,24 +428,24 @@ button.ui-opt-cat{cursor:pointer}button.ui-opt-cat:hover{background:#252a35;tran
 </header>
 <div class="shell">
 <aside class="side" aria-label="Menu">
-  <div class="logo"><svg viewBox="0 0 44 44"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="#e8eefc"/></svg></div>
-  <button class="nav on" data-v="dash" data-tip="Dashboard" aria-label="Dashboard"><svg class="i"><use href="#dash"/></svg></button>
-  <div class="div"></div>
-  <button class="nav" data-v="otim" data-tip="Otimização" aria-label="Otimização"><svg class="i"><use href="#bolt"/></svg></button>
-  <button class="nav" data-v="jogos" data-tip="FPS Boost" aria-label="FPS Boost"><svg class="i"><use href="#pad"/></svg></button>
-  <button class="nav" data-v="monitor" data-tip="Monitoramento" aria-label="Monitoramento"><svg class="i"><use href="#pulse"/></svg></button>
-  <button class="nav" data-v="rede" data-tip="Rede e internet" aria-label="Rede e internet"><svg class="i"><use href="#wifi"/></svg></button>
-  <button class="nav" data-v="init" data-tip="Inicialização" aria-label="Inicialização"><svg class="i"><use href="#pwr"/></svg></button>
-  <button class="nav" data-v="energia" data-tip="Energia" aria-label="Energia"><svg class="i"><use href="#batt"/></svg></button>
-  <div class="div"></div>
-  <button class="nav" data-v="limpeza" data-tip="Limpeza" aria-label="Limpeza"><svg class="i"><use href="#trash"/></svg></button>
-  <button class="nav" data-v="apps" data-tip="Aplicativos" aria-label="Aplicativos"><svg class="i"><use href="#box"/></svg></button>
-  <button class="nav" data-v="servicos" data-tip="Serviços" aria-label="Serviços"><svg class="i"><use href="#svc"/></svg></button>
-  <button class="nav" data-v="priv" data-tip="Privacidade" aria-label="Privacidade"><svg class="i"><use href="#shield"/></svg></button>
-  <button class="nav" data-v="ferr" data-tip="Ferramentas" aria-label="Ferramentas"><svg class="i"><use href="#wrench"/></svg></button>
-  <div class="sp"></div>
-  <button class="nav" data-v="config" data-tip="Configurações" aria-label="Configurações"><svg class="i"><use href="#gear"/></svg></button>
-  <div class="ver">v1.0</div>
+ <div class="logo"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 4h12l-8 22h-9zM8 40l6-16h9l-6 16z" fill="#e8eefc"/></svg><div class="brandtxt"><div class="brandrow">LZ Painel <span class="ntag beta">BETA</span></div><div class="brandsub">OTIMIZAÇÃO INTELIGENTE</div></div></div>
+ <button class="nav on" data-v="dash" data-tip="Dashboard" aria-label="Dashboard"><svg class="i"><use href="#dash"/></svg><span class="nlabel">Dashboard</span></button>
+<div class="sect">OTIMIZAÇÃO</div>
+<button class="nav " data-v="jogos" data-tip="FPS Boost" aria-label="FPS Boost"><svg class="i"><use href="#bolt"/></svg><span class="nlabel">FPS Boost</span></button>
+<button class="nav " data-v="input" data-tip="Input Lag" aria-label="Input Lag"><svg class="i"><use href="#pulse"/></svg><span class="nlabel">Input Lag</span><span class="nextras"><span class="ntag ">PRO</span></span></button>
+<button class="nav " data-v="game" data-tip="Game Boost" aria-label="Game Boost"><svg class="i"><use href="#pad"/></svg><span class="nlabel">Game Boost</span><span class="nextras"><span class="ntag ">PRO</span><span class="ntag beta">BETA</span></span></button>
+<button class="nav " data-v="apps" data-tip="Apps" aria-label="Apps"><svg class="i"><use href="#box"/></svg><span class="nlabel">Apps</span></button>
+<button class="nav " data-v="mem" data-tip="Memória" aria-label="Memória"><svg class="i"><use href="#ram"/></svg><span class="nlabel">Memória</span></button>
+<button class="nav " data-v="rede" data-tip="Rede" aria-label="Rede"><svg class="i"><use href="#wifi"/></svg><span class="nlabel">Rede</span></button>
+<button class="nav " data-v="bios" data-tip="BIOS" aria-label="BIOS"><svg class="i"><use href="#cpu"/></svg><span class="nlabel">BIOS</span></button>
+<div class="sect">SISTEMA</div>
+<button class="nav " data-v="limpeza" data-tip="Limpeza" aria-label="Limpeza"><svg class="i"><use href="#trash"/></svg><span class="nlabel">Limpeza</span></button>
+<button class="nav " data-v="debloat" data-tip="Debloat" aria-label="Debloat"><svg class="i"><use href="#svc"/></svg><span class="nlabel">Debloat</span></button>
+<button class="nav " data-v="updates" data-tip="Atualizações" aria-label="Atualizações"><svg class="i"><use href="#refresh"/></svg><span class="nlabel">Atualizações</span><span class="nextras"><span class="ntag ">PRO</span></span></button>
+<button class="nav " data-v="proc" data-tip="Processos" aria-label="Processos"><svg class="i"><use href="#monitor"/></svg><span class="nlabel">Processos</span></button>
+<button class="nav " data-v="pers" data-tip="Personalização" aria-label="Personalização"><svg class="i"><use href="#gear"/></svg><span class="nlabel">Personalização</span><span class="nextras"><span class="ntag ">PRO</span></span></button>
+<button class="nav " data-v="config" data-tip="Configurações" aria-label="Configurações"><svg class="i"><use href="#gear"/></svg><span class="nlabel">Configurações</span></button>
+ <div class="sp"></div><div class="ver">LZ Painel • v1.0</div>
 </aside>
 <div id="navfly" class="navfly" aria-label="Menu expandido" aria-hidden="true"></div>
 
@@ -637,27 +670,22 @@ function skeletonMarkup(k){
   <div class="card sk-panel"><span class="sk title"></span><span class="sk w2"></span><span class="sk w1"></span><span class="sk w3"></span></div></div>
  </div>`
 }
-function initFlyout(){
- const side=$('.side'),menu=$('#navfly');
- if(!side||!menu)return;
- const navs=[...side.querySelectorAll('.nav[data-v]')];
- menu.innerHTML='<div class="nfhead">PAINEL <small>NAVEGAÇÃO</small></div>'+
- navs.map(b=>`<button class="nfl ${b.classList.contains('on')?'on':''}" data-v="${b.dataset.v}" aria-label="${esc(b.getAttribute('data-tip')||b.dataset.v)}">${b.querySelector('svg')?.outerHTML||''}<span>${esc(b.getAttribute('data-tip')||b.dataset.v)}</span></button>`).join('');
- let ct;
- const hide=()=>{clearTimeout(ct);menu.classList.remove('open');menu.setAttribute('aria-hidden','true')};
- const show=()=>{if(window.innerWidth<=900)return;clearTimeout(ct);menu.classList.add('open');menu.setAttribute('aria-hidden','false')};
- const later=()=>{clearTimeout(ct);ct=setTimeout(hide,170)};
- navs.forEach(b=>{b.addEventListener('mouseenter',show);b.addEventListener('focus',show)});
- side.addEventListener('mouseleave',later);
- menu.addEventListener('mouseenter',()=>clearTimeout(ct));
- menu.addEventListener('mouseleave',later);
- menu.addEventListener('click',e=>{const b=e.target.closest('button[data-v]');if(!b)return;e.stopPropagation();hide();go(b.dataset.v)});
- window.addEventListener('resize',()=>{if(window.innerWidth<=900)hide()});
- window.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
-}
+function initFlyout(){}
 
 /* ---------- telas ---------- */
 const T={dash:['Dashboard','Tudo o que importa sobre o seu PC agora: a nota, o que está acontecendo e o que dá para melhorar.'],otim:['Otimização','Escolha o que otimizar e execute tudo de uma vez.'],jogos:['FPS Boost','Prepare seu PC para jogar com ajustes de energia, memória e gráficos.'],monitor:['Monitoramento','Uso em tempo real e processos ativos.'],rede:['Rede e internet','Conexão, latência e DNS.'],init:['Inicialização','Gerencie os apps ao iniciar.'],energia:['Energia','Planos de energia do Windows.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],apps:['Aplicativos','Programas instalados.'],servicos:['Serviços','Desative serviços do Windows que raramente são usados.'],priv:['Privacidade','Revise permissões e preferências.'],ferr:['Ferramentas','Diagnóstico e utilitários.'],config:['Configurações','Preferências do painel.']};
+
+Object.assign(T,{
+ input:['Input Lag','Ajustes e ferramentas para melhorar a responsividade.'],
+ game:['Game Boost','Ferramentas para preparar o computador antes de jogar.'],
+ mem:['Memória','Acompanhe e gerencie a memória do PC.'],
+ bios:['BIOS','Atalhos para informações do hardware e configurações.'],
+ debloat:['Debloat','Revise serviços e aplicativos sem remover componentes essenciais.'],
+ updates:['Atualizações','Acompanhe e configure o Windows Update.'],
+ proc:['Processos','Uso de recursos e processos ativos.'],
+ pers:['Personalização','Preferências visuais e de privacidade.']
+});
+
 const V={};
 
 /* Desempenho e Interface: estado real, sem aplicar ajustes de risco. */
@@ -796,6 +824,41 @@ $('#sd').onclick=async()=>{const a=l.filter(s=>!s.on);if(!a.length)return toast(
 V.priv=async()=>[card('Permissões e preferências',[['privacy-webcam','Câmera','Quais apps podem usar a câmera.'],['privacy-microphone','Microfone','Quais apps podem gravar áudio.'],['privacy-location','Localização','Quais apps sabem onde você está.'],['privacy-general','Geral','ID de publicidade e idioma.'],['privacy-feedback','Diagnóstico e comentários','Dados enviados à Microsoft.']].map(x=>row(x[1],ob('Revisar',x[0]),x[2])).join(''))];
 V.ferr=async()=>[card('Utilitários do Windows',[['taskmgr','Gerenciador de Tarefas','Veja e encerre programas.'],['resmon','Monitor de Recursos','Uso detalhado de CPU, disco e rede.'],['cleanmgr','Limpeza de Disco','Ferramenta de limpeza do Windows.'],['devmgmt','Gerenciador de Dispositivos','Drivers e hardware.'],['diskmgmt','Gerenciamento de Disco','Partições e unidades.'],['services','Serviços','Serviços do Windows.'],['msinfo','Informações do sistema','Detalhes completos do PC.'],['cmd','Prompt de comando','Terminal do Windows.']].map(x=>row(x[1],ob('Abrir',x[0]),x[2])).join('')+row('Ponto de restauração','<button class="ghost" data-act="restore">Criar</button>','Salva o estado do Windows para voltar atrás se algo der errado.'))];
 V.config=async()=>[card('Preferências',row('Atualizar valores em tempo real',tg('cl1',S.live!==false),'CPU, memória, disco e temperatura no Dashboard.')+row('Reduzir animações',tg('cl2',!!S.calm),'Deixa o painel mais leve em PCs fracos.')+row('Versão','1.0')),()=>{$('#cl1').onchange=e=>{S.live=e.target.checked;save();if(S.live)tick()};$('#cl2').onchange=e=>{S.calm=e.target.checked;save();document.body.classList.toggle('calm',S.calm)}}];
+
+
+/* As novas categorias reutilizam ações existentes e mantêm o acesso às antigas. */
+V.input=async()=>[card('Input Lag',
+ row('Processos ativos','<button class="ghost" data-go="proc">Abrir processos</button>','Revise programas que estejam consumindo CPU e memória.')+
+ row('Plano de energia','<button class="ghost" data-go="energia">Configurar</button>','Confira o plano de desempenho, consumo e temperatura.')+
+ row('Modo de Jogo do Windows',ob('Abrir','gaming-gamemode'),'Use as preferências oficiais do sistema.'))];
+V.game=async()=>{const r=await V.jogos();return [r[0]+card('Otimização geral',
+ row('Otimizar tudo','<button class="ghost" data-go="otim">Abrir</button>','Abre o fluxo com animação, confirmação e relatório de etapas.')),r[1]]};
+const originalJogos=V.jogos;
+V.jogos=async()=>{const r=await originalJogos();return [r[0]+card('Otimização geral',
+ row('Otimizar tudo','<button class="ghost" data-go="otim">Abrir</button>','Mantém o acesso à otimização geral e aos ajustes avançados.')),r[1]]};
+V.mem=async()=>{const st=await A('stats')||{};const used=Number(st.ram_used)||0,total=Number(st.ram_total)||0;return [
+ card('Memória RAM',row('Memória em uso','<span class="mono">'+(total?Math.round(used/total*100)+'%':'N/D')+'</span>',total?used.toFixed(1)+' de '+total.toFixed(1)+' GB':'Leitura indisponível')+
+ row('Liberar memória','<button class="ghost" id="memoryQuick">Executar</button>','Solicita a liberação de memória disponível sem fechar programas.')+
+ row('Processos que mais consomem memória','<button class="ghost" data-go="proc">Ver</button>','Consulte os aplicativos e os processos ativos.')),()=>{
+ const b=$('#memoryQuick');if(b)b.onclick=async()=>{b.disabled=true;const n=await A('freemem');toast(typeof n==='number'?'Memória liberada: '+fmt(n):'Não foi possível liberar memória');b.disabled=false}
+ }]};
+V.bios=async()=>[card('BIOS e hardware',
+ row('Informações do sistema',ob('Abrir','msinfo'),'Consulte processador, BIOS, placa-mãe e demais informações oficiais.')+
+ row('Gerenciador de Dispositivos',ob('Abrir','devmgmt'),'Revise drivers e dispositivos.')+
+ row('Ferramentas e diagnóstico','<button class="ghost" data-go="ferr">Abrir</button>','Outros utilitários do Windows.')+
+ row('Atenção','<span class="mono">Somente consulta</span>','Alterações na BIOS precisam ser feitas no firmware; este painel não força overclock.'))];
+V.debloat=async()=>{const r=await V.servicos();return [card('Debloat seguro',row('Aplicativos instalados','<button class="ghost" data-go="apps">Gerenciar</button>','Desinstale manualmente apenas os aplicativos que você conhece.')+
+ row('Serviços opcionais','<button class="ghost" data-go="servicos">Revisar</button>','Mudanças em serviços exigem escolha consciente. Defender, Update e Store são preservados.'))+r[0],r[1]]};
+V.updates=async()=>[card('Windows Update',
+ row('Verificar atualizações',ob('Abrir Windows Update','windowsupdate'),'Abre a página oficial do Windows para instalar atualizações.')+
+ row('Proteção do sistema','<span class="mono">Preservada</span>','Este painel não desativa automaticamente o Windows Update nem o Defender.'))];
+V.proc=async()=>V.monitor();
+V.pers=async()=>[card('Personalização',
+ row('Preferências visuais','<button class="ghost" data-go="config">Configurar</button>','Ajuste as animações e os valores em tempo real do painel.')+
+ row('Privacidade do Windows','<button class="ghost" data-go="priv">Revisar</button>','Confira as permissões de câmera, microfone e localização.'))];
+const baseApps=V.apps;
+V.apps=async()=>{const r=await baseApps();return [r[0]+card('Inicialização',
+ row('Aplicativos que iniciam com o Windows','<button class="ghost" data-go="init">Gerenciar</button>','Mantém acesso às configurações de inicialização.')),r[1]]};
 
 async function go(k){
  const n=++gn;clearInterval(timer);

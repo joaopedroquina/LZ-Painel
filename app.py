@@ -35,7 +35,7 @@ TOOLS = {"taskmgr": "taskmgr", "resmon": "resmon", "cleanmgr": "cleanmgr",
          "msinfo": "msinfo32", "cmd": "cmd", "appwiz": "appwiz.cpl"}
 SETTINGS = {"gaming-gamemode", "display-advancedgraphics", "network", "powersleep",
             "privacy-webcam", "privacy-microphone", "privacy-location",
-            "privacy-general", "privacy-feedback"}
+            "privacy-general", "privacy-feedback", "windowsupdate"}
 
 # nome do serviço: (título, descrição, início padrão, seguro desativar?)
 SERVICES = {
