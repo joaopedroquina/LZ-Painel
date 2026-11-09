@@ -65,6 +65,12 @@ class FpsTests(unittest.TestCase):
         self.assertTrue(reopened.fps_set("energy", False)["ok"])
         reopened.setplan.assert_called_once_with(original)
 
+    def test_invalid_nested_backup_blocks_changes(self):
+        Path(self.api._fps_backup_path()).write_text(json.dumps({"DiagTrack": "invalid"}))
+        self.api.set_service = MagicMock()
+        self.assertFalse(self.api.fps_set("DiagTrack", True)["ok"])
+        self.api.set_service.assert_not_called()
+
     def test_unknown_and_unsafe_services_cannot_be_applied(self):
         self.api.set_service = MagicMock()
         for key in ["Unknown", "Spooler", "SysMain"]:

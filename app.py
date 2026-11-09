@@ -178,6 +178,17 @@ class Api:
                 data = json.load(f)
             if not isinstance(data, dict):
                 raise ValueError("Backup inválido")
+            for key, snapshot in data.items():
+                if not isinstance(snapshot, dict):
+                    raise ValueError("Registro de backup inválido")
+                if key == "energy":
+                    plan = snapshot.get("plan")
+                    if not isinstance(plan, str) or not GUID.fullmatch(plan):
+                        raise ValueError("Plano do backup inválido")
+                elif (key not in SERVICES or not SERVICES[key][3] or
+                      snapshot.get("start") not in {"auto", "delayed-auto", "demand"} or
+                      not isinstance(snapshot.get("running"), bool)):
+                    raise ValueError("Serviço do backup inválido")
             return data
         except FileNotFoundError:
             return {}
