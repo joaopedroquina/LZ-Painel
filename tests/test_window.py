@@ -49,7 +49,7 @@ class WindowTests(unittest.TestCase):
         self.assertFalse(self.api.game_restore("unknown")["ok"])
         with tempfile.TemporaryDirectory() as folder:
             config = Path(folder) / "options.txt"
-            original = b"renderDistance:16\nsimulationDistance:12\\notherSetting:keep\\n"
+            original = b"renderDistance:16\nsimulationDistance:12\notherSetting:keep\n"
             config.write_bytes(original)
             with patch.object(self.api, "_gb_path_for", return_value=str(config)), \
                  patch.object(self.api, "_gb_root", return_value=folder), \
