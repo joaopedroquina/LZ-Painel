@@ -427,6 +427,60 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 @media(max-width:800px){.gb-hero{grid-template-columns:76px 1fr}.gb-controller{display:none}.gb-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.gb-tabs,.gb-grid,.gb-options,.gb-advanced{grid-template-columns:1fr}}
 
+
+/* Game Boost premium, artes vetoriais originais, sem downloads externos */
+.gb-shell{background:radial-gradient(1200px 550px at 85% 2%,rgba(12,71,170,.22),transparent 60%),#0a1220;border:1px solid #2456a9;border-radius:24px;padding:22px;display:grid;gap:18px;overflow:hidden}
+.gb-hero{min-height:113px;display:grid;grid-template-columns:78px minmax(0,1fr) 310px;align-items:center;gap:18px;position:relative}
+.gb-appicon{height:72px;width:72px;border:1px solid #498fff;border-radius:19px;background:linear-gradient(155deg,#177fff,#0049d3);display:grid;place-items:center;font-size:38px;box-shadow:0 9px 24px #006bff44}
+.gb-hero h2{font-size:29px;margin:4px 0}.gb-hero-copy{z-index:2}.gb-hero-copy p{font-size:13px;color:#9fb3d7;max-width:680px}
+.gb-kicker{color:#ffc852;font-weight:800;letter-spacing:.13em;font-size:11px}
+.gb-controller{height:118px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(ellipse at 55% 45%,#174fbb99,transparent 55%),linear-gradient(120deg,#081526,#12305f 60%,#060d18);border:1px solid #193e82;overflow:hidden;position:relative}
+.gb-controller:before,.gb-controller:after{content:'';position:absolute;width:250px;height:1px;background:#178aff;transform:rotate(-25deg);box-shadow:0 0 18px #2688ff;right:-20px;top:29px}
+.gb-controller:after{top:95px;transform:rotate(18deg)}
+.gb-controller span{position:relative;z-index:1;font-size:79px;filter:drop-shadow(0 4px 16px #007bff)}
+.gb-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gb-tabs button{border-radius:13px;border:1px solid #334668;color:#e3eeff;background:linear-gradient(180deg,#1a263a,#0f1b2d);padding:14px;cursor:pointer;font-weight:750;transition:transform .18s,background .2s,box-shadow .2s}
+.gb-tabs button:hover{transform:translateY(-2px)}
+.gb-tabs button.selected{background:linear-gradient(180deg,#2486ff,#0962ea);box-shadow:0 5px 25px #0782ff66;border-color:#389bff;color:#fff}
+.gb-section-heading{display:flex;align-items:center;gap:12px;margin:5px 0 15px}
+.gb-section-heading b{font-size:16px;display:block}
+.gb-section-heading small{display:block;color:#9faec8;font-size:12px;margin-top:4px}
+.gb-subicon{height:38px;width:38px;border-radius:11px;background:#103767;color:#fff;display:grid;place-items:center;font-size:20px;flex:none}
+.gb-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.gb-card{background:#0c1526;border:1px solid #2354a1;border-radius:17px;overflow:hidden;min-width:0;box-shadow:0 9px 25px #0006;display:flex;flex-direction:column}
+.gb-card.valorant{border-color:#c52542}.gb-card.minecraft{border-color:#188659}.gb-card.fortnite{border-color:#8542d9}.gb-card.bluestacks{border-color:#1188d8}.gb-card.discord{border-color:#5868ed}
+.gb-art{height:185px;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;text-align:center;padding:15px;background:#10223a}
+.gb-art:before{content:'';position:absolute;width:130px;height:250px;top:-50px;left:18%;border-radius:42%;filter:blur(3px);transform:rotate(-35deg);opacity:.55}
+.gb-art:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#06101c99,transparent 52%)}
+.gb-art b,.gb-artglyph{position:relative;z-index:2;color:#fff;text-shadow:0 4px 13px #000c}
+.gb-art b{font-size:19px;font-weight:900;letter-spacing:-.03em;text-transform:uppercase}
+.gb-artglyph{position:absolute;top:37px;font-size:87px;line-height:1;font-weight:1000}
+.valorant .gb-art{background:linear-gradient(135deg,#090b16,#441018 55%,#ce2c4e)}.valorant .gb-art:before{background:#ff3457}
+.minecraft .gb-art{background:linear-gradient(180deg,#3b86c1 0 40%,#288052 40% 70%,#583e25 70%)}.minecraft .gb-art:before{background:#79d744}
+.fortnite .gb-art{background:linear-gradient(135deg,#0d0b27,#3d1363,#8534c9)}.fortnite .gb-art:before{background:#914eff}
+.bluestacks .gb-art{background:linear-gradient(130deg,#001327,#064c83,#0e9fc5)}.bluestacks .gb-art:before{background:#11b7ff}
+.discord .gb-art{background:linear-gradient(130deg,#0b1441,#3c46a5,#586ef9)}.discord .gb-art:before{background:#96a4ff}
+.gb-inner{padding:14px 12px;display:flex;flex-direction:column;gap:8px;align-items:stretch;text-align:center;flex:1}
+.gb-inner strong{font-size:15px}
+.gb-inner small{color:#98abc6;font-size:11px;line-height:1.4;min-height:31px}
+.gb-state{border-radius:999px;padding:5px 8px;font-size:10.5px;font-weight:750;align-self:center;background:#172942;color:#aac2e6;white-space:nowrap}
+.gb-state.success{background:#12422b;color:#70e1a5}.gb-state.ready{background:#1b3e37;color:#8cddbd}
+.gb-state.warn{background:#49371a;color:#e9c879}.gb-state.muted{background:#30343e;color:#a4adbe}
+.gb-main-action,.gb-global-btn{background:linear-gradient(180deg,#1587ff,#0962f0);border:1px solid #4da0ff;color:#fff;border-radius:12px;padding:11px;font-weight:800;cursor:pointer}
+.gb-main-action:disabled{opacity:.44;cursor:not-allowed}
+.gb-restore{background:#1b2b42;color:#d9e8ff;border:1px solid #4a678b;border-radius:10px;padding:8px;cursor:pointer}
+.gb-warning{color:#e7c176!important}
+.gb-global{background:linear-gradient(120deg,#101e32,#0a1426);border:1px solid #28559d;border-radius:20px;padding:17px;margin-top:17px}
+.gb-options{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}
+.gb-options label,.gb-options button{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#15243a;border:1px solid #344c76;border-radius:12px;color:#f4f8ff;padding:13px;font-size:12px;font-weight:700}
+.gb-options button{cursor:pointer}.gb-global-btn{display:block;min-width:280px;margin:auto}
+.gb-advanced{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.gb-advanced button{padding:16px;border-radius:13px;background:#172740;border:1px solid #375786;color:white;cursor:pointer}
+.gb-history{display:grid;gap:8px}.gb-history>div{display:flex;justify-content:space-between;gap:15px;padding:13px;border-radius:11px;background:#172640}.gb-history small{color:#aabbd5}
+@media(max-width:1250px){.gb-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.gb-options{grid-template-columns:repeat(2,minmax(0,1fr))}.gb-hero{grid-template-columns:76px 1fr}.gb-controller{display:none}}
+@media(max-width:800px){.gb-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.gb-grid,.gb-options,.gb-tabs,.gb-advanced{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -599,6 +653,9 @@ const MB=2**20,MJ=[1.1*2**30,.8*2**30,.5*2**30];
 const MA=['7-Zip','Discord','Google Chrome','Microsoft Visual C++ 2015-2022 Redistributable (x64)','Spotify','Steam','Visual Studio Code'].map(n=>({name:n,ver:'1.0.0',pub:'Fabricante',can:true}));
 const MS=[['DiagTrack','Telemetria do Windows','Envia dados de diagnóstico e uso à Microsoft.',1],['WerSvc','Relatório de erros do Windows','Envia relatórios de falhas à Microsoft.',1],['Fax','Fax','Envio e recebimento de fax.',1],['SysMain','SysMain (Superfetch)','Pré-carrega apps na memória. Pode ser desativado em SSD; em HD costuma ajudar.',0],['Spooler','Spooler de impressão','Necessário para imprimir. Desative só se não usa impressora.',0]].map(x=>({name:x[0],title:x[1],desc:x[2],safe:!!x[3],on:true,running:true}));
 const MOCK={
+game_profiles:()=>Object.fromEntries(['valorant','minecraft','fortnite','bluestacks','discord'].map(id=>[id,{found:false,applied:false,restorable:false,running:false}])),
+game_optimize:()=>({ok:false,error:'Prévia: nenhuma alteração foi aplicada ao PC.'}),
+game_restore:()=>({ok:false,error:'Prévia: não há backup para restaurar.'}),
 stats:()=>({cpu:R(15,40),ram_used:R(6.2,6.8),ram_total:16,disk:68,disk_free:164e9,disk_total:512e9,temp:Math.round(R(46,50))}),
 info:()=>({os:'Windows 11',cpu:'Processador de exemplo',cores:'8 núcleos / 16 threads',ram:16,disk_total:512e9,disk_free:164e9,uptime:19800}),
 procs:()=>[['chrome.exe',1240],['Code.exe',830],['Discord.exe',512],['explorer.exe',230],['Spotify.exe',190]].map((p,i)=>({pid:4100+i,name:p[0],mem:p[1]*MB})),
@@ -909,37 +966,79 @@ V.config=async()=>[card('Preferências',row('Atualizar valores em tempo real',tg
 
 V.input=async()=>{const s=await A('stats')||{}; return [card('Input Lag', row('Reduzir processos em segundo plano', bt('Abrir Processos','ilgoproc','pri'),'Revise o que está pesando no sistema antes de jogar.')+row('Plano de energia', bt('Abrir Energia','ilgoener'),'Cheque o modo de energia quando quiser máximo desempenho.')+row('Uso atual da CPU', `<span class="mono">${Number.isFinite(s.cpu)?Math.round(s.cpu)+'%':'Indisponível'}</span>`, 'A latência tende a piorar quando a CPU já está muito ocupada.')),()=>{$('#ilgoproc').onclick=()=>go('proc');$('#ilgoener').onclick=()=>go('jogos')}]};
 V.game=async()=>{
+ const profiles=await A('game_profiles')||{};
  const games=[
-  ['valorant','VALORANT','🎯'],['minecraft','Minecraft','⛏'],
-  ['fortnite','Fortnite','⚡'],['bluestacks','BlueStacks','▣'],['discord','Discord','◈']
+  {id:'valorant',name:'VALORANT',kind:'Preset competitivo',note:'Sombras, efeitos e VSync no arquivo de configuração.',glyph:'V'},
+  {id:'minecraft',name:'Minecraft',kind:'Minecraft Java',note:'Distância de renderização, simulação e partículas.',glyph:'⛏'},
+  {id:'fortnite',name:'Fortnite',kind:'Preset de desempenho',note:'Efeitos, sombras, pós-processamento e VSync.',glyph:'✦'},
+  {id:'bluestacks',name:'BlueStacks',kind:'Preferência de GPU',note:'Seleciona a preferência de alto desempenho do Windows.',glyph:'▱'},
+  {id:'discord',name:'Discord',kind:'Menos impacto em jogos',note:'Seleciona a preferência de economia de energia do Windows.',glyph:'◈'}
  ];
- const history=Array.isArray(S.gameHistory)?S.gameHistory.slice(0,12):[];
- const cards=games.map(g=>'<article class="gb-card '+g[0]+'"><div class="gb-art"><span>'+g[2]+'</span><b>'+g[1]+'</b></div><div class="gb-inner"><strong>'+g[1]+'</strong><small>Preparação geral de sessão</small><button data-gprep="'+g[0]+'">⚡ Otimizar</button></div></article>').join('');
- const switches='<div class="gb-options"><label><span>Alto desempenho</span><input id="gbPower" type="checkbox" checked></label><label><span>Liberar RAM</span><input id="gbRam" type="checkbox" checked></label><button data-open="display-advancedgraphics">CPU/GPU · Configurar</button><button data-open="gaming-gamemode">Input Lag · Revisar</button></div>';
+ const history=Array.isArray(S.gameHistory)?S.gameHistory.slice(0,14):[];
+ const record=(text)=>{if(!Array.isArray(S.gameHistory))S.gameHistory=[];S.gameHistory.unshift({label:text,at:new Date().toLocaleString('pt-BR')});S.gameHistory=S.gameHistory.slice(0,14);save()};
+ const cards=()=>games.map(g=>{
+  const info=profiles[g.id]||{},found=!!info.found,applied=info.applied===true,backup=info.restorable===true;
+  const state=applied?'✓ Perfil aplicado':backup?'Backup disponível':found?'Pronto para configurar':'Não detectado';
+  const stateClass=applied?'success':backup?'warn':found?'ready':'muted';
+  return '<article class="gb-card '+g.id+'"><div class="gb-art"><div class="gb-artglow"></div><span class="gb-artglyph">'+g.glyph+'</span><b>'+g.name+'</b></div>'+
+  '<div class="gb-inner"><strong>'+g.name+'</strong><span class="gb-state '+stateClass+'">'+state+'</span>'+
+  '<small>'+esc(g.note)+'</small><button class="gb-main-action" data-gb-optimize="'+g.id+'" '+(!found||backup?'disabled':'')+'>⚡ Otimizar</button>'+
+  (backup?'<button class="gb-restore" data-gb-restore="'+g.id+'">↶ Restaurar</button>':'')+
+  (info.running?'<small class="gb-warning">Feche o jogo antes de alterar.</small>':'')+
+  '</div></article>';
+ }).join('');
  const sections={
-  games:'<div class="gb-heading"><h3>Jogos suportados</h3><p>Escolha um jogo. A preparação utiliza recursos gerais do Windows, sem alterações específicas nos arquivos dos jogos.</p></div><div class="gb-grid">'+cards+'</div><div class="gb-global"><h3>Otimização geral de jogos</h3><p>Selecione os ajustes e aplique quando necessário.</p>'+switches+'<button class="gb-global-btn" id="gbApply">⚡ Aplicar otimização global</button></div>',
-  advanced:'<div class="gb-heading"><h3>Otimização avançada</h3><p>Recursos oficiais para revisar as preferências do Windows.</p></div><div class="gb-advanced"><button data-open="gaming-gamemode">Modo de Jogo</button><button data-open="display-advancedgraphics">Configurações gráficas</button><button data-go="monitor">Monitoramento</button><button data-go="rede">Rede e latência</button></div>',
-  history:'<div class="gb-heading"><h3>Histórico</h3><p>Ações confirmadas nesta instalação. Nenhuma medição de FPS é inventada.</p></div><div class="gb-history">'+(history.length?history.map(h=>'<div><b>'+esc(h.label)+'</b><small>'+esc(h.at)+'</small></div>').join(''):'<p>Nenhuma otimização confirmada ainda.</p>')+'</div>'
+  games:()=>'<div class="gb-section-heading"><span class="gb-subicon">🎮</span><span><b>Jogos suportados</b><small>Perfis individuais, backups antes de mudar arquivos e restauração disponível.</small></span></div><div class="gb-grid">'+cards()+'</div>'+
+      '<div class="gb-global"><div class="gb-section-heading"><span class="gb-subicon">⚙</span><span><b>Otimização geral de jogos</b><small>Ative apenas os ajustes que deseja aplicar à sessão.</small></span></div>'+
+      '<div class="gb-options"><label>⚡ Alto desempenho <input id="gbPower" type="checkbox" checked></label><label>◉ Liberar memória RAM <input id="gbRam" type="checkbox" checked></label>'+
+      '<button data-open="display-advancedgraphics">▣ Priorizar CPU/GPU · Configurar</button><button data-open="gaming-gamemode">⌁ Reduzir Input Lag · Revisar</button></div>'+
+      '<button class="gb-global-btn" id="gbApply">⚡ Aplicar otimização global</button></div>',
+  advanced:()=>'<div class="gb-section-heading"><span class="gb-subicon">⚙</span><span><b>Otimização avançada</b><small>Ferramentas do Windows para personalizar desempenho e gráficos.</small></span></div><div class="gb-advanced">'+
+      '<button data-open="gaming-gamemode">Modo de Jogo do Windows</button><button data-open="display-advancedgraphics">Preferências de gráficos</button>'+
+      '<button data-go="monitor">Monitoramento e processos</button><button data-go="rede">Rede e latência</button></div>',
+  history:()=>'<div class="gb-section-heading"><span class="gb-subicon">◷</span><span><b>Histórico de otimizações</b><small>Somente alterações confirmadas pelo aplicativo; sem promessas de FPS.</small></span></div>'+
+      '<div class="gb-history">'+(history.length?history.map(h=>'<div><b>'+esc(h.label)+'</b><small>'+esc(h.at)+'</small></div>').join(''):'<p>Nenhuma alteração confirmada ainda.</p>')+'</div>'
  };
- const tabs='<div class="gb-tabs"><button data-gbtab="games" class="selected">🎮 Jogos</button><button data-gbtab="advanced">⚙ Otimização avançada</button><button data-gbtab="history">◴ Histórico</button></div>';
- const shell='<section class="gb-shell"><div class="gb-hero"><div class="gb-appicon">🎮</div><div><span class="gb-kicker">GAME BOOST · PRÉVIA</span><h2>Game Boost</h2><p>Prepare seus jogos e configure opções de energia, memória e gráficos.</p></div><div class="gb-controller">🎮</div></div>'+tabs+'<div id="gbContent">'+sections.games+'</div></section>';
- return [shell,()=>{
-  const record=label=>{if(!Array.isArray(S.gameHistory))S.gameHistory=[];S.gameHistory.unshift({label,at:new Date().toLocaleString('pt-BR')});S.gameHistory=S.gameHistory.slice(0,12);save()};
-  const run=async(label,power,ram)=>{
-    if(!power&&!ram)return toast('Selecione pelo menos uma opção');
-    if(!await ask('Preparar sessão de jogo','Aplicar os ajustes escolhidos? Não serão alterados arquivos nem configurações internas dos jogos.','Aplicar'))return;
-    const results=[];
-    if(power&&await A('setplan','high'))results.push('Plano de energia');
-    if(ram){const value=await A('freemem');if(typeof value==='number')results.push('Memória: '+fmt(value))}
-    if(results.length){record(label+' · '+results.join(', '));toast('Concluído: '+results.join(', '))}
-    else toast('Nenhum ajuste pôde ser confirmado no Windows');
-  };
-  const paint=tab=>{const c=$('#gbContent');if(!c)return;c.innerHTML=sections[tab];document.querySelectorAll('[data-gbtab]').forEach(b=>b.classList.toggle('selected',b.dataset.gbtab===tab));bind()};
+ const initial='<section class="gb-shell"><div class="gb-hero"><div class="gb-appicon">🎮</div><div class="gb-hero-copy"><span class="gb-kicker">GAME BOOST · BETA</span>'+
+    '<h2>Game Boost</h2><p>Escolha um jogo para aplicar um perfil específico, reversível e com backup automático.</p></div><div class="gb-controller"><span>🎮</span></div></div>'+
+    '<div class="gb-tabs"><button class="selected" data-gbtab="games">🎮 Jogos</button><button data-gbtab="advanced">⚙ Otimização avançada</button><button data-gbtab="history">◷ Histórico</button></div>'+
+    '<div id="gbContent">'+sections.games()+'</div></section>';
+ return [initial,()=>{
   const bind=()=>{
-    document.querySelectorAll('[data-gprep]').forEach(b=>b.onclick=()=>{const g=games.find(x=>x[0]===b.dataset.gprep);run(g?.[1]||'Jogo',true,true)});
-    if($('#gbApply'))$('#gbApply').onclick=()=>run('Preparação geral',!!$('#gbPower')?.checked,!!$('#gbRam')?.checked);
+    document.querySelectorAll('[data-gb-optimize]').forEach(b=>b.onclick=async()=>{
+      const id=b.dataset.gbOptimize,g=games.find(x=>x.id===id),info=profiles[id]||{};
+      if(!g||!info.found)return toast('Instalação não detectada neste PC');
+      if(!await ask('Otimizar '+g.name,'O programa deve estar fechado. Aplicar '+g.kind+'? O aplicativo salvará backup para restauração. O desempenho real pode variar.','Aplicar'))return;
+      b.disabled=true;
+      const r=await A('game_optimize',id);
+      if(r?.ok){record(g.name+': '+(r.summary||'Configuração atualizada'));toast(r.summary||'Perfil aplicado')}
+      else toast(r?.error||'Não foi possível aplicar o perfil');
+      go('game');
+    });
+    document.querySelectorAll('[data-gb-restore]').forEach(b=>b.onclick=async()=>{
+      const id=b.dataset.gbRestore,g=games.find(x=>x.id===id);
+      if(!g||!await ask('Restaurar '+g.name,'Restaurar a configuração anterior? Se o jogo alterou o arquivo depois, o backup será mantido para revisão.','Restaurar'))return;
+      b.disabled=true;const r=await A('game_restore',id);
+      if(r?.ok){record(g.name+': configuração original restaurada');toast(r.summary||'Restaurado')}
+      else toast(r?.error||'Não foi possível restaurar');
+      go('game');
+    });
+    const apply=$('#gbApply');if(apply)apply.onclick=async()=>{
+      const power=!!$('#gbPower')?.checked,ram=!!$('#gbRam')?.checked;
+      if(!power&&!ram)return toast('Escolha pelo menos um ajuste');
+      if(!await ask('Otimização geral','Aplicar apenas os ajustes selecionados? Não modifica arquivos dos jogos.','Aplicar'))return;
+      const changes=[];
+      if(power&&await A('setplan','high'))changes.push('Plano Alto desempenho');
+      if(ram){const bytes=await A('freemem');if(typeof bytes==='number')changes.push('Memória: '+fmt(bytes))}
+      if(changes.length){record('Otimização geral: '+changes.join(', '));toast('Concluído: '+changes.join(' · '))}
+      else toast('Nenhum ajuste foi confirmado');
+    };
   };
-  document.querySelectorAll('[data-gbtab]').forEach(b=>b.onclick=()=>paint(b.dataset.gbtab));
+  document.querySelectorAll('[data-gbtab]').forEach(btn=>btn.onclick=()=>{
+    const tab=btn.dataset.gbtab;$('#gbContent').innerHTML=sections[tab]();
+    document.querySelectorAll('[data-gbtab]').forEach(x=>x.classList.toggle('selected',x===btn));
+    bind();
+  });
   bind();
  }];
 };

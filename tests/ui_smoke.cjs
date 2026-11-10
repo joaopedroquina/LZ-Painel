@@ -39,6 +39,10 @@ const fs=require('node:fs');
   assert.equal(await page.locator('.fpsx-item').count(),4);
   await page.evaluate(()=>go('game'));
   assert.equal(await page.locator('.gb-card').count(),5);
+  assert.equal(await page.locator('.gb-main-action').count(),5);
+  assert.equal(await page.locator('.gb-main-action:disabled').count(),5);
+  assert.equal(await page.locator('.gb-state').count(),5);
+
   await page.locator('[data-gbtab="advanced"]').click();
   assert.equal(await page.locator('.gb-advanced button').count(),4);
   await page.locator('[data-gbtab="history"]').click();

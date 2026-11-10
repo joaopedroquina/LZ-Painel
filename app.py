@@ -1,6 +1,10 @@
 import os
 import re
 import json
+import glob
+import hashlib
+import shutil
+import tempfile
 import sys
 import time
 import socket
@@ -642,6 +646,283 @@ class Api:
                 return {"ok": True, "reboot": name == "startup_delay"}
             except (OSError, KeyError, TypeError):
                 return {"ok": False, "error": "Não foi possível restaurar a configuração."}
+
+
+    # Game Boost: mudanças explícitas, reversíveis e limitadas às configurações de usuário.
+    # Não altera EXEs, anti-cheat, Defender, Windows Update ou saves dos jogos.
+    _GB_IDS = ("valorant", "minecraft", "fortnite", "bluestacks", "discord")
+    _GB_OPTIONS = {
+        "valorant": {"bUseVSync": "False", "sg.ShadowQuality": "0",
+                     "sg.PostProcessQuality": "0", "sg.EffectsQuality": "0"},
+        "minecraft": {"renderDistance": "8", "simulationDistance": "6",
+                      "particles": "1", "entityShadows": "false",
+                      "biomeBlendRadius": "0"},
+        "fortnite": {"bUseVSync": "False", "bMotionBlur": "False",
+                     "sg.ShadowQuality": "0", "sg.PostProcessQuality": "0",
+                     "sg.EffectsQuality": "0"},
+    }
+
+    def _gb_root(self):
+        folder = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),
+                              "LZPainel", "GameBoost")
+        os.makedirs(folder, exist_ok=True)
+        return folder
+
+    def _gb_manifest(self):
+        path = os.path.join(self._gb_root(), "manifest.json")
+        try:
+            with open(path, "r", encoding="utf-8") as handle:
+                data = json.load(handle)
+                return data if isinstance(data, dict) else {}
+        except (FileNotFoundError, ValueError, OSError, TypeError):
+            return {}
+
+    def _gb_write_manifest(self, entries):
+        folder = self._gb_root()
+        fd, tmp = tempfile.mkstemp(prefix="manifest_", suffix=".json", dir=folder)
+        try:
+            with os.fdopen(fd, "w", encoding="utf-8") as handle:
+                json.dump(entries, handle, ensure_ascii=False, indent=2)
+            os.replace(tmp, os.path.join(folder, "manifest.json"))
+        finally:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+
+    @staticmethod
+    def _gb_sha(path):
+        with open(path, "rb") as handle:
+            return hashlib.sha256(handle.read()).hexdigest()
+
+    @staticmethod
+    def _gb_existing(path):
+        return path if path and os.path.isfile(path) else ""
+
+    def _gb_path_for(self, game_id):
+        local = os.environ.get("LOCALAPPDATA", "")
+        roaming = os.environ.get("APPDATA", "")
+        if game_id == "minecraft":
+            return self._gb_existing(os.path.join(roaming, ".minecraft", "options.txt"))
+        if game_id == "fortnite":
+            for leaf in ("WindowsClient", "Windows"):
+                path = os.path.join(local, "FortniteGame", "Saved", "Config", leaf,
+                                    "GameUserSettings.ini")
+                if os.path.isfile(path):
+                    return path
+            return ""
+        if game_id == "valorant":
+            root = os.path.join(local, "VALORANT", "Saved", "Config")
+            if not os.path.isdir(root):
+                return ""
+            paths = glob.glob(os.path.join(root, "**", "GameUserSettings.ini"),
+                              recursive=True)
+            root_real = os.path.normcase(os.path.realpath(root))
+            matches = []
+            for path in paths:
+                try:
+                    if (os.path.commonpath((root_real, os.path.normcase(os.path.realpath(path))))
+                            == root_real and os.path.isfile(path)):
+                        matches.append(path)
+                except (OSError, ValueError):
+                    continue
+            return max(matches, key=os.path.getmtime) if matches else ""
+        if game_id == "bluestacks":
+            program_dirs = [os.environ.get("ProgramFiles", ""),
+                            os.environ.get("ProgramFiles(x86)", "")]
+            for root in program_dirs:
+                for leaf in ("BlueStacks_nxt", "BlueStacks"):
+                    path = os.path.join(root, leaf, "HD-Player.exe")
+                    if os.path.isfile(path):
+                        return path
+            return ""
+        if game_id == "discord":
+            root = os.path.join(local, "Discord")
+            matches = glob.glob(os.path.join(root, "app-*", "Discord.exe"))
+            return max(matches, key=os.path.getmtime) if matches else ""
+        return ""
+
+    @staticmethod
+    def _gb_running(game_id):
+        if os.name != "nt":
+            return False
+        names = {
+            "valorant": {"valorant-win64-shipping.exe"},
+            "minecraft": {"javaw.exe"},
+            "fortnite": {"fortniteclient-win64-shipping.exe", "fortniteclient-win64-shipping_eac.exe"},
+            "bluestacks": {"hd-player.exe"},
+            "discord": {"discord.exe"},
+        }.get(game_id, set())
+        try:
+            return any((p.info.get("name") or "").lower() in names
+                       for p in psutil.process_iter(["name"]))
+        except (OSError, psutil.Error):
+            return False
+
+    @staticmethod
+    def _gb_patch_text(raw, game_id):
+        """Retorna bytes modificados e nomes efetivamente alterados, preservando demais linhas."""
+        encoding = "utf-8-sig" if raw.startswith(b"\xef\xbb\xbf") else "utf-8"
+        text = raw.decode(encoding)
+        updates = Api._GB_OPTIONS[game_id]
+        altered = []
+        for key, value in updates.items():
+            sep = ":" if game_id == "minecraft" else "="
+            pattern = re.compile(r"(?m)^(\s*" + re.escape(key)
+                                 + r"\s*" + re.escape(sep) + r"\s*)([^\r\n]*)$")
+            def patch(match):
+                if match.group(2).strip() != value:
+                    altered.append(key)
+                return match.group(1) + value
+            text = pattern.sub(patch, text)
+        return text.encode(encoding), list(dict.fromkeys(altered))
+
+    def game_profiles(self):
+        entries = self._gb_manifest()
+        out = {}
+        for game_id in self._GB_IDS:
+            path = self._gb_path_for(game_id)
+            entry = entries.get(game_id) or {}
+            applied = False
+            if entry.get("path") == path and path:
+                try:
+                    if entry.get("kind") == "file":
+                        applied = self._gb_sha(path) == entry.get("after_sha")
+                    elif entry.get("kind") == "gpu" and os.name == "nt" and winreg:
+                        with winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                                r"Software\Microsoft\DirectX\UserGpuPreferences") as key:
+                            val, _ = winreg.QueryValueEx(key, path)
+                            applied = val == entry.get("value")
+                except (OSError, ValueError):
+                    pass
+            out[game_id] = {"found": bool(path), "path": path, "applied": applied,
+                            "restorable": bool(entry), "running": self._gb_running(game_id),
+                            "kind": "arquivo" if game_id in self._GB_OPTIONS else "gráficos do Windows"}
+        return out
+
+    def game_optimize(self, game_id):
+        if game_id not in self._GB_IDS:
+            return {"ok": False, "error": "Perfil de jogo inválido."}
+        if self._gb_running(game_id):
+            return {"ok": False, "error": "Feche o jogo ou aplicativo antes de aplicar o perfil."}
+        path = self._gb_path_for(game_id)
+        if not path:
+            return {"ok": False, "error": "Instalação ou configuração não encontrada."}
+        entries = self._gb_manifest()
+        if game_id in entries:
+            return {"ok": False, "error": "Já existe um backup desse perfil. Restaure antes de reaplicar."}
+        if game_id in self._GB_OPTIONS:
+            try:
+                with open(path, "rb") as handle:
+                    original = handle.read()
+                patched, fields = self._gb_patch_text(original, game_id)
+                if not fields:
+                    return {"ok": False, "error": "Sem configurações compatíveis para alterar neste arquivo."}
+                fd, backup = tempfile.mkstemp(prefix=game_id+"_",suffix=".bak",
+                                               dir=self._gb_root())
+                with os.fdopen(fd, "wb") as handle:
+                    handle.write(original)
+                temp = path + ".lztemp"
+                try:
+                    with open(temp, "wb") as handle:
+                        handle.write(patched)
+                    os.replace(temp, path)
+                finally:
+                    if os.path.exists(temp):
+                        os.remove(temp)
+                entry = {"kind": "file", "path": path, "backup": backup,
+                         "before_sha": hashlib.sha256(original).hexdigest(),
+                         "after_sha": hashlib.sha256(patched).hexdigest(),
+                         "when": time.strftime("%Y-%m-%d %H:%M")}
+                entries[game_id] = entry
+                try:
+                    self._gb_write_manifest(entries)
+                except OSError:
+                    with open(path, "wb") as handle:
+                        handle.write(original)
+                    raise
+                return {"ok": True, "changes": fields, "restorable": True,
+                        "summary": "Configuração salva com backup: "+", ".join(fields)}
+            except (OSError, ValueError, UnicodeError) as exc:
+                return {"ok": False, "error": "Não foi possível modificar a configuração: "+str(exc)}
+        if os.name != "nt" or not winreg:
+            return {"ok": False, "error": "Preferência gráfica disponível apenas no Windows."}
+        keypath = r"Software\Microsoft\DirectX\UserGpuPreferences"
+        preference = "GpuPreference=2;" if game_id == "bluestacks" else "GpuPreference=1;"
+        try:
+            with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, keypath, 0,
+                                    winreg.KEY_READ | winreg.KEY_WRITE) as key:
+                try:
+                    original, original_type = winreg.QueryValueEx(key, path)
+                    existed = True
+                except FileNotFoundError:
+                    original, original_type, existed = "", winreg.REG_SZ, False
+                if existed and original == preference:
+                    return {"ok": False, "error": "A preferência gráfica já está aplicada."}
+                winreg.SetValueEx(key, path, 0, winreg.REG_SZ, preference)
+            entries[game_id] = {"kind": "gpu", "path": path,
+                                "existed": existed, "original": original,
+                                "original_type": original_type, "value": preference,
+                                "when": time.strftime("%Y-%m-%d %H:%M")}
+            try:
+                self._gb_write_manifest(entries)
+            except OSError:
+                with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, keypath, 0,
+                                        winreg.KEY_SET_VALUE) as key:
+                    if existed:
+                        winreg.SetValueEx(key, path, 0, original_type, original)
+                    else:
+                        winreg.DeleteValue(key, path)
+                raise
+            return {"ok": True, "changes": ["Preferência gráfica do Windows"],
+                    "restorable": True,
+                    "summary": ("Alto desempenho" if game_id == "bluestacks"
+                                else "Economia de energia") + " configurado para o aplicativo."}
+        except OSError as exc:
+            return {"ok": False, "error": "Não foi possível configurar a GPU: "+str(exc)}
+
+    def game_restore(self, game_id):
+        if game_id not in self._GB_IDS:
+            return {"ok": False, "error": "Perfil inválido."}
+        entries = self._gb_manifest()
+        entry = entries.get(game_id)
+        if not entry:
+            return {"ok": False, "error": "Não há backup para restaurar."}
+        path = entry.get("path", "")
+        if path != self._gb_path_for(game_id):
+            return {"ok": False, "error": "O caminho do aplicativo mudou; verifique o backup manualmente."}
+        if self._gb_running(game_id):
+            return {"ok": False, "error": "Feche o aplicativo antes de restaurar."}
+        try:
+            if entry["kind"] == "file":
+                backup = entry.get("backup", "")
+                root = os.path.realpath(self._gb_root())
+                if (not backup or os.path.commonpath((root,os.path.realpath(backup))) != root
+                        or not os.path.isfile(backup)):
+                    return {"ok": False, "error": "Arquivo de backup não encontrado."}
+                if self._gb_sha(path) != entry.get("after_sha"):
+                    return {"ok": False, "error": "Arquivo alterado depois do perfil. O backup foi preservado."}
+                shutil.copy2(backup, path)
+            else:
+                if os.name != "nt" or not winreg:
+                    return {"ok": False, "error": "Restauração disponível somente no Windows."}
+                with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER,
+                        r"Software\Microsoft\DirectX\UserGpuPreferences",0,
+                        winreg.KEY_READ | winreg.KEY_WRITE) as key:
+                    try:
+                        current, _ = winreg.QueryValueEx(key, path)
+                    except FileNotFoundError:
+                        current = None
+                    if current != entry.get("value"):
+                        return {"ok": False, "error": "Preferência alterada depois do perfil; backup preservado."}
+                    if entry.get("existed"):
+                        winreg.SetValueEx(key,path,0,entry.get("original_type",winreg.REG_SZ),
+                                          entry.get("original",""))
+                    else:
+                        winreg.DeleteValue(key,path)
+            del entries[game_id]
+            self._gb_write_manifest(entries)
+            return {"ok": True, "summary": "Configuração anterior restaurada."}
+        except (OSError, ValueError, KeyError) as exc:
+            return {"ok": False, "error": "Falha ao restaurar: "+str(exc)}
 
     def restore(self):
         code, _ = run(["powershell", "-NoProfile", "-Command",

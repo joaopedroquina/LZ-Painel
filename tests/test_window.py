@@ -1,5 +1,6 @@
 """Window bridge tests: no changes to the host PC or GUI startup."""
 import importlib.util
+import tempfile
 from pathlib import Path
 import sys
 import types
@@ -40,6 +41,29 @@ class WindowTests(unittest.TestCase):
         self.assertEqual(set(self.api._PRIVACY_ITEMS), {"search_web", "feedback", "search_history"})
         self.assertFalse(self.api.privacy_apply("disable_defender")["ok"])
         self.assertFalse(self.api.privacy_restore("diagtrack")["ok"])
+
+    def test_game_boost_allowlist_and_file_backup_restore(self):
+        self.assertEqual(set(self.api._GB_IDS),
+                         {"valorant", "minecraft", "fortnite", "bluestacks", "discord"})
+        self.assertFalse(self.api.game_optimize("unknown")["ok"])
+        self.assertFalse(self.api.game_restore("unknown")["ok"])
+        with tempfile.TemporaryDirectory() as folder:
+            config = Path(folder) / "options.txt"
+            original = b"renderDistance:16\nsimulationDistance:12\\notherSetting:keep\\n"
+            config.write_bytes(original)
+            with patch.object(self.api, "_gb_path_for", return_value=str(config)), \
+                 patch.object(self.api, "_gb_root", return_value=folder), \
+                 patch.object(self.api, "_gb_running", return_value=False):
+                result = self.api.game_optimize("minecraft")
+                self.assertTrue(result["ok"], result)
+                updated = config.read_text()
+                self.assertIn("renderDistance:8", updated)
+                self.assertIn("otherSetting:keep", updated)
+                self.assertTrue(self.api.game_profiles()["minecraft"]["applied"])
+                self.assertFalse(self.api.game_optimize("minecraft")["ok"])
+                restored = self.api.game_restore("minecraft")
+                self.assertTrue(restored["ok"], restored)
+                self.assertEqual(config.read_bytes(), original)
 
     def test_no_window(self):
         self.api._window = None
