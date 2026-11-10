@@ -481,6 +481,91 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 @media(max-width:800px){.gb-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.gb-grid,.gb-options,.gb-tabs,.gb-advanced{grid-template-columns:1fr}}
 
+/* LZ v1.3: janela corrigida, miniaturas de jogos e telas de manutenção. */
+.main{min-width:0;overflow:visible}
+.appbar{position:relative!important;top:auto!important;z-index:15;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;min-height:60px;max-width:100%;width:100%;box-shadow:0 6px 18px #0003!important;overflow:visible;isolation:isolate}
+.appdrag{min-width:0;align-self:stretch}
+.apppromo{grid-column:2;min-width:0}
+.appbar-right{grid-column:3;justify-self:end;white-space:nowrap}
+.winset{flex:none}.hd{position:relative;z-index:1}
+.gb-art{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+.gb-art:before,.gb-art:after,.gb-artglow,.gb-artglyph,.gb-art b{display:none!important}
+.gb-card.valorant .gb-art{background-image:linear-gradient(0deg,#170b16aa,transparent 40%),url('assets/games/valorant.svg')!important}
+.gb-card.minecraft .gb-art{background-image:linear-gradient(0deg,#0c251aaa,transparent 40%),url('assets/games/minecraft.svg')!important}
+.gb-card.fortnite .gb-art{background-image:linear-gradient(0deg,#120a24aa,transparent 40%),url('assets/games/fortnite.svg')!important}
+.gb-card.bluestacks .gb-art{background-image:linear-gradient(0deg,#061423aa,transparent 40%),url('assets/games/bluestacks.svg')!important}
+.gb-card.discord .gb-art{background-image:linear-gradient(0deg,#091344aa,transparent 40%),url('assets/games/discord.svg')!important}
+.gb-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #0008,0 0 0 1px #326ade55;transition:transform .2s,box-shadow .2s}
+@media(max-width:1130px){
+ .appbar{gap:8px;padding:8px!important;grid-template-columns:minmax(12px,1fr) auto auto!important}
+ .apppromo{font-size:11px;gap:5px}
+ .apppromo button{padding:7px 9px}
+ .appbar-right{gap:5px}
+ .userchip{padding:4px 7px}.userav{width:23px;height:23px}
+ .winbtn{width:27px}
+}
+@media(max-width:700px){.appbar .userplan{display:none}.apppromo span{display:none}.winbtn{width:25px}}
+.mem-shade{position:fixed;inset:0;z-index:55;background:#05070cba;backdrop-filter:blur(6px);display:grid;place-items:center}
+.mem-box{width:min(460px,92vw);border:1px solid #3d4657;border-radius:22px;background:#22262f;box-shadow:0 20px 70px #0009;padding:24px;display:grid;gap:14px}
+.mem-head{display:flex;align-items:center;gap:12px}
+.mem-icon{width:40px;height:40px;border-radius:11px;background:#203754;color:#80bbff;display:grid;place-items:center;font-size:21px}
+.mem-head h3{font-size:18px}.mem-caption{color:#b7bdc9;font-size:13px}
+.mem-progress{height:7px;background:#151a24;border-radius:10px;overflow:hidden}
+.mem-progress>i{display:block;width:0%;height:100%;background:linear-gradient(90deg,#296fff,#61b6ff);border-radius:10px;transition:width .35s}
+.mem-stage{display:grid;grid-template-columns:23px 1fr auto;gap:8px;align-items:center;padding:7px 0;font-size:12px;color:#b0bac9}
+.mem-stage .glyph{color:#7f9abf;font-size:14px}.mem-stage.done .glyph{color:#34d399}.mem-stage.active .glyph{color:#4b9cff}
+.mem-stage .detail{color:#98a8bc;font-size:11px}
+.mem-close{border:1px solid #44516a;border-radius:10px;background:#273344;color:#f6f8fd;padding:10px;cursor:pointer}
+.mem-close:disabled{opacity:.4;cursor:default}
+.st-shell{display:grid;grid-template-columns:200px minmax(0,1fr);gap:26px;align-items:start}
+.st-nav{display:grid;gap:6px;padding:2px}
+.st-nav button{border:0;border-radius:10px;background:transparent;color:#b8c3d5;text-align:left;padding:11px 13px;cursor:pointer;font-size:13px}
+.st-nav button.active{background:#282e38;color:#fff;box-shadow:inset 3px 0 0 #3486ff}
+.st-content{display:grid;gap:14px;min-width:0}
+.st-content h3{font-size:14px}.st-content p{font-size:12px;color:#aab3c2}
+.st-panel{border:1px solid #343b46;border-radius:17px;background:#242830;overflow:hidden}
+.st-panel-h{padding:17px;border-bottom:1px solid #343b46;font-weight:750}
+.st-block{padding:17px 19px;border-top:1px solid #303640}
+.st-block:first-of-type{border-top:0}
+.st-block>strong{font-size:13px}.st-block>p{margin:5px 0 14px}
+.st-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.st-preview{border:1px solid #384252;border-radius:13px;overflow:hidden;background:#1a1e26;color:#ccd5e7;text-align:left;cursor:pointer}
+.st-preview.selected,.st-lang.selected{outline:2px solid #4d91ff;outline-offset:-2px}
+.st-mini{height:104px;padding:10px;display:flex;gap:7px;background:#eee}
+.st-mini:before{content:'';width:22%;border-radius:5px;background:#dae0e7}
+.st-mini:after{content:'';flex:1;border-radius:5px;background:#fff}
+.st-mini.dark{background:#101216}.st-mini.dark:before{background:#2a3039}.st-mini.dark:after{background:#242830}
+.st-mini.system{background:linear-gradient(138deg,#fafafa 48%,#1a1d23 49%)}.st-mini.system:after{background:#a7b1c2}
+.st-preview label{display:block;padding:10px;font-size:11px;cursor:pointer}
+.st-langs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.st-lang{border:1px solid #383f4c;border-radius:12px;background:#262b35;text-align:left;padding:12px;cursor:pointer;display:flex;gap:9px;align-items:center}
+.st-lang span{font-size:21px}.st-lang strong{font-size:12px;display:block}.st-lang small{color:#a3afc1;font-size:10px;display:block}
+.st-lang:disabled{opacity:.48;cursor:not-allowed}
+.st-controlrow{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:14px 17px;border-top:1px solid #313947}
+.st-controlrow small{display:block;color:#a2adbc;font-size:12px;margin-top:4px}
+.bios-shell{width:min(610px,100%);margin:0 auto;border:1px solid #3c485b;border-radius:24px;background:linear-gradient(160deg,#313642,#20242b);overflow:hidden}
+.bios-cover{padding:24px;background:linear-gradient(145deg,#394152,#282e3a)}
+.bios-tag{color:#4dda9e;font-size:11px;font-weight:800;letter-spacing:.06em}
+.bios-cover h2{font-size:25px;margin:14px 0 8px}.bios-cover p{font-size:13px;color:#bac5d6;line-height:1.6}
+.bios-metrics{padding:16px;border-radius:15px;background:#1f242c;border:1px solid #3d4655;margin-top:16px}
+.bios-metrics strong{display:block;margin-bottom:8px}
+.bios-steps{display:grid;gap:12px;padding:22px}
+.bios-step{border:1px solid #3b4350;border-radius:13px;padding:14px;display:flex;gap:12px;align-items:start;background:#22262e}
+.bios-step-icon{height:32px;width:32px;border-radius:50%;display:grid;place-items:center;background:#2b3750;flex:none;color:#c4dcff}
+.bios-step b{display:block}.bios-step small{display:block;color:#afb7c5;line-height:1.5;margin-top:4px}
+.bios-link{display:block;width:100%;border:1px solid #3b90ff;border-radius:13px;background:#1b6de8;color:#fff;font-weight:800;font-size:14px;padding:13px;cursor:pointer;text-align:center}
+.bios-disclaimer{font-size:11px;color:#a3aebc;text-align:center;padding:4px 12px}
+html[data-ui-theme=light] body{background:#edf1f7;color:#1b263a}
+html[data-ui-theme=light] .shell,html[data-ui-theme=light] .main{background:#f6f8fc;color:#1b263a}
+html[data-ui-theme=light] .side{background:#e7edf6}
+html[data-ui-theme=light] .side .nav{color:#36445b}
+html[data-ui-theme=light] .side .nav.on{color:#fff}
+html[data-ui-theme=light] .card,html[data-ui-theme=light] .st-panel{background:#fff;color:#1b263a;border-color:#dbe2ed}
+html[data-ui-theme=light] .appbar{background:#fff;border-color:#d7e0ed}
+@media(max-width:920px){.st-shell{grid-template-columns:1fr}.st-nav{grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}.st-nav button{text-align:center;padding:9px 3px;font-size:11px}}
+@media(max-width:600px){.st-options,.st-langs{grid-template-columns:1fr 1fr}.st-nav{grid-template-columns:repeat(3,1fr)}}
+
+
 </style>
 </head>
 <body>
@@ -609,6 +694,16 @@ h1{font-size:28px;font-weight:700;letter-spacing:-.4px;line-height:1.15}
 </main>
 </div>
 
+<div class="mem-shade" id="memOverlay" hidden aria-hidden="true">
+ <section class="mem-box" role="dialog" aria-modal="true" aria-labelledby="memTitle">
+  <header class="mem-head"><span class="mem-icon">▥</span><div><h3 id="memTitle">Liberando memória...</h3><p class="mem-caption" id="memSubtitle">Preparando a manutenção segura do computador.</p></div></header>
+  <div class="mem-progress"><i id="memBar"></i></div>
+  <div class="mem-stage" id="memStage1"><span class="glyph">◌</span><span>Liberar memória RAM disponível</span><span class="detail" id="memResult1"></span></div>
+  <div class="mem-stage" id="memStage2"><span class="glyph">◌</span><span>Limpar arquivos temporários</span><span class="detail" id="memResult2"></span></div>
+  <div class="mem-stage" id="memStage3"><span class="glyph">◌</span><span>Renovar cache DNS</span><span class="detail" id="memResult3"></span></div>
+  <button class="mem-close" id="memClose" disabled>Concluir</button>
+ </section>
+</div>
 <div class="toast" id="toast" role="status"><svg class="i"><use href="#ck"/></svg><span id="tt"></span></div>
 <div class="md" id="md" hidden><div class="card mb" role="dialog" aria-modal="true"><h3 id="mt"></h3><p id="mp"></p><div class="mbt"><button class="ghost" id="mn">Cancelar</button><button class="btn sm" id="my">Confirmar</button></div></div></div>
 
@@ -723,6 +818,32 @@ function bindWindowChrome(){
   b.title=maximized?'Restaurar janela':'Maximizar janela';
  };
  const pulse=$('#appPulse');if(pulse)pulse.onclick=()=>toast('Novidades e atalhos rápidos em breve');
+}
+
+let memBusy=false;
+async function memoryCleanFlow(){
+ if(memBusy)return;
+ if(!await ask('Manutenção segura','Liberar RAM, excluir arquivos temporários removíveis e renovar o cache DNS? Arquivos em uso, downloads, documentos e arquivos pessoais serão preservados.','Iniciar'))return;
+ memBusy=true;
+ const shade=$('#memOverlay');shade.hidden=false;shade.setAttribute('aria-hidden','false');
+ $('#memClose').disabled=true;$('#memTitle').textContent='Liberando memória...';$('#memSubtitle').textContent='Executando as etapas com segurança.';$('#memBar').style.width='0%';
+ for(let i=1;i<=3;i++){const e=$('#memStage'+i);e.className='mem-stage';e.querySelector('.glyph').textContent='◌';$('#memResult'+i).textContent=''}
+ const stage=async(i,func)=>{
+  const e=$('#memStage'+i);e.classList.add('active');e.querySelector('.glyph').textContent='◴';
+  let result='Não concluído';
+  try{result=await func()}catch(e){result='Falhou'}
+  e.classList.remove('active');e.classList.add('done');e.querySelector('.glyph').textContent='✓';
+  $('#memResult'+i).textContent=result;$('#memBar').style.width=Math.round(i/3*100)+'%';
+ };
+ try{
+  await stage(1,async()=>{const n=await A('freemem');return typeof n==='number'?fmt(n)+' devolvidos':'Indisponível'});
+  await stage(2,async()=>{const scan=await A('scan')||[],total=scan.reduce((a,x)=>a+Math.max(0,Number(x[1])||0),0);
+    if(!total)return 'Sem temporários removíveis';
+    const n=await A('clean');return typeof n==='number'?fmt(n)+' removidos':'Não foi possível limpar'});
+  await stage(3,async()=>await A('flushdns')?'Cache renovado':'Não concluído');
+  $('#memTitle').textContent='Manutenção concluída';$('#memSubtitle').textContent='Somente arquivos temporários acessíveis foram removidos; não é possível eliminar todo o lixo do PC.';
+  await tick(true);analyze();
+ }finally{memBusy=false;$('#memClose').disabled=false}
 }
 
 /* ---------- tarefas de otimização (usadas no Dashboard e na tela Otimização) ---------- */
@@ -1096,7 +1217,7 @@ V.game=async()=>{
   bind();
  }];
 };
-V.mem=async()=>{const st=await A('stats')||{}; const pct=st.ram_total?Math.round(st.ram_used/st.ram_total*100):0; return [card('Memória', row('Uso atual da RAM', `<span class="mono">${pct}%</span>`, `Em uso: ${(Number(st.ram_used)||0).toFixed(1).replace('.',',')} de ${(Number(st.ram_total)||0).toFixed(1).replace('.',',')} GB.`)+row('Liberar memória', bt('Executar agora','memfree','pri'),'Tenta devolver RAM disponível sem fechar seus apps.')+row('Monitoramento', bt('Abrir Processos','memproc'),'Veja quais processos mais consomem memória.')),()=>{$('#memfree').onclick=async()=>{toast('Liberando memória…');toast('Liberados '+fmt(await A('freemem')||0))};$('#memproc').onclick=()=>go('proc')}]};
+V.mem=async()=>{const st=await A('stats')||{}; const pct=st.ram_total?Math.round(st.ram_used/st.ram_total*100):0; return [card('Memória', row('Uso atual da RAM', `<span class="mono">${pct}%</span>`, `Em uso: ${(Number(st.ram_used)||0).toFixed(1).replace('.',',')} de ${(Number(st.ram_total)||0).toFixed(1).replace('.',',')} GB.`)+row('Liberar memória', bt('Executar agora','memfree','pri'),'Tenta devolver RAM disponível sem fechar seus apps.')+row('Monitoramento', bt('Abrir Processos','memproc'),'Veja quais processos mais consomem memória.')),()=>{$('#memfree').onclick=()=>memoryCleanFlow();$('#memproc').onclick=()=>go('proc')}]};
 V.bios=async()=>[
  '<section class="bios-shell"><div class="bios-cover"><span class="bios-tag">✣ RECURSOS GRATUITOS · GUIA DE BIOS</span>'+
  '<h2>Seu raio-X de BIOS está a um passo</h2><p>Entre na comunidade LZ para conversar sobre sua placa-mãe e descobrir como consultar as opções da BIOS com segurança.</p>'+
@@ -1147,9 +1268,10 @@ if(g.dataset.go||g.dataset.v)go(g.dataset.go||g.dataset.v);
 else if(g.dataset.open)await A('abrir',g.dataset.open);
 else if(g.dataset.act==='restore'){toast('Criando ponto de restauração…');toast(await A('restore')||'Não foi possível criar')}
 else if(g.dataset.act==='fullopt'){startQuickOptimization()}
-else if(g.dataset.act==='freemem'){toast('Liberando memória…');toast('Liberados '+fmt(await A('freemem')||0)+' de memória');tick(true)}
+else if(g.dataset.act==='freemem'){memoryCleanFlow()}
 else if(g.dataset.act==='netopt'){toast('Otimizando rede…');await A('flushdns');const pg=await A('ping')||[],ms=pg.map(x=>x[1]).filter(x=>x!=null).sort((a,b)=>a-b);toast(ms.length?'DNS limpo · latência de '+ms[Math.floor(ms.length/2)]+' ms':'DNS limpo. Sem conexão no momento')}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#md').hidden)$('#mn').click();else $('#np').hidden=true}});
+$('#memClose').onclick=()=>{if(memBusy)return;$('#memOverlay').hidden=true;$('#memOverlay').setAttribute('aria-hidden','true')};
 $('#bellb').onclick=()=>{const n=$('#np');n.hidden=!n.hidden;if(!n.hidden){npRender();$('#bellb').classList.remove('un')}};
 applyUiLanguage();
 $('#rean').onclick=()=>analyze();
