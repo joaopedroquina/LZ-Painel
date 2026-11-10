@@ -65,6 +65,11 @@ class WindowTests(unittest.TestCase):
                 self.assertTrue(restored["ok"], restored)
                 self.assertEqual(config.read_bytes(), original)
 
+    def test_discord_community_opens_only_official_invite(self):
+        with patch.object(self.app.webbrowser, "open", return_value=True) as opener:
+            self.assertTrue(self.api.open_community())
+            opener.assert_called_once_with("https://discord.gg/efdF2Cfrb", new=2)
+
     def test_no_window(self):
         self.api._window = None
         self.assertFalse(self.api.window_action("close"))

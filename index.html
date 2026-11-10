@@ -642,6 +642,13 @@ const sleep=t=>new Promise(r=>setTimeout(r,t)),clamp=(v,a=0,b=100)=>Math.max(a,M
 let S={};try{S=JSON.parse(localStorage.painel||'{}')}catch(e){}
 const save=()=>{try{localStorage.painel=JSON.stringify(S)}catch(e){}};
 document.body.classList.toggle('calm',!!S.calm);
+function applyUiTheme(){
+ const theme=['dark','light','system'].includes(S.theme)?S.theme:'dark';
+ const resolved=theme==='system'?(window.matchMedia?.('(prefers-color-scheme: light)').matches?'light':'dark'):theme;
+ document.documentElement.dataset.uiTheme=resolved;
+}
+applyUiTheme();
+
 const MAXH=40;
 let timer,gn=0,DEMO=false,JUNK=0,INFO={},analyzing=false,AX={},CUR={cpu:0,rp:0,used:0,tot:16,dsk:0,tmp:null,free:0,total:0},HL={cpu:[],ram:[],dsk:[],tmp:[]};
 const LOG=[];
@@ -653,6 +660,7 @@ const MB=2**20,MJ=[1.1*2**30,.8*2**30,.5*2**30];
 const MA=['7-Zip','Discord','Google Chrome','Microsoft Visual C++ 2015-2022 Redistributable (x64)','Spotify','Steam','Visual Studio Code'].map(n=>({name:n,ver:'1.0.0',pub:'Fabricante',can:true}));
 const MS=[['DiagTrack','Telemetria do Windows','Envia dados de diagnóstico e uso à Microsoft.',1],['WerSvc','Relatório de erros do Windows','Envia relatórios de falhas à Microsoft.',1],['Fax','Fax','Envio e recebimento de fax.',1],['SysMain','SysMain (Superfetch)','Pré-carrega apps na memória. Pode ser desativado em SSD; em HD costuma ajudar.',0],['Spooler','Spooler de impressão','Necessário para imprimir. Desative só se não usa impressora.',0]].map(x=>({name:x[0],title:x[1],desc:x[2],safe:!!x[3],on:true,running:true}));
 const MOCK={
+open_community:()=>false,
 game_profiles:()=>Object.fromEntries(['valorant','minecraft','fortnite','bluestacks','discord'].map(id=>[id,{found:false,applied:false,restorable:false,running:false}])),
 game_optimize:()=>({ok:false,error:'Prévia: nenhuma alteração foi aplicada ao PC.'}),
 game_restore:()=>({ok:false,error:'Prévia: não há backup para restaurar.'}),
@@ -785,6 +793,22 @@ function initFlyout(){}
 
 /* ---------- telas ---------- */
 const T={dash:['Dashboard','Visão geral do seu PC.'],jogos:['FPS Boost','Perfil de desempenho para jogos e FPS.'],input:['Input Lag','Ajustes focados em responsividade e latência do sistema.'],game:['Game Boost','Aplique melhorias rápidas para uma sessão de jogo mais limpa.'],apps:['Apps','Gerencie programas instalados e desinstale o que não usa.'],mem:['Memória','Veja o uso atual da RAM e libere memória quando necessário.'],rede:['Rede','Conexão, latência e DNS.'],bios:['BIOS','Ferramentas e atalhos úteis para sistema e hardware.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],debloat:['Debloat','Reduza bloat e serviços desnecessários com segurança.'],updates:['Atualizações','Revise opções e preferências ligadas ao Windows Update.'],proc:['Processos','Uso em tempo real e processos ativos.'],pers:['Personalização','Preferências visuais do painel e ajustes de interface.'],config:['Configurações','Preferências gerais do painel.']};
+
+const ORIGINAL_TITLES=Object.fromEntries(Object.entries(T).map(([k,v])=>[k,v[0]]));
+const LANG_TITLES={
+ en:{dash:'Dashboard',jogos:'FPS Boost',input:'Input Lag',game:'Game Boost',apps:'Apps',mem:'Memory',rede:'Network',bios:'BIOS',limpeza:'Cleanup',debloat:'Debloat',updates:'Updates',proc:'Processes',pers:'Customization',config:'Settings'},
+ es:{dash:'Panel principal',jogos:'FPS Boost',input:'Input Lag',game:'Game Boost',apps:'Aplicaciones',mem:'Memoria',rede:'Red',bios:'BIOS',limpeza:'Limpieza',debloat:'Debloat',updates:'Actualizaciones',proc:'Procesos',pers:'Personalización',config:'Configuración'}
+};
+function applyUiLanguage(){
+ const titles=LANG_TITLES[S.lang]||{};
+ for(const [key,item] of Object.entries(T))item[0]=titles[key]||ORIGINAL_TITLES[key];
+ document.querySelectorAll('.side .nav[data-v]').forEach(node=>{
+  const label=node.querySelector('.lbl');if(label)label.textContent=T[node.dataset.v]?.[0]||label.textContent;
+ });
+ const k=document.querySelector('.side .nav.on')?.dataset.v||'dash';
+ if($('#h1'))$('#h1').textContent=T[k]?.[0]||'LZ Painel';
+}
+
 const V={};
 V.otim=async()=>{const ids=['temp','dns','ram','plan','serv'],def={temp:1,dns:1,ram:1};
 return [card('Otimizar tudo',`<p class="nt">Execute limpeza de temporários, renovação do DNS e verificação de inicialização, serviços e desempenho. No final, veja o relatório como no vídeo.</p><button class="btn sm" data-act="fullopt">✧ Otimizar tudo</button>`) +card('Ajustes individuais','<div class="opt-track" aria-hidden="true"><span id="optline"></span></div>'+ids.map(id=>row(`<label class="chk"><input type="checkbox" id="o_${id}" ${def[id]?'checked':''}><span><b style="font-weight:600">${TASKS[id].t}</b><small>${TASKS[id].d}</small></span></label>`,`<span class="st-run" id="r_${id}"></span>`)).join(''),bt('Executar agora','ex','pri')),()=>{$('#ex').onclick=async()=>{const sel=ids.filter(id=>$('#o_'+id).checked);if(!sel.length)return toast('Marque pelo menos uma opção');
@@ -961,7 +985,37 @@ $('#sr').onclick=async()=>{const a=l.filter(s=>s.safe&&s.on);if(!a.length)return
 $('#sd').onclick=async()=>{const a=l.filter(s=>!s.on);if(!a.length)return toast('Todos os serviços já estão no padrão');toast('Restaurando…');const n=await set(a,true);toast(n+' de '+a.length+' serviços restaurados');go('servicos')}}]};
 V.priv=async()=>[card('Permissões e preferências',[['privacy-webcam','Câmera','Quais apps podem usar a câmera.'],['privacy-microphone','Microfone','Quais apps podem gravar áudio.'],['privacy-location','Localização','Quais apps sabem onde você está.'],['privacy-general','Geral','ID de publicidade e idioma.'],['privacy-feedback','Diagnóstico e comentários','Dados enviados à Microsoft.']].map(x=>row(x[1],ob('Revisar',x[0]),x[2])).join(''))];
 V.ferr=async()=>[card('Utilitários do Windows',[['taskmgr','Gerenciador de Tarefas','Veja e encerre programas.'],['resmon','Monitor de Recursos','Uso detalhado de CPU, disco e rede.'],['cleanmgr','Limpeza de Disco','Ferramenta de limpeza do Windows.'],['devmgmt','Gerenciador de Dispositivos','Drivers e hardware.'],['diskmgmt','Gerenciamento de Disco','Partições e unidades.'],['services','Serviços','Serviços do Windows.'],['msinfo','Informações do sistema','Detalhes completos do PC.'],['cmd','Prompt de comando','Terminal do Windows.']].map(x=>row(x[1],ob('Abrir',x[0]),x[2])).join('')+row('Ponto de restauração','<button class="ghost" data-act="restore">Criar</button>','Salva o estado do Windows para voltar atrás se algo der errado.'))];
-V.config=async()=>[card('Preferências',row('Atualizar valores em tempo real',tg('cl1',S.live!==false),'CPU, memória, disco e temperatura no Dashboard.')+row('Reduzir animações',tg('cl2',!!S.calm),'Deixa o painel mais leve em PCs fracos.')+row('Versão','1.0')),()=>{$('#cl1').onchange=e=>{S.live=e.target.checked;save();if(S.live)tick()};$('#cl2').onchange=e=>{S.calm=e.target.checked;save();document.body.classList.toggle('calm',S.calm)}}];
+V.config=async()=>{
+ const tabs=[['geral','◉','Geral'],['conta','♙','Conta'],['sistema','▣','Sistema'],['seguranca','◇','Segurança'],['sobre','ⓘ','Sobre']];
+ const langs=[['pt','🇧🇷','Português','Brasil'],['en','🇺🇸','English','United States'],['es','🇪🇸','Español','España'],['de','🇩🇪','Deutsch','Em breve'],['fr','🇫🇷','Français','Em breve'],['ru','🇷🇺','Русский','Em breve'],['ja','🇯🇵','日本語','Em breve'],['ko','🇰🇷','한국어','Em breve'],['system','🌐','System','Windows language']];
+ const render=tab=>{
+ if(tab==='geral')return '<div class="st-panel"><div class="st-panel-h">◉ Aparência</div>'+
+  '<div class="st-block"><strong>Tema</strong><p>Escolha como o LZ Painel aparece na sua tela.</p><div class="st-options">'+
+  [['light','Claro'],['dark','Escuro'],['system','Sistema']].map(([id,label])=>'<button class="st-preview '+(S.theme===id||(!S.theme&&id==='dark')?'selected':'')+'" data-theme="'+id+'"><div class="st-mini '+(id==='dark'?'dark':id==='system'?'system':'')+'"></div><label>'+(S.theme===id||(!S.theme&&id==='dark')?'✓ ':'○ ')+label+'</label></button>').join('')+
+  '</div></div><div class="st-block"><strong>Idioma</strong><p>Português, inglês e espanhol alteram os títulos e o menu. Mais idiomas estão em preparação.</p><div class="st-langs">'+
+  langs.map(([id,flag,name,sub])=>'<button class="st-lang '+((S.lang||'pt')===id?'selected':'')+'" data-language="'+id+'" '+(!['pt','en','es','system'].includes(id)?'disabled':'')+'><span>'+flag+'</span><div><strong>'+name+'</strong><small>'+sub+'</small></div></button>').join('')+
+  '</div></div></div>';
+ if(tab==='conta')return '<div class="st-panel"><div class="st-panel-h">♙ Conta</div><div class="st-block"><strong>Versão gratuita</strong><p>O LZ Painel funciona localmente. Nenhum login foi necessário para abrir esta versão.</p></div></div>';
+ if(tab==='sistema')return '<div class="st-panel"><div class="st-panel-h">▣ Sistema</div><div class="st-controlrow"><div><strong>Atualizar valores em tempo real</strong><small>CPU, RAM, disco e temperaturas quando disponíveis.</small></div>'+tg('stLive',S.live!==false)+'</div><div class="st-controlrow"><div><strong>Reduzir animações</strong><small>Melhora a responsividade em computadores mais lentos.</small></div>'+tg('stCalm',!!S.calm)+'</div></div>';
+ if(tab==='seguranca')return '<div class="st-panel"><div class="st-panel-h">◇ Segurança</div><div class="st-block"><strong>Proteções preservadas</strong><p>Este painel não desativa Windows Defender, Windows Update ou Microsoft Store. As otimizações de jogos exigem confirmação e oferecem backup quando arquivos são modificados.</p></div></div>';
+ return '<div class="st-panel"><div class="st-panel-h">ⓘ Sobre o LZ Painel</div><div class="st-block"><strong>LZ Painel — Desktop</strong><p>Central de otimização e monitoramento do Windows. A versão exibida na interface é informativa; os ganhos reais variam por PC.</p></div></div>';
+ };
+ return ['<section class="st-shell"><aside class="st-nav">'+tabs.map(([id,icon,name])=>'<button data-st-tab="'+id+'" class="'+(id==='geral'?'active':'')+'">'+icon+' '+name+'</button>').join('')+'</aside><div class="st-content"><div><h3>GERAL</h3><p>Aparência, idioma e preferências do painel.</p></div><div id="stDynamic">'+render('geral')+'</div></div></section>',()=>{
+  const current=$('#stDynamic');
+  const choose=tab=>{current.innerHTML=render(tab);document.querySelectorAll('[data-st-tab]').forEach(b=>b.classList.toggle('active',b.dataset.stTab===tab));bind()};
+  const bind=()=>{
+   current.querySelectorAll('[data-theme]').forEach(b=>b.onclick=()=>{S.theme=b.dataset.theme;save();applyUiTheme();choose('geral');toast('Tema atualizado: '+b.textContent.trim())});
+   current.querySelectorAll('[data-language]').forEach(b=>b.onclick=()=>{
+    S.lang=b.dataset.language==='system'?'pt':b.dataset.language;save();applyUiLanguage();choose('geral');toast('Idioma atualizado');
+   });
+   const live=$('#stLive');if(live)live.onchange=e=>{S.live=e.target.checked;save();if(S.live)tick()};
+   const calm=$('#stCalm');if(calm)calm.onchange=e=>{S.calm=e.target.checked;save();document.body.classList.toggle('calm',S.calm)};
+  };
+  document.querySelectorAll('[data-st-tab]').forEach(b=>b.onclick=()=>choose(b.dataset.stTab));
+  bind();
+ }];
+};
+
 
 
 V.input=async()=>{const s=await A('stats')||{}; return [card('Input Lag', row('Reduzir processos em segundo plano', bt('Abrir Processos','ilgoproc','pri'),'Revise o que está pesando no sistema antes de jogar.')+row('Plano de energia', bt('Abrir Energia','ilgoener'),'Cheque o modo de energia quando quiser máximo desempenho.')+row('Uso atual da CPU', `<span class="mono">${Number.isFinite(s.cpu)?Math.round(s.cpu)+'%':'Indisponível'}</span>`, 'A latência tende a piorar quando a CPU já está muito ocupada.')),()=>{$('#ilgoproc').onclick=()=>go('proc');$('#ilgoener').onclick=()=>go('jogos')}]};
@@ -1043,7 +1097,22 @@ V.game=async()=>{
  }];
 };
 V.mem=async()=>{const st=await A('stats')||{}; const pct=st.ram_total?Math.round(st.ram_used/st.ram_total*100):0; return [card('Memória', row('Uso atual da RAM', `<span class="mono">${pct}%</span>`, `Em uso: ${(Number(st.ram_used)||0).toFixed(1).replace('.',',')} de ${(Number(st.ram_total)||0).toFixed(1).replace('.',',')} GB.`)+row('Liberar memória', bt('Executar agora','memfree','pri'),'Tenta devolver RAM disponível sem fechar seus apps.')+row('Monitoramento', bt('Abrir Processos','memproc'),'Veja quais processos mais consomem memória.')),()=>{$('#memfree').onclick=async()=>{toast('Liberando memória…');toast('Liberados '+fmt(await A('freemem')||0))};$('#memproc').onclick=()=>go('proc')}]};
-V.bios=async()=>V.ferr();
+V.bios=async()=>[
+ '<section class="bios-shell"><div class="bios-cover"><span class="bios-tag">✣ RECURSOS GRATUITOS · GUIA DE BIOS</span>'+
+ '<h2>Seu raio-X de BIOS está a um passo</h2><p>Entre na comunidade LZ para conversar sobre sua placa-mãe e descobrir como consultar as opções da BIOS com segurança.</p>'+
+ '<div class="bios-metrics"><strong>◈ Antes de alterar a BIOS</strong><p>Verifique o modelo da placa-mãe, a versão da BIOS e a compatibilidade dos recursos. Não há diagnóstico de hardware automático nesta página.</p></div></div>'+
+ '<div class="bios-steps"><div class="bios-step"><span class="bios-step-icon">1</span><div><b>Entre no servidor Discord</b><small>O convite oficial abre no navegador para que você possa entrar com sua conta.</small></div></div>'+
+ '<div class="bios-step"><span class="bios-step-icon">2</span><div><b>Converse com a comunidade</b><small>Compartilhe o modelo da placa-mãe e peça orientações. Deixar feedback é opcional.</small></div></div>'+
+ '<div class="bios-step"><span class="bios-step-icon">3</span><div><b>Revise os ajustes recomendados</b><small>Não altere voltagens, firmware ou configurações que não compreende. O painel não afirma liberar acesso automaticamente.</small></div></div>'+
+ '<button class="bios-link" id="biosDiscord">◈ Entrar no Discord e liberar</button>'+
+ '<p class="bios-disclaimer">Você será direcionado ao convite discord.gg/efdF2Cfrb. A entrada depende da confirmação no Discord.</p></div></section>',
+ ()=>{
+  $('#biosDiscord').onclick=async()=>{
+   const ok=await A('open_community');
+   if(!ok){window.open('https://discord.gg/efdF2Cfrb','_blank','noopener,noreferrer');}
+  };
+ }
+];
 V.debloat=async()=>V.servicos();
 V.updates=async()=>[card('Atualizações', row('Windows Update', ob('Abrir opções','windowsupdate'),'Abra a tela oficial do Windows Update.')+row('Observação', '<small style="color:var(--mut)">Esta categoria é apenas de revisão. O painel não desativa Windows Update automaticamente.</small>','Mantenha o Windows em dia quando quiser estabilidade e segurança.'))];
 V.proc=async()=>V.monitor();
@@ -1082,6 +1151,7 @@ else if(g.dataset.act==='freemem'){toast('Liberando memória…');toast('Liberad
 else if(g.dataset.act==='netopt'){toast('Otimizando rede…');await A('flushdns');const pg=await A('ping')||[],ms=pg.map(x=>x[1]).filter(x=>x!=null).sort((a,b)=>a-b);toast(ms.length?'DNS limpo · latência de '+ms[Math.floor(ms.length/2)]+' ms':'DNS limpo. Sem conexão no momento')}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('#md').hidden)$('#mn').click();else $('#np').hidden=true}});
 $('#bellb').onclick=()=>{const n=$('#np');n.hidden=!n.hidden;if(!n.hidden){npRender();$('#bellb').classList.remove('un')}};
+applyUiLanguage();
 $('#rean').onclick=()=>analyze();
 $('#opt').onclick=()=>startQuickOptimization();
 

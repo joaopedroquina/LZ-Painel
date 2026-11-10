@@ -1,4 +1,5 @@
 import os
+import webbrowser
 import re
 import json
 import glob
@@ -923,6 +924,13 @@ class Api:
             return {"ok": True, "summary": "Configuração anterior restaurada."}
         except (OSError, ValueError, KeyError) as exc:
             return {"ok": False, "error": "Falha ao restaurar: "+str(exc)}
+
+    def open_community(self):
+        """Abre apenas o convite oficial configurado da comunidade, no navegador externo."""
+        try:
+            return bool(webbrowser.open("https://discord.gg/efdF2Cfrb", new=2))
+        except Exception:
+            return False
 
     def restore(self):
         code, _ = run(["powershell", "-NoProfile", "-Command",

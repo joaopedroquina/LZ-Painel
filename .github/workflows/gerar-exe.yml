@@ -53,7 +53,7 @@ jobs:
 
       - name: Criar Painel.exe
         run: |
-          python -m PyInstaller --noconfirm --clean --onefile --windowed --name Painel --icon icone.ico --add-data "index.html;." --collect-all webview app.py
+          python -m PyInstaller --noconfirm --clean --onefile --windowed --name Painel --icon icone.ico --add-data "index.html;." --add-data "assets;assets" --collect-all webview app.py
 
       - name: Disponibilizar executavel
         uses: actions/upload-artifact@v4

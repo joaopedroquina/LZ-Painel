@@ -49,7 +49,36 @@ const fs=require('node:fs');
   assert.equal(await page.locator('.gb-history').count(),1);
   await page.evaluate(()=>go('jogos'));
 
+  await page.evaluate(()=>go('game'));
+  assert.equal(await page.locator('.gb-card').count(),5);
+  assert.equal(await page.locator('.gb-art').count(),5);
+  assert.equal(await page.locator('.gb-art').first().evaluate(e=>getComputedStyle(e).backgroundImage.includes('valorant.svg')),true);
+  await page.evaluate(()=>go('config'));
+  assert.equal(await page.locator('[data-st-tab]').count(),5);
+  assert.equal(await page.locator('[data-theme]').count(),3);
+  await page.locator('[data-theme="light"]').click();
+  assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'light');
+  await page.locator('[data-language="en"]').click();
+  assert.equal(await page.locator('.side [data-v="config"] .lbl').innerText(),'Settings');
+  await page.locator('[data-theme="dark"]').click();
+  await page.locator('[data-language="pt"]').click();
+  await page.evaluate(()=>go('bios'));
+  assert.equal(await page.locator('#biosDiscord').isVisible(),true);
+  assert.equal((await page.locator('.bios-disclaimer').innerText()).includes('discord.gg/efdF2Cfrb'),true);
+  await page.evaluate(()=>go('dash'));
+  await page.locator('[data-act="freemem"]').click();
+  assert.equal(await page.locator('#md').isVisible(),true);
+  await page.locator('#my').click();
+  assert.equal(await page.locator('#memOverlay').isVisible(),true);
+  await page.waitForFunction(()=>!memBusy,{timeout:45000});
+  assert.equal(await page.locator('#memClose').isEnabled(),true);
+  assert.equal(await page.locator('#memStage3 .glyph').innerText(),'✓');
+  await page.locator('#memClose').click();
+  assert.equal(await page.locator('#memOverlay').isVisible(),false);
+  assert.equal(await page.locator('.appbar').evaluate(e=>getComputedStyle(e).position),'relative');
+
   await page.evaluate(()=>{
+
    window.testActions=[];
    window.pywebview={api:{window_action:async action=>{window.testActions.push(action);return true}}};
    bindWindowChrome();
