@@ -566,6 +566,63 @@ html[data-ui-theme=light] .appbar{background:#fff;border-color:#d7e0ed}
 @media(max-width:600px){.st-options,.st-langs{grid-template-columns:1fr 1fr}.st-nav{grid-template-columns:repeat(3,1fr)}}
 
 
+
+/* LZ MINIMAL — transparência legível, bordas suaves e rolagem sem barra visível. */
+html,body,.side,.main,#view,.view{scrollbar-width:none!important;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar,.side::-webkit-scrollbar,.main::-webkit-scrollbar,#view::-webkit-scrollbar,.view::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
+.shell{border-radius:28px;overflow:clip;border-color:#364154a3;box-shadow:0 18px 65px #0007}
+.side{border-radius:27px 0 0 27px;gap:5px}
+.nav{border-radius:13px}.side .nav.on{box-shadow:0 7px 22px #156bda37}
+.main{gap:17px;padding:15px 26px 28px}
+.appbar{grid-template-columns:minmax(0,1fr) auto!important;border-radius:20px!important;min-height:61px}
+.appbar .appdrag{grid-column:1;min-height:39px}
+.appbar .appbar-right{grid-column:2;gap:9px}
+.appmini{border-color:#435772;background:#253147;color:#91b8ff}
+.appmini:hover{background:#334666;border-color:#6485c0}
+.appmini .badge{background:#3976e1;color:#fff;box-shadow:0 0 0 3px #242936}
+.hd{padding:4px 2px 1px}
+.card,.qc,.il-card,.up-card,.fpsx-panel,.fpsx-cats,.fpsx-hero,.st-panel,.bios-shell,.gb-shell{border-radius:20px!important}
+#v-dash,.view{min-width:0}
+html:not([data-ui-theme="light"]) .side{background:linear-gradient(165deg,rgba(32,38,50,.95),rgba(19,23,31,.93));backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+html:not([data-ui-theme="light"]) .appbar{background:linear-gradient(130deg,rgba(38,45,59,.88),rgba(23,27,36,.87))!important;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-color:#42506b80!important}
+html:not([data-ui-theme="light"]) .card,html:not([data-ui-theme="light"]) .qc,html:not([data-ui-theme="light"]) .il-card,html:not([data-ui-theme="light"]) .up-card{background:linear-gradient(145deg,rgba(40,47,61,.83),rgba(29,34,44,.93));border-color:#46506685;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+html[data-ui-theme="light"] .appbar{background:#f8fbff!important;border-color:#d8e0ed!important}
+html[data-ui-theme="light"] .il-card,html[data-ui-theme="light"] .up-card{background:#fff;border-color:#d8e0ed;color:#1b263a}
+.il-wrap,.up-wrap{display:grid;gap:18px;min-width:0}
+.il-summary,.up-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:23px;border:1px solid #3f52767d;border-radius:22px;background:linear-gradient(120deg,#142b51ad,#222834ad)}
+.il-summary h2,.up-hero h2{font-size:22px;margin:6px 0 8px}
+.il-summary p,.up-hero p{font-size:13px;color:#aab8ce;line-height:1.55;max-width:660px}
+.il-eyebrow,.up-eyebrow{font-size:11px;font-weight:800;color:#89b6ff;letter-spacing:.12em}
+.il-summary-stats{display:flex;gap:9px;flex-shrink:0}
+.il-summary-stats>div{min-width:115px;background:#1b293e91;border:1px solid #3e5472a6;border-radius:14px;padding:13px}
+.il-summary-stats small{display:block;color:#a7bad5;font-size:10.5px;margin-bottom:7px}
+.il-summary-stats strong{font-size:23px}
+.il-section-heading,.up-group-title{display:flex;align-items:center;gap:11px;flex-wrap:wrap;margin-top:3px}
+.il-section-heading strong,.up-group-title strong{font-size:15px}
+.il-section-heading small,.up-group-title small{font-size:12px;color:#91a2b9}
+.il-grid,.up-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.il-card{padding:17px;min-width:0;display:grid;align-content:start;gap:12px;border:1px solid #465066}
+.il-card-top{display:flex;align-items:center;gap:12px;min-width:0}
+.il-icon,.up-icon{width:39px;height:39px;border-radius:12px;background:#284466;color:#abd0ff;display:grid;place-items:center;flex-shrink:0;font-size:19px}
+.il-label{flex:1;min-width:0}.il-label strong{display:block;font-size:13px}.il-label small{display:block;font-size:11px;color:#9babbe;margin-top:4px;line-height:1.4}
+.il-card>p{font-size:12px;line-height:1.6;color:#9facbd;margin:0}
+.il-button,.up-card button{padding:9px 12px;background:#246eeb;border:1px solid #4084fa;border-radius:11px;color:#fff;font-size:12px;font-weight:750;cursor:pointer;white-space:nowrap}
+.il-button.secondary{background:#27344a;border-color:#45618e;color:#dbe7ff}
+.il-button:disabled,.up-card button:disabled{opacity:.55;cursor:default}
+.il-indicator{font-size:11px;white-space:nowrap;border-radius:10px;padding:8px 9px;background:#293445;color:#bdc7d7}
+.il-indicator.done{background:#1b4a3b;color:#78eab3}
+.il-footnote,.up-footnote{font-size:11px;color:#91a2b9;line-height:1.5;padding:4px}
+.up-hero{justify-content:flex-start}
+.up-hero-icon{width:63px;height:63px;border-radius:17px;display:grid;place-items:center;background:#2360c5;color:white;font-size:32px;flex:none}
+.up-card{display:flex;align-items:center;gap:15px;border:1px solid #465066;padding:18px;min-width:0}
+.up-card>div{flex:1;min-width:0}
+.up-card strong{font-size:13px}.up-card p{font-size:12px;color:#9aabc0;line-height:1.5;margin:5px 0 0}
+.up-official{font-size:10px;color:#8bbaec;display:block;margin-top:9px}
+.up-vendor.nvidia .up-icon{color:#b5f79c;background:#243a2f}
+.up-vendor.amd .up-icon{color:#ffb0b0;background:#462b32}
+@media(max-width:1100px){.il-grid,.up-grid{grid-template-columns:1fr}}
+@media(max-width:770px){.il-summary{flex-direction:column;align-items:flex-start}.il-summary-stats{width:100%}.il-summary-stats>div{flex:1}.up-card{flex-wrap:wrap}.up-card button{margin-left:auto}}
+
 </style>
 </head>
 <body>
@@ -610,8 +667,8 @@ html[data-ui-theme=light] .appbar{background:#fff;border-color:#d7e0ed}
   <button class="nav on" data-v="dash" data-tip="Dashboard" aria-label="Dashboard"><svg class="i"><use href="#dash"/></svg><span class="lbl">Dashboard</span></button>
   <div class="sec">Otimização</div>
   <button class="nav" data-v="jogos" data-tip="FPS Boost" aria-label="FPS Boost"><svg class="i"><use href="#bolt"/></svg><span class="lbl">FPS Boost</span></button>
-  <button class="nav" data-v="input" data-tip="Input Lag" aria-label="Input Lag"><svg class="i"><use href="#pulse"/></svg><span class="lbl">Input Lag</span><span class="meta"><span class="mini-badge pro">PRO</span></span></button>
-  <button class="nav" data-v="game" data-tip="Game Boost" aria-label="Game Boost"><svg class="i"><use href="#pad"/></svg><span class="lbl">Game Boost</span><span class="meta"><span class="mini-badge pro">PRO</span><span class="mini-badge beta">BETA</span></span></button>
+  <button class="nav" data-v="input" data-tip="Input Lag" aria-label="Input Lag"><svg class="i"><use href="#pulse"/></svg><span class="lbl">Input Lag</span><span class="meta"></span></button>
+  <button class="nav" data-v="game" data-tip="Game Boost" aria-label="Game Boost"><svg class="i"><use href="#pad"/></svg><span class="lbl">Game Boost</span><span class="meta"><span class="mini-badge beta">BETA</span></span></button>
   <button class="nav" data-v="apps" data-tip="Apps" aria-label="Apps"><svg class="i"><use href="#box"/></svg><span class="lbl">Apps</span></button>
   <button class="nav" data-v="mem" data-tip="Memória" aria-label="Memória"><svg class="i"><use href="#ram"/></svg><span class="lbl">Memória</span></button>
   <button class="nav" data-v="rede" data-tip="Rede" aria-label="Rede"><svg class="i"><use href="#wifi"/></svg><span class="lbl">Rede</span></button>
@@ -619,9 +676,9 @@ html[data-ui-theme=light] .appbar{background:#fff;border-color:#d7e0ed}
   <div class="sec">Sistema</div>
   <button class="nav" data-v="limpeza" data-tip="Limpeza" aria-label="Limpeza"><svg class="i"><use href="#trash"/></svg><span class="lbl">Limpeza</span></button>
   <button class="nav" data-v="debloat" data-tip="Debloat" aria-label="Debloat"><svg class="i"><use href="#svc"/></svg><span class="lbl">Debloat</span></button>
-  <button class="nav" data-v="updates" data-tip="Atualizações" aria-label="Atualizações"><svg class="i"><use href="#refresh"/></svg><span class="lbl">Atualizações</span><span class="meta"><span class="mini-badge pro">PRO</span></span></button>
+  <button class="nav" data-v="updates" data-tip="Atualizações" aria-label="Atualizações"><svg class="i"><use href="#refresh"/></svg><span class="lbl">Atualizações</span><span class="meta"></span></button>
   <button class="nav" data-v="proc" data-tip="Processos" aria-label="Processos"><svg class="i"><use href="#monitor"/></svg><span class="lbl">Processos</span></button>
-  <button class="nav" data-v="pers" data-tip="Personalização" aria-label="Personalização"><svg class="i"><use href="#gear"/></svg><span class="lbl">Personalização</span><span class="meta"><span class="mini-badge pro">PRO</span></span></button>
+  <button class="nav" data-v="pers" data-tip="Personalização" aria-label="Personalização"><svg class="i"><use href="#gear"/></svg><span class="lbl">Personalização</span><span class="meta"></span></button>
   <div class="sp"></div>
   <button class="nav" data-v="config" data-tip="Configurações" aria-label="Configurações"><svg class="i"><use href="#gear"/></svg><span class="lbl">Configurações</span></button>
   <div class="ver">LZ Painel • v1.0</div>
@@ -631,7 +688,7 @@ html[data-ui-theme=light] .appbar{background:#fff;border-color:#d7e0ed}
 <main class="main">
   <div class="appbar">
     <div class="appdrag pywebview-drag-region" id="appdrag" title="Arraste para mover o painel"></div>
-    <div class="apppromo"><b>▻</b><span>Cupom de 10% OFF</span><button type="button">Aproveitar</button></div>
+    
     <div class="appbar-right">
       <div class="userchip"><div class="userav">LZ</div><div class="userplan">GRÁTIS</div></div>
       <button class="appmini" id="appPulse" aria-label="Central de novidades"><svg class="i"><use href="#refresh"/></svg><span class="badge">7</span></button>
@@ -1139,7 +1196,63 @@ V.config=async()=>{
 
 
 
-V.input=async()=>{const s=await A('stats')||{}; return [card('Input Lag', row('Reduzir processos em segundo plano', bt('Abrir Processos','ilgoproc','pri'),'Revise o que está pesando no sistema antes de jogar.')+row('Plano de energia', bt('Abrir Energia','ilgoener'),'Cheque o modo de energia quando quiser máximo desempenho.')+row('Uso atual da CPU', `<span class="mono">${Number.isFinite(s.cpu)?Math.round(s.cpu)+'%':'Indisponível'}</span>`, 'A latência tende a piorar quando a CPU já está muito ocupada.')),()=>{$('#ilgoproc').onclick=()=>go('proc');$('#ilgoener').onclick=()=>go('jogos')}]};
+V.input=async()=>{
+ const [stats,inputState,interfaceState]=await Promise.all([A('stats'),A('input_lag_status'),A('interface_status')]);
+ const cpu=Number.isFinite(stats?.cpu)?Math.round(stats.cpu):null;
+ const inputStatus=inputState||{},iface=interfaceState||{};
+ const profiles=[
+  {key:'mouse_acceleration',label:'Aceleração do mouse',symbol:'⌖',
+   description:'Desative a aceleração do ponteiro para movimentos mais consistentes. Jogos com entrada bruta podem ignorar esta opção.',
+   note:'Pode exigir sair e entrar na conta do Windows.'},
+  {key:'background_capture',label:'Gravação em segundo plano',symbol:'▣',
+   description:'Desative a captura automática de clipes do Game Bar. Essa mudança também desativa algumas funções de gravação.',
+   note:'A gravação pode ser reativada com o backup.'},
+  {key:'menu_delay',label:'Resposta dos menus',symbol:'↗',source:'interface',
+   description:'Reduza a espera ao abrir menus do Windows. Melhora a sensação da interface, não a latência dentro dos jogos.',
+   note:'A interface pode precisar de novo login para refletir a mudança.'}
+ ];
+ const applied=profiles.filter(p=>(p.source==='interface'?iface:inputStatus)[p.key]?.applied===true).length;
+ const item=p=>{
+   const current=(p.source==='interface'?iface:inputStatus)[p.key]||{};
+   let action='<span class="il-indicator muted">Indisponível</span>';
+   if(current.applied===true){
+     action=current.restorable
+       ?'<button type="button" class="il-button secondary" data-il-profile="'+p.key+'" data-il-type="'+(p.source||'input')+'" data-il-method="restore">Restaurar</button>'
+       :'<span class="il-indicator done">✓ Já configurado</span>';
+   }else if(current.supported===true){
+     action='<button type="button" class="il-button" data-il-profile="'+p.key+'" data-il-type="'+(p.source||'input')+'" data-il-method="apply">Aplicar</button>';
+   }
+   return '<article class="il-card"><div class="il-card-top"><span class="il-icon">'+p.symbol+'</span><div class="il-label"><strong>'+p.label+'</strong><small>'+p.note+'</small></div>'+action+'</div><p>'+p.description+'</p></article>';
+ };
+ const link=(symbol,title,description,label,target,action='open')=>'<article class="il-card"><div class="il-card-top"><span class="il-icon">'+symbol+'</span><div class="il-label"><strong>'+title+'</strong><small>'+description+'</small></div><button type="button" class="il-button secondary" data-'+action+'="'+target+'">'+label+'</button></div></article>';
+ return [
+ '<section class="il-wrap"><div class="il-summary"><div><span class="il-eyebrow">RESPONSIVIDADE · WINDOWS 10 / 11</span><h2>Ajustes de Input Lag</h2><p>Configure o ponteiro, a captura de jogos e a resposta da interface com opções verificáveis e reversíveis.</p></div>'+
+ '<div class="il-summary-stats"><div><small>Configurações aplicadas</small><strong>'+applied+' / '+profiles.length+'</strong></div><div><small>CPU no momento</small><strong>'+(cpu===null?'N/D':cpu+'%')+'</strong></div></div></div>'+
+ '<div class="il-section-heading"><strong>Otimizações disponíveis</strong><small>Somente ajustes suportados pelo seu Windows podem ser aplicados.</small></div><div class="il-grid">'+profiles.map(item).join('')+'</div>'+
+ '<div class="il-section-heading"><strong>Ferramentas de responsividade</strong><small>Atalhos oficiais para revisar configurações antes de jogar.</small></div>'+
+ '<div class="il-grid il-tools">'+
+ link('🎮','Modo de Jogo do Windows','Confira se o Game Mode está ativado.','Configurar','gaming-gamemode')+
+ link('◴','Taxa de atualização do monitor','Revise os Hz usados pelo Windows.','Abrir','display-advanced')+
+ link('▣','Capturas do Windows','Revise opções de gravação e clipes do Game Bar.','Revisar','gaming-gamedvr')+
+ link('▥','Processos em segundo plano','Verifique processos que consomem CPU ou RAM.','Abrir','proc','go')+
+ '</div><p class="il-footnote">Não são alterados driver de mouse, temporizadores do sistema, configurações de BIOS ou recursos de proteção. O resultado em jogos depende do hardware e das configurações do jogo.</p></section>',
+ ()=>{
+  document.querySelectorAll('[data-il-profile]').forEach(button=>button.onclick=async()=>{
+    const id=button.dataset.ilProfile,method=button.dataset.ilMethod,source=button.dataset.ilType;
+    const label=profiles.find(p=>p.key===id)?.label||id;
+    const verb=method==='restore'?'restaurar':'aplicar';
+    if(!await ask('Input Lag — '+label,
+      'Deseja '+verb+' essa configuração? O estado anterior é salvo quando necessário e a alteração pode afetar suas preferências de mouse ou gravação.',
+      method==='restore'?'Restaurar':'Aplicar'))return;
+    button.disabled=true;
+    const endpoint=source==='interface'?'interface_'+method:'input_lag_'+method;
+    const result=await A(endpoint,id);
+    toast(result?.ok?(method==='restore'?'Configuração restaurada':'Configuração aplicada')+(result.relogin?' · talvez seja necessário entrar novamente':''):(result?.error||'Não foi possível concluir'));
+    await go('input');
+  });
+ }
+ ];
+};
 V.game=async()=>{
  const profiles=await A('game_profiles')||{};
  const games=[
@@ -1235,7 +1348,27 @@ V.bios=async()=>[
  }
 ];
 V.debloat=async()=>V.servicos();
-V.updates=async()=>[card('Atualizações', row('Windows Update', ob('Abrir opções','windowsupdate'),'Abra a tela oficial do Windows Update.')+row('Observação', '<small style="color:var(--mut)">Esta categoria é apenas de revisão. O painel não desativa Windows Update automaticamente.</small>','Mantenha o Windows em dia quando quiser estabilidade e segurança.'))];
+V.updates=async()=>[
+ '<section class="up-wrap"><div class="up-hero"><div class="up-hero-icon">↻</div><div><span class="up-eyebrow">WINDOWS · DRIVERS · HARDWARE</span>'+
+ '<h2>Central de atualizações</h2><p>Mantenha o Windows e os drivers atualizados usando apenas os aplicativos do sistema e os sites oficiais dos fabricantes.</p></div></div>'+
+ '<div class="up-group-title"><strong>Windows</strong><small>Ferramentas de atualização do sistema</small></div>'+
+ '<div class="up-grid">'+
+ '<article class="up-card"><span class="up-icon">⊞</span><div><strong>Windows Update</strong><p>Verifique atualizações de segurança e estabilidade do Windows.</p></div><button data-open="windowsupdate">Abrir</button></article>'+
+ '<article class="up-card"><span class="up-icon">↓</span><div><strong>Atualizações opcionais</strong><p>Confira drivers opcionais oferecidos pelo próprio Windows, se disponíveis.</p></div><button data-open="windowsupdate-optionalupdates">Verificar</button></article>'+
+ '<article class="up-card"><span class="up-icon">▣</span><div><strong>Gerenciador de Dispositivos</strong><p>Consulte o hardware e os drivers instalados.</p></div><button data-open="devmgmt">Abrir</button></article>'+
+ '</div><div class="up-group-title"><strong>Drivers da placa de vídeo</strong><small>Selecione sua fabricante e confirme o modelo da GPU antes de instalar.</small></div>'+
+ '<div class="up-grid up-driver-grid">'+
+ '<article class="up-card up-vendor nvidia"><span class="up-icon">◈</span><div><strong>NVIDIA</strong><p>Site oficial de drivers GeForce, Game Ready e Studio.</p><span class="up-official">Fonte oficial NVIDIA</span></div><button data-driver="nvidia">Buscar driver</button></article>'+
+ '<article class="up-card up-vendor amd"><span class="up-icon">◉</span><div><strong>AMD Radeon</strong><p>Drivers AMD Software: Adrenalin Edition e suporte de GPU.</p><span class="up-official">Fonte oficial AMD</span></div><button data-driver="amd">Buscar driver</button></article>'+
+ '</div><p class="up-footnote">O painel abre as ferramentas oficiais, mas não baixa nem instala drivers sozinho. Faça um ponto de restauração antes de alterações importantes; nunca remova drivers em uso sem necessidade.</p></section>',
+ ()=>{
+   document.querySelectorAll('[data-driver]').forEach(button=>button.onclick=async()=>{
+      const vendor=button.dataset.driver;
+      const ok=await A('open_driver_page',vendor);
+      if(!ok)toast('Não foi possível abrir a página oficial. Confira a conexão ou o navegador padrão.');
+   });
+ }
+];
 V.proc=async()=>V.monitor();
 V.pers=async()=>V.config();
 

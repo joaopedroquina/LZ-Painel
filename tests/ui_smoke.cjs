@@ -22,6 +22,23 @@ const fs=require('node:fs');
    assert.equal(await page.locator('#h1').innerText(),await page.evaluate(k=>T[k][0],k));
    assert.equal(await page.getByText('Não foi possível carregar esta tela.',{exact:false}).count(),0,'Falha na categoria '+k);
   }
+  // Input Lag e Atualizações: opções reversíveis e fontes oficiais.
+  assert.equal(await page.locator('.side .mini-badge.pro').count(),0);
+  assert.equal(await page.locator('.apppromo').count(),0);
+  assert.equal(await page.locator('.side').evaluate(e=>getComputedStyle(e).scrollbarWidth),'none');
+  await page.evaluate(()=>go('input'));
+  assert.equal(await page.locator('.il-card[data-id]').count(),0);
+  assert.equal(await page.locator('.il-card').count(),7);
+  assert.equal(await page.locator('.il-grid').count(),2);
+  assert.equal(await page.locator('.il-wrap').innerText().then(s=>s.includes('Plano de energia')),false);
+  await page.evaluate(()=>go('updates'));
+  assert.equal(await page.locator('.up-card').count(),5);
+  assert.equal(await page.locator('[data-driver]').count(),2);
+  assert.equal(await page.locator('[data-open="windowsupdate"]').count()>0,true);
+  await page.setViewportSize({width:1000,height:700});
+  assert.equal(await page.locator('.appbar').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),2);
+  await page.setViewportSize({width:1440,height:900});
+
   await page.evaluate(()=>go('jogos'));
   assert.equal(await page.locator('.fpsx-page').isVisible(),true);
   assert.equal(await page.locator('.fpsx-cat').count(),8);

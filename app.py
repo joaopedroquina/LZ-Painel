@@ -40,7 +40,8 @@ TOOLS = {"taskmgr": "taskmgr", "resmon": "resmon", "cleanmgr": "cleanmgr",
          "msinfo": "msinfo32", "cmd": "cmd", "appwiz": "appwiz.cpl"}
 SETTINGS = {"gaming-gamemode", "display-advancedgraphics", "network", "powersleep",
             "privacy-webcam", "privacy-microphone", "privacy-location",
-            "privacy-general", "privacy-feedback", "windowsupdate"}
+            "privacy-general", "privacy-feedback", "windowsupdate",
+            "windowsupdate-optionalupdates", "display-advanced", "gaming-gamedvr"}
 
 # nome do serviço: (título, descrição, início padrão, seguro desativar?)
 SERVICES = {
@@ -549,6 +550,146 @@ class Api:
                 return {"ok": True, "relogin": name in {"search_web", "search_history"}}
             except (OSError, KeyError, TypeError):
                 return {"ok": False, "error": "Não foi possível restaurar o ajuste."}
+
+
+    # Controles de responsividade seguros por usuário (HKCU) e reversíveis.
+    # Não modificam drivers, firmware, serviços, Defender ou proteções do Windows.
+    _INPUT_ITEMS = {
+        "mouse_acceleration": (
+            (r"Control Panel\Mouse", "MouseSpeed", "0", 1),
+            (r"Control Panel\Mouse", "MouseThreshold1", "0", 1),
+            (r"Control Panel\Mouse", "MouseThreshold2", "0", 1),
+        ),
+        "background_capture": (
+            (r"Software\Microsoft\Windows\CurrentVersion\GameDVR",
+             "AppCaptureEnabled", 0, 4),
+            (r"System\GameConfigStore", "GameDVR_Enabled", 0, 4),
+        ),
+    }
+
+    def _input_backup_path(self):
+        return os.path.join(os.path.dirname(self._interface_backup_path()),
+                            "input_lag_backup.json")
+
+    def _input_backups(self):
+        try:
+            with open(self._input_backup_path(), "r", encoding="utf-8") as handle:
+                value = json.load(handle)
+                return value if isinstance(value, dict) else {}
+        except (FileNotFoundError, OSError, ValueError, TypeError):
+            return {}
+
+    def _input_save_backups(self, data):
+        path = self._input_backup_path()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        tmp = path + ".tmp"
+        try:
+            with open(tmp, "w", encoding="utf-8") as handle:
+                json.dump(data, handle, ensure_ascii=False, indent=2)
+            os.replace(tmp, path)
+        finally:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+
+    def _input_read(self, entry):
+        path, name, _, default_type = entry
+        try:
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, path, 0, winreg.KEY_READ) as key:
+                value, value_type = winreg.QueryValueEx(key, name)
+                return {"exists": True, "value": value, "type": value_type}
+        except OSError:
+            return {"exists": False, "value": None, "type": default_type}
+
+    def _input_write(self, entry, data):
+        path, name, _, _ = entry
+        with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, path, 0,
+                                winreg.KEY_SET_VALUE) as key:
+            if data["exists"]:
+                winreg.SetValueEx(key, name, 0, data["type"], data["value"])
+            else:
+                try:
+                    winreg.DeleteValue(key, name)
+                except FileNotFoundError:
+                    pass
+
+    def input_lag_status(self):
+        supported = os.name == "nt" and winreg is not None
+        backups = self._input_backups() if supported else {}
+        result = {}
+        for name, entries in self._INPUT_ITEMS.items():
+            active = (all(self._input_read(e)["exists"]
+                          and self._input_read(e)["value"] == e[2]
+                          for e in entries) if supported else None)
+            result[name] = {"supported": supported, "applied": active,
+                            "restorable": name in backups}
+        return result
+
+    def input_lag_apply(self, name):
+        if name not in self._INPUT_ITEMS or os.name != "nt" or winreg is None:
+            return {"ok": False, "error": "Ajuste indisponível neste sistema."}
+        with self._interface_lock:
+            entries = self._INPUT_ITEMS[name]
+            current = [self._input_read(e) for e in entries]
+            if all(state["exists"] and state["value"] == e[2]
+                   for state, e in zip(current, entries)):
+                return {"ok": True, "already": True}
+            backups = self._input_backups()
+            if name not in backups:
+                backups[name] = current
+                try:
+                    self._input_save_backups(backups)
+                except OSError:
+                    return {"ok": False, "error": "Não foi possível salvar backup."}
+            written = []
+            try:
+                for entry, original in zip(entries, current):
+                    self._input_write(entry, {"exists": True, "value": entry[2],
+                                              "type": entry[3]})
+                    written.append((entry, original))
+            except OSError:
+                for entry, original in reversed(written):
+                    try:
+                        self._input_write(entry, original)
+                    except OSError:
+                        pass
+                return {"ok": False, "error": "Windows impediu a alteração; backup preservado."}
+            return {"ok": bool(self.input_lag_status()[name]["applied"]),
+                    "relogin": name == "mouse_acceleration"}
+
+    def input_lag_restore(self, name):
+        if name not in self._INPUT_ITEMS or os.name != "nt" or winreg is None:
+            return {"ok": False, "error": "Ajuste indisponível neste sistema."}
+        with self._interface_lock:
+            backups = self._input_backups()
+            states = backups.get(name)
+            entries = self._INPUT_ITEMS[name]
+            if not isinstance(states, list) or len(states) != len(entries):
+                return {"ok": False, "error": "Backup não encontrado."}
+            if not self.input_lag_status()[name]["applied"]:
+                return {"ok": False, "error": "Ajuste mudou desde a aplicação. Backup mantido para revisão."}
+            try:
+                for entry, original in zip(entries, states):
+                    self._input_write(entry, original)
+            except (OSError, TypeError, KeyError):
+                return {"ok": False, "error": "Restauração incompleta; backup preservado."}
+            backups.pop(name, None)
+            try:
+                self._input_save_backups(backups)
+            except OSError:
+                return {"ok": False, "error": "Restaurado, mas não foi possível atualizar o registro de backup."}
+            return {"ok": True, "relogin": name == "mouse_acceleration"}
+
+    def open_driver_page(self, vendor):
+        official = {
+            "nvidia": "https://www.nvidia.com/pt-br/drivers/",
+            "amd": "https://www.amd.com/pt/support/download/drivers.html",
+        }
+        if vendor not in official:
+            return False
+        try:
+            return bool(webbrowser.open(official[vendor], new=2))
+        except Exception:
+            return False
 
     def _interface_backup_path(self):
         folder = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),

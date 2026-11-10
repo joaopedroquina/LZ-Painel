@@ -70,6 +70,42 @@ class WindowTests(unittest.TestCase):
             self.assertTrue(self.api.open_community())
             opener.assert_called_once_with("https://discord.gg/efdF2Cfrb", new=2)
 
+    def test_input_lag_allowlist_and_restore(self):
+        self.assertEqual(set(self.api._INPUT_ITEMS),
+                         {"mouse_acceleration", "background_capture"})
+        self.assertFalse(self.api.input_lag_apply("disable_defender")["ok"])
+        self.assertFalse(self.api.input_lag_restore("remove_update")["ok"])
+        entries = self.api._INPUT_ITEMS["mouse_acceleration"]
+        live = {(e[0], e[1]): {"exists": True, "value": "1", "type": 1}
+                for e in entries}
+        def read(entry):
+            return dict(live[(entry[0], entry[1])])
+        def write(entry, state):
+            live[(entry[0], entry[1])] = dict(state)
+        with tempfile.TemporaryDirectory() as folder, \
+             patch.object(self.app.os, "name", "nt"), \
+             patch.object(self.app, "winreg", MagicMock()), \
+             patch.object(self.api, "_input_backup_path", return_value=str(Path(folder)/"backup.json")), \
+             patch.object(self.api, "_input_read", side_effect=read), \
+             patch.object(self.api, "_input_write", side_effect=write):
+            applied = self.api.input_lag_apply("mouse_acceleration")
+            self.assertTrue(applied["ok"], applied)
+            self.assertTrue(self.api.input_lag_status()["mouse_acceleration"]["applied"])
+            self.assertTrue(self.api.input_lag_status()["mouse_acceleration"]["restorable"])
+            restored = self.api.input_lag_restore("mouse_acceleration")
+            self.assertTrue(restored["ok"], restored)
+            self.assertTrue(all(item["value"] == "1" for item in live.values()))
+            self.assertFalse(self.api.input_lag_status()["mouse_acceleration"]["restorable"])
+
+    def test_driver_pages_are_official(self):
+        with patch.object(self.app.webbrowser, "open", return_value=True) as opener:
+            self.assertFalse(self.api.open_driver_page("random"))
+            self.assertTrue(self.api.open_driver_page("nvidia"))
+            self.assertTrue(self.api.open_driver_page("amd"))
+            urls = [call.args[0] for call in opener.call_args_list]
+            self.assertEqual(urls, ["https://www.nvidia.com/pt-br/drivers/",
+                                    "https://www.amd.com/pt/support/download/drivers.html"])
+
     def test_no_window(self):
         self.api._window = None
         self.assertFalse(self.api.window_action("close"))
