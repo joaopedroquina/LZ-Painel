@@ -77,7 +77,7 @@ class WindowTests(unittest.TestCase):
         self.assertFalse(self.api.input_lag_restore("remove_update")["ok"])
         entries = self.api._INPUT_ITEMS["mouse_acceleration"]
         live = {(e[0], e[1]): {"exists": True, "value": "1", "type": 1}
-                for e in entries}
+                for group in self.api._INPUT_ITEMS.values() for e in group}
         def read(entry):
             return dict(live[(entry[0], entry[1])])
         def write(entry, state):
