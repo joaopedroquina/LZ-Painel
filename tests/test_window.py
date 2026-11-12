@@ -142,6 +142,42 @@ class WindowTests(unittest.TestCase):
             self.assertFalse(out["ok"])
             self.assertIn("internet", out["error"])
 
+    def test_new_interface_settings_are_reversible(self):
+        names = set(self.api._INTERFACE_ITEMS)
+        self.assertTrue({"startup_delay", "menu_delay", "min_animate",
+                         "taskbar_animations", "mouse_hover"} <= names)
+        self.assertFalse(self.api.interface_apply("disable_defender")["ok"])
+        self.assertFalse(self.api.interface_restore("disable_update")["ok"])
+
+    def test_optional_services_protect_critical_services(self):
+        all_names = self.api._OPTIONAL_SERVICE_NAMES
+        self.assertTrue({"Fax", "MapsBroker", "TrkWks", "PhoneSvc"} <= all_names)
+        self.assertTrue({"WinDefend", "wuauserv", "ClipSVC", "SysMain", "WSearch"}.isdisjoint(all_names))
+        self.assertFalse(self.api.optional_service_apply("WinDefend")["ok"])
+        self.assertFalse(self.api.optional_service_restore("wuauserv")["ok"])
+        self.assertFalse(self.api.optional_service_apply("SysMain")["ok"])
+
+    def test_optional_service_backup_and_restore(self):
+        with tempfile.TemporaryDirectory() as folder:
+            backup = os.path.join(folder, "optional-service.json")
+            state = {"mode": "manual"}
+            service = MagicMock()
+            service.start_type.side_effect = lambda: state["mode"]
+            service.status.return_value = "stopped"
+            def execute(cmd, timeout=60):
+                self.assertEqual(cmd[:3], ["sc", "config", "Fax"])
+                state["mode"] = "disabled" if cmd[-1] == "disabled" else "manual"
+                return (0, "")
+            with patch.object(self.app.os, "name", "nt"), \
+                 patch.object(self.api, "_service_backup_path", return_value=backup), \
+                 patch.object(self.app.psutil, "win_service_get", return_value=service), \
+                 patch.object(self.app, "run", side_effect=execute):
+                self.assertTrue(self.api.optional_service_apply("Fax")["ok"])
+                self.assertTrue(self.api.optional_service_status()["Fax"]["restorable"])
+                self.assertTrue(self.api.optional_service_restore("Fax")["ok"])
+                self.assertEqual(state["mode"], "manual")
+                self.assertFalse(self.api.optional_service_status()["Fax"]["restorable"])
+
     def test_no_window(self):
         self.api._window = None
         self.assertFalse(self.api.window_action("close"))

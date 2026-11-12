@@ -40,7 +40,7 @@ UNINST = [r"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
           r"SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"]
 TOOLS = {"taskmgr": "taskmgr", "resmon": "resmon", "cleanmgr": "cleanmgr",
          "devmgmt": "devmgmt.msc", "diskmgmt": "diskmgmt.msc", "services": "services.msc",
-         "msinfo": "msinfo32", "cmd": "cmd", "appwiz": "appwiz.cpl"}
+         "msinfo": "msinfo32", "cmd": "cmd", "appwiz": "appwiz.cpl", "dxdiag": "dxdiag.exe"}
 SETTINGS = {"gaming-gamemode", "display-advancedgraphics", "network", "powersleep",
             "privacy-webcam", "privacy-microphone", "privacy-location",
             "privacy-general", "privacy-feedback", "windowsupdate",
@@ -64,6 +64,11 @@ SERVICES = {
     "XblAuthManager": ("Xbox: autenticação", "Login da Xbox. Necessário para Game Pass e o app Xbox.", "demand", False),
     "XboxNetApiSvc": ("Xbox: rede", "Recursos de rede da Xbox.", "demand", False),
     "TabletInputService": ("Teclado de toque e manuscrito", "Usado em telas de toque e canetas.", "demand", False),
+    "TrkWks": ("Vínculos de arquivos distribuídos", "Pode afetar vínculos de arquivos movidos pela rede. Use somente se não precisa do recurso.", "auto", False),
+    "PhoneSvc": ("Integração com celular", "Pode afetar os recursos Vincular ao Celular e aplicativos de telefone.", "demand", False),
+    "SSDPSRV": ("Descoberta UPnP", "Pode impedir descoberta de dispositivos de rede e TVs.", "demand", False),
+    "upnphost": ("Dispositivos UPnP", "Pode afetar dispositivos multimídia e serviços de rede.", "demand", False),
+    "wisvc": ("Windows Insider", "Necessário para compilações Insider. Não é recomendado desativar.", "demand", False),
 }
 
 _temp = {"v": None}
@@ -535,6 +540,104 @@ class Api:
             code, _ = run(["sc", "config", name, "start=", "disabled"])
         return code == 0
 
+
+    # Serviços OPCIONAIS: altera o tipo de início somente após confirmação na interface.
+    # O serviço não é encerrado à força; o estado original é salvo para restauração.
+    _OPTIONAL_SERVICE_NAMES = frozenset((
+        "DiagTrack", "dmwappushservice", "WerSvc", "MapsBroker", "RetailDemo",
+        "Fax", "WMPNetworkSvc", "TrkWks", "PhoneSvc", "SSDPSRV", "upnphost",
+    ))
+
+    def _service_backup_path(self):
+        return os.path.join(os.path.dirname(self._interface_backup_path()),
+                            "optional_service_backup.json")
+
+    def _service_backups(self):
+        try:
+            with open(self._service_backup_path(), "r", encoding="utf-8") as f:
+                val = json.load(f)
+            return val if isinstance(val, dict) else {}
+        except (OSError, TypeError, ValueError):
+            return {}
+
+    def _save_service_backups(self, data):
+        dst = self._service_backup_path()
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        tmp = dst + ".tmp"
+        try:
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(data, f, indent=2, ensure_ascii=False)
+            os.replace(tmp, dst)
+        finally:
+            if os.path.exists(tmp):
+                os.remove(tmp)
+
+    def optional_service_status(self):
+        result = {}
+        backups = self._service_backups()
+        for name in self._OPTIONAL_SERVICE_NAMES:
+            if name not in SERVICES or os.name != "nt":
+                continue
+            try:
+                service = psutil.win_service_get(name)
+                mode = service.start_type()
+                result[name] = {"found": True, "mode": mode,
+                                "disabled": mode == "disabled",
+                                "restorable": name in backups,
+                                "pending_restart": service.status() == "running" and mode == "disabled"}
+            except (OSError, psutil.Error):
+                result[name] = {"found": False, "restorable": name in backups}
+        return result
+
+    def optional_service_apply(self, name):
+        if (name not in self._OPTIONAL_SERVICE_NAMES or name not in SERVICES
+                or os.name != "nt"):
+            return {"ok": False, "error": "Serviço não permitido."}
+        with self._interface_lock:
+            try:
+                start_type = psutil.win_service_get(name).start_type()
+            except (OSError, psutil.Error):
+                return {"ok": False, "error": "Serviço indisponível neste PC."}
+            if start_type == "disabled":
+                return {"ok": False, "error": "Serviço já desativado. Não alterado."}
+            mode = {"automatic": "auto", "manual": "demand", "delayed": "delayed-auto"}.get(start_type)
+            if not mode:
+                return {"ok": False, "error": "Tipo de inicialização não reconhecido."}
+            backups = self._service_backups()
+            if name not in backups:
+                backups[name] = {"start": mode, "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+                try:
+                    self._save_service_backups(backups)
+                except OSError:
+                    return {"ok": False, "error": "Falha ao registrar o estado anterior."}
+            code, _ = run(["sc", "config", name, "start=", "disabled"])
+            return {"ok": code == 0, "restart": code == 0,
+                    "error": None if code == 0 else "Windows impediu a alteração; use permissão de administrador."}
+
+    def optional_service_restore(self, name):
+        if name not in self._OPTIONAL_SERVICE_NAMES or os.name != "nt":
+            return {"ok": False, "error": "Serviço não permitido."}
+        with self._interface_lock:
+            backups = self._service_backups()
+            record = backups.get(name)
+            if not isinstance(record, dict) or record.get("start") not in {"auto", "demand", "delayed-auto"}:
+                return {"ok": False, "error": "Backup original indisponível."}
+            try:
+                current_mode = psutil.win_service_get(name).start_type()
+            except (OSError, psutil.Error):
+                return {"ok": False, "error": "Serviço não encontrado."}
+            if current_mode != "disabled":
+                return {"ok": False, "error": "Serviço foi alterado externamente; backup preservado."}
+            code, _ = run(["sc", "config", name, "start=", record["start"]])
+            if code != 0:
+                return {"ok": False, "error": "Falha ao restaurar. Confira as permissões."}
+            backups.pop(name, None)
+            try:
+                self._save_service_backups(backups)
+            except OSError:
+                return {"ok": False, "error": "Tipo restaurado; backup ainda registrado."}
+            return {"ok": True, "restart": True}
+
     def freemem(self):
         """Esvazia o working set dos processos (libera RAM sem fechar nada). Retorna bytes liberados."""
         if os.name != "nt":
@@ -600,6 +703,10 @@ class Api:
         "startup_delay": (r"Software\Microsoft\Windows\CurrentVersion\Explorer\Serialize",
                           "StartupDelayInMSec", 0, 4),
         "menu_delay": (r"Control Panel\Desktop", "MenuShowDelay", "100", 1),
+        "min_animate": (r"Control Panel\Desktop\WindowMetrics", "MinAnimate", "0", 1),
+        "taskbar_animations": (r"Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced",
+                              "TaskbarAnimations", 0, 4),
+        "mouse_hover": (r"Control Panel\Mouse", "MouseHoverTime", "150", 1),
     }
 
     # Ajustes individuais de privacidade do usuário atual com backup e restauração.
@@ -889,8 +996,7 @@ class Api:
 
     def interface_status(self):
         if os.name != "nt" or winreg is None:
-            return {"startup_delay": {"applied": None, "supported": False, "restorable": False},
-                    "menu_delay": {"applied": None, "supported": False, "restorable": False},
+            return {**{k: {"applied": None, "supported": False, "restorable": False} for k in self._INTERFACE_ITEMS},
                     "perf_counters": {"applied": None, "supported": False},
                     "kernel_ram": {"applied": None, "supported": False},
                     "memory_compression": {"applied": None, "supported": False}}

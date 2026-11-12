@@ -645,6 +645,10 @@ html[data-ui-theme="light"] body{background:#f6f8fc}
 /* Remoção de contador numérico, mantendo o botão de novidades funcional. */
 .appmini .badge{display:none!important}
 
+.gb-art{position:relative;height:185px;overflow:hidden!important;background:#0d1730!important}
+.gb-art .gb-illustration{display:block;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;z-index:3}
+.gb-art:before,.gb-art:after{display:none!important}
+.gb-card .gb-art{background-image:none!important}
 </style>
 </head>
 <body>
@@ -1017,12 +1021,14 @@ for(const id of sel){const e=$('#r_'+id);if(!e)return;e.className='st-run is-bus
 if($('#ex'))b.disabled=false;toast(n+' otimizações concluídas');analyze()}}]};
 
 V.jogos=async()=>{
- const [plans,stats,startup,dns,svcs,scan,iface]=await Promise.all([
-   A('plans'),A('stats'),A('startup'),A('dns_status'),A('services'),A('scan'),A('interface_status')
+ const [plans,stats,startup,dns,svcs,scan,iface,inputStatus,optionalStatus]=await Promise.all([
+   A('plans'),A('stats'),A('startup'),A('dns_status'),A('services'),A('scan'),A('interface_status'),A('input_lag_status'),A('optional_service_status')
  ]);
  const planList=plans||[], st=stats||{}, startupList=startup||[], serviceList=svcs||[], scanList=scan||[], ifaceStatus=iface||{};
  const hi=planList.some(p=>p.on&&/alto|high|ultimate|máximo/i.test(p.name));
- const ifaceApplied=['startup_delay','menu_delay','perf_counters','kernel_ram','memory_compression'].filter(k=>ifaceStatus[k]&&ifaceStatus[k].applied===true).length;
+ const ifaceKeys=['startup_delay','menu_delay','min_animate','taskbar_animations','mouse_hover','perf_counters','kernel_ram','memory_compression'];
+ const ifaceApplied=ifaceKeys.filter(k=>ifaceStatus[k]?.applied===true).length;
+ const gpuCaptured=inputStatus?.background_capture?.applied===true?1:0;
  const safeDisabled=serviceList.filter(s=>s.safe&&!s.on).length;
  const startupOn=startupList.filter(x=>x.on).length;
  const ramPct=st.ram_total?Math.round(st.ram_used/st.ram_total*100):0;
@@ -1031,15 +1037,25 @@ V.jogos=async()=>{
  const privDone=['search_web','feedback','search_history'].filter(k=>privStatus[k]?.applied===true).length;
  const svcMap=new Map(serviceList.map(x=>[x.name,x]));
  const svcSpecs=[
- ['SysMain','Desativar SysMain (Superfetch)','Pré-carrega aplicativos na RAM; desativar pode prejudicar o carregamento.','med'],
- ['RemoteRegistry','Desativar Registro Remoto','Pode ser necessário para administração remota; revisão manual.','med'],
- ['WSearch','Desativar Windows Search','Desativar a indexação prejudica a busca e o desempenho de pesquisa.','high'],
- ['dmwappushservice','Desativar WAP Push Routing','Serviço opcional de mensagens; confirme antes de alterar.','']
+ ['SysMain','SysMain (Superfetch)','Pré-carrega aplicativos; pode beneficiar HDDs.','med'],
+ ['RemoteRegistry','Registro Remoto','Pode ser necessário para administração remota.','med'],
+ ['WSearch','Windows Search','Desativar a indexação prejudica a pesquisa.','high'],
+ ['dmwappushservice','Mensagens WAP Push','Comunicação opcional, confira se precisa do recurso.','med'],
+ ['MapsBroker','Mapas offline','Pode impedir a atualização de mapas offline.','med'],
+ ['Fax','Fax','Somente para quem não utiliza aparelhos de fax.',''],
+ ['RetailDemo','Demonstração de loja','Recurso de demonstração em estabelecimentos comerciais.',''],
+ ['WMPNetworkSvc','Media Player: compartilhamento','Compartilhamento de mídia pela rede pode parar.','med'],
+ ['TrkWks','Vínculos de arquivos distribuídos','Pode afetar vínculos de arquivos entre computadores.','med'],
+ ['PhoneSvc','Integração com celular','Pode afetar aplicativos de conexão com o telefone.','med'],
+ ['SSDPSRV','Descoberta UPnP','Pode parar de localizar TVs e dispositivos de rede.','med'],
+ ['upnphost','Hospedagem UPnP','Pode interromper serviços multimídia e dispositivos.','med'],
+ ['wisvc','Windows Insider','Mantenha se participa do Insider; revisão manual.','high']
  ];
  const svcItems=svcSpecs.map(([name,title,desc,risk])=>{
    const x=svcMap.get(name);
-   return {icon:'▤',title,desc,risk,svc:name,svcOn:x?.on,svcAllowed:!!x?.safe,
-      state:x?(x.on?'Ativo':'Desativado'):'Indisponível'};
+   return {icon:'▤',title,desc,risk,svc:name,svcOn:x?.on,svcAllowed:optionalStatus?.[name]?.found===true,
+      svcRestorable:optionalStatus?.[name]?.restorable===true,
+      state:x?(x.on?'Ativo':optionalStatus?.[name]?.restorable?'Desativado · backup salvo':'Desativado'):'Indisponível'};
  });
  const svcAvailable=svcSpecs.filter(([name])=>svcMap.has(name));
  const svcOff=svcAvailable.filter(([name])=>!svcMap.get(name).on).length;
@@ -1070,19 +1086,28 @@ V.jogos=async()=>{
      {icon:'▥',title:'Contadores de desempenho',desc:'Alteração avançada. Mantenha em revisão manual para não atrapalhar diagnósticos.',state:'Revisão manual',risk:'high'},
      {icon:'≋',title:'Núcleo do Windows na RAM',desc:'Opção avançada relacionada ao arquivo de paginação. Avalie manualmente antes de alterar.',state:'Revisão manual',risk:'med'}
    ]},
-   gpu:{icon:'▤',title:'GPU',sub:'atalhos e monitoramento',done:0,total:3,accent:12,desc:'Atalhos úteis para gráficos e monitoramento do sistema.',items:[
-     {icon:'◎',title:'Preferências de gráficos',desc:'Defina GPU de alto desempenho por aplicativo nas opções do Windows.',btn:'Abrir',open:'display-advancedgraphics'},
-     {icon:'◴',title:'Monitoramento',desc:'Veja CPU, memória e processos ativos em tempo real.',btn:'Abrir',go:'monitor'},
-     {icon:'◈',title:'Informações do sistema',desc:'Consulte GPU, drivers e hardware via ferramentas do Windows.',btn:'Abrir',go:'ferr'}
+   gpu:{icon:'▤',title:'GPU',sub:gpuCaptured+'/8 verificáveis',done:gpuCaptured,total:8,accent:gpuCaptured?18:4,desc:'Ajuste reversível de captura e ferramentas oficiais de desempenho gráfico.',items:[
+     {icon:'▧',title:'Captura de jogos em segundo plano',desc:'Desativa gravação automática do Game Bar. O recurso de clipes pode deixar de funcionar.',capture:'background_capture',risk:'med'},
+     {icon:'◎',title:'Preferência de GPU por jogo',desc:'Selecione Alto desempenho nas preferências de gráficos do Windows.',btn:'Configurar',open:'display-advancedgraphics'},
+     {icon:'✦',title:'Modo de Jogo do Windows',desc:'Revise os ajustes nativos do Game Mode.',btn:'Abrir',open:'gaming-gamemode'},
+     {icon:'◴',title:'Monitoramento',desc:'Acompanhe CPU e RAM em tempo real.',btn:'Abrir',go:'monitor'},
+     {icon:'▣',title:'Diagnóstico DirectX',desc:'Consulte o driver e o dispositivo gráfico com a ferramenta oficial.',btn:'Abrir',open:'dxdiag'},
+     {icon:'⬡',title:'Drivers NVIDIA',desc:'Abra a seleção de drivers no site oficial.',btn:'Abrir',driver:'nvidia'},
+     {icon:'◈',title:'Drivers AMD Radeon',desc:'Consulte drivers e compatibilidade no suporte AMD.',btn:'Abrir',driver:'amd'},
+     {icon:'▤',title:'Perfis de jogos',desc:'Escolha ajustes individuais nos jogos detectados.',btn:'Abrir',go:'game'}
    ]},
-   interface:{icon:'◉',title:'Desempenho e Interface',sub:`${ifaceApplied}/5 aplicados`,done:ifaceApplied,total:5,accent:Math.round((ifaceApplied/5)*100),desc:'Ajustes leves de interface e revisões manuais de desempenho.',items:[
-     {icon:'◷',title:'Remover atraso de inicialização',desc:'Remove a espera artificial aplicada a alguns apps na entrada do Windows.',iface:'startup_delay'},
-     {icon:'↗',title:'Reduzir atraso de menus',desc:'Deixa a interface mais responsiva ao abrir menus e listas do sistema.',iface:'menu_delay'},
-     {icon:'▥',title:'Desativar contadores de desempenho',desc:'Pode reduzir overhead de monitoramento, mas também prejudicar diagnósticos.',state:'Revisão manual',risk:'high'},
-     {icon:'≋',title:'Manter o núcleo do Windows na RAM',desc:'Impede que partes do kernel e dos drivers vão para paginação. Requer análise manual.',state:'Revisão manual'},
-     {icon:'⇄',title:'Desativar compressão de memória',desc:'Pode aumentar o consumo de RAM e não garante ganhos. Avalie manualmente.',state:'Revisão manual',risk:'med'}
+   interface:{icon:'◉',title:'Desempenho e Interface',sub:`${ifaceApplied}/8 aplicados`,done:ifaceApplied,total:8,accent:Math.round(ifaceApplied/8*100),
+     desc:'Ajustes visuais leves do usuário, com backup e restauração, e revisões manuais separadas.',items:[
+     {icon:'◷',title:'Remover atraso de inicialização',desc:'Reduz a espera de alguns aplicativos ao entrar no Windows.',iface:'startup_delay'},
+     {icon:'↗',title:'Reduzir atraso de menus',desc:'Menus do Windows podem responder visualmente mais rápido.',iface:'menu_delay'},
+     {icon:'◇',title:'Reduzir animações de janelas',desc:'Desliga animações de minimizar e maximizar (somente visual).',iface:'min_animate'},
+     {icon:'▥',title:'Reduzir animações da barra de tarefas',desc:'Desativa transições visuais de alguns elementos da barra.',iface:'taskbar_animations'},
+     {icon:'⌖',title:'Diminuir tempo de hover',desc:'Reduz a espera de algumas dicas ao passar o mouse.',iface:'mouse_hover'},
+     {icon:'▥',title:'Contadores de desempenho',desc:'Desativar pode atrapalhar diagnóstico de falhas.',state:'Revisão manual',risk:'high'},
+     {icon:'≋',title:'Kernel na RAM',desc:'Pode afetar paginação e estabilidade, sem ganho garantido.',state:'Revisão manual',risk:'high'},
+     {icon:'⇄',title:'Compressão de memória',desc:'Desativar pode elevar uso de RAM; revisão manual.',state:'Revisão manual',risk:'med'}
    ]},
-   rede:{icon:'⌁',title:'Rede',sub:'cache DNS e atalhos',done:dns?1:0,total:3,accent:dns?34:10,desc:'Ferramentas rápidas para melhorar a resolução de nomes e revisar a conexão.',items:[
+      rede:{icon:'⌁',title:'Rede',sub:'cache DNS e atalhos',done:dns?1:0,total:3,accent:dns?34:10,desc:'Ferramentas rápidas para melhorar a resolução de nomes e revisar a conexão.',items:[
      {icon:'⇄',title:'Limpar cache DNS',desc:'Renova o cache DNS antes de entrar em partidas online.',btn:'Executar',run:'flushdns'},
      {icon:'◌',title:'DNS atual',desc:'DNS detectado neste momento: '+esc(dns||'Não foi possível ler')+'.',state:'Informativo'},
      {icon:'✦',title:'Abrir categoria Rede',desc:'Veja testes de latência, troca de DNS e opções adicionais.',btn:'Abrir',go:'rede'}
@@ -1110,19 +1135,25 @@ V.jogos=async()=>{
   const risk=item.risk==='high'?'<span class="risk">RISCO ALTO</span>':item.risk==='med'?'<span class="risk med">RISCO MÉDIO</span>':'';
   let action='';
   if(item.iface)action=renderIfaceAction(item.iface);
+  else if(item.capture){
+   const st=inputStatus?.[item.capture]||{};
+   action=st.applied===true?(st.restorable?'<button class="btnx alt" data-gpucapture="'+item.capture+'" data-method="restore">Restaurar</button>':'<span class="state ok">✓ Aplicado</span>'):
+     (st.supported?'<button class="btnx" data-gpucapture="'+item.capture+'" data-method="apply">Aplicar</button>':'<span class="state">Indisponível</span>');
+  }
   else if(item.privacy){
    const state=privStatus[item.privacy]||{};
    action=state.applied===true?(state.restorable?'<button class="btnx alt" data-privacy="'+item.privacy+'" data-method="restore">Restaurar</button>':'<span class="state ok">✓ Aplicado</span>'):(state.supported?'<button class="btnx" data-privacy="'+item.privacy+'" data-method="apply">Aplicar</button>':'<span class="state">Revisão manual</span>');
   }else if(item.svc){
-   action=item.svcAllowed?'<button class="btnx alt" data-service="'+esc(item.svc)+'" data-on="'+(!item.svcOn)+'">'+(item.svcOn?'Desativar':'Reativar')+'</button>':'<span class="state">'+esc(item.state)+'</span>';
-  }else if(item.btn&&item.run)action='<button class="btnx" data-run="'+esc(item.run)+'">'+esc(item.btn)+'</button>';
+   action=item.svcAllowed?(item.svcRestorable?'<button class="btnx alt" data-optservice="'+esc(item.svc)+'" data-method="restore">Restaurar</button>':item.svcOn?'<button class="btnx alt" data-optservice="'+esc(item.svc)+'" data-method="apply">Desativar no reinício</button>':'<span class="state">Desativado · sem backup</span>'):'<span class="state">'+esc(item.state)+'</span>';
+  }else if(item.btn&&item.driver)action='<button class="btnx alt" data-driver="'+esc(item.driver)+'">'+esc(item.btn)+'</button>';
+  else if(item.btn&&item.run)action='<button class="btnx" data-run="'+esc(item.run)+'">'+esc(item.btn)+'</button>';
   else if(item.btn&&item.go)action='<button class="btnx alt" data-go="'+esc(item.go)+'">'+esc(item.btn)+'</button>';
   else if(item.btn&&item.open)action='<button class="btnx alt" data-open="'+esc(item.open)+'">'+esc(item.btn)+'</button>';
   else if(item.open)action='<button class="btnx alt" data-open="'+esc(item.open)+'">Revisar</button>';
   else if(item.state)action='<span class="state">'+esc(item.state)+'</span>';
   return '<div class="fpsx-item"><span class="fpsx-icon">'+item.icon+'</span><div><div class="ttl"><b>'+esc(item.title)+'</b>'+risk+'</div><p>'+esc(item.desc)+'</p></div><div class="act">'+action+'</div></div>';
  };
- return [`<section class="fpsx-page"><div class="fpsx-top"><div class="fpsx-hero"><div class="fpsx-ring" style="--pct:${overallPct}"><div><b>${overallPct}%</b><span>pronto</span></div></div><div class="fpsx-head"><small>PERFORMANCE • GAMING</small><h3>FPS Boost com categorias rápidas.</h3><p>Layout inspirado na segunda foto: ajuste por categoria, veja o estado atual e aplique ações seguras antes de abrir seu jogo.</p><div class="fpsx-mini"><span>✦ Tudo reversível quando houver backup</span><span>◈ Ajustes manuais separados</span><span>◎ Nada desativa Defender ou Update</span></div></div><div class="fpsx-side">${summaryRows.map(r=>`<div class="fpsx-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}<button class="fpsx-btn" id="fpsApplyAllTop">Aplicar tudo</button><small class="fps-mini-note">Alguns ajustes permanecem em revisão manual por segurança.</small></div></div></div><div class="fpsx-grid"><aside class="fpsx-cats">${order.map((k,i)=>renderCategory(k,i===0)).join('')}</aside><div class="fpsx-panel"><div class="fpsx-panel-h"><span class="fpsx-cicon" id="fpsPaneIcon">${categories.priv.icon}</span><div><strong id="fpsPaneTitle">${esc(categories.priv.title)}</strong><p id="fpsPaneDesc">${esc(categories.priv.desc)}</p></div><span class="fpsx-chip" id="fpsPaneChip">${categories.priv.done}/${categories.priv.total} prontos</span></div><div class="fpsx-list" id="fpsPaneList">${categories.interface.items.map(renderItem).join('')}</div><div class="fpsx-foot">Use a coluna da esquerda para trocar entre categorias. Os ajustes realmente aplicados aparecem como “Aplicado”; os demais ficam como ação disponível ou revisão manual.</div></div></div></section>`,()=>{
+ return [`<section class="fpsx-page"><div class="fpsx-top"><div class="fpsx-hero"><div class="fpsx-ring" style="--pct:${overallPct}"><div><b>${overallPct}%</b><span>pronto</span></div></div><div class="fpsx-head"><small>PERFORMANCE • GAMING</small><h3>FPS Boost com categorias rápidas.</h3><p>Ajuste por categoria, veja o estado real do seu Windows e aplique ações compatíveis e reversíveis.</p><div class="fpsx-mini"><span>✦ Tudo reversível quando houver backup</span><span>◈ Ajustes manuais separados</span><span>◎ Nada desativa Defender ou Update</span></div></div><div class="fpsx-side">${summaryRows.map(r=>`<div class="fpsx-row"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')}<button class="fpsx-btn" id="fpsApplyAllTop">Aplicar tudo</button><small class="fps-mini-note">Alguns ajustes permanecem em revisão manual por segurança.</small></div></div></div><div class="fpsx-grid"><aside class="fpsx-cats">${order.map((k,i)=>renderCategory(k,i===0)).join('')}</aside><div class="fpsx-panel"><div class="fpsx-panel-h"><span class="fpsx-cicon" id="fpsPaneIcon">${categories.priv.icon}</span><div><strong id="fpsPaneTitle">${esc(categories.priv.title)}</strong><p id="fpsPaneDesc">${esc(categories.priv.desc)}</p></div><span class="fpsx-chip" id="fpsPaneChip">${categories.priv.done}/${categories.priv.total} prontos</span></div><div class="fpsx-list" id="fpsPaneList">${categories.interface.items.map(renderItem).join('')}</div><div class="fpsx-foot">Use a coluna da esquerda para trocar entre categorias. Os ajustes realmente aplicados aparecem como “Aplicado”; os demais ficam como ação disponível ou revisão manual.</div></div></div></section>`,()=>{
    let active='priv';
    const paint=()=>{document.querySelectorAll('[data-fpscat]').forEach(b=>b.classList.toggle('on',b.dataset.fpscat===active)); const c=categories[active]; if(!c)return; $('#fpsPaneIcon').textContent=c.icon; $('#fpsPaneTitle').textContent=c.title; $('#fpsPaneDesc').textContent=c.desc; $('#fpsPaneChip').textContent=`${c.done}/${c.total} prontos`; const list=$('#fpsPaneList'); list.classList.remove('view-in'); void list.offsetWidth; list.innerHTML=c.items.map(renderItem).join(''); list.classList.add('view-in'); bindActions(); };
    const bindActions=()=>{
@@ -1133,11 +1164,21 @@ V.jogos=async()=>{
  b.disabled=true;const r=await A(restore?'privacy_restore':'privacy_apply',name);
  toast(r?.ok?(restore?'Configuração restaurada':'Configuração aplicada')+(r.relogin?' · pode exigir novo login':''):(r?.error||'Não foi possível alterar'));go('jogos');
  });
-     document.querySelectorAll('[data-service]').forEach(b=>b.onclick=async()=>{
- const name=b.dataset.service,on=b.dataset.on==='true';
- if(!await ask('Serviço do Windows',(on?'Reativar ':'Desativar ')+name+'? A alteração pode exigir administrador.','Confirmar'))return;
- b.disabled=true;const ok=await A('set_service',name,on);
- toast(ok?'Serviço atualizado':'Não foi possível alterar este serviço');go('jogos');
+     document.querySelectorAll('[data-optservice]').forEach(b=>b.onclick=async()=>{
+ const name=b.dataset.optservice,method=b.dataset.method;
+ const desc=categories.services.items.find(x=>x.svc===name)?.desc||'';
+ if(!await ask('Serviços opcionais',(method==='apply'?'Desativar na próxima inicialização? ':'Restaurar o tipo original? ')+desc+' Pode precisar de administrador.','Confirmar'))return;
+ b.disabled=true;const r=await A(method==='apply'?'optional_service_apply':'optional_service_restore',name);
+ toast(r?.ok?(method==='apply'?'Alteração salva. Reinicie quando conveniente.':'Configuração restaurada.'):(r?.error||'Não foi possível concluir'));go('jogos');
+ });
+     document.querySelectorAll('[data-gpucapture]').forEach(b=>b.onclick=async()=>{
+ const method=b.dataset.method;
+ if(!await ask('Captura de jogos',method==='apply'?'Desativar captura automática em segundo plano? Algumas gravações podem parar.':'Restaurar configuração original da captura?','Confirmar'))return;
+ b.disabled=true;const r=await A(method==='apply'?'input_lag_apply':'input_lag_restore',b.dataset.gpucapture);
+ toast(r?.ok?(method==='apply'?'Captura de fundo ajustada.':'Configuração restaurada.'):(r?.error||'Não foi possível concluir'));go('jogos');
+ });
+     document.querySelectorAll('[data-driver]').forEach(b=>b.onclick=async()=>{
+ if(!await A('open_driver_page',b.dataset.driver))toast('Não foi possível abrir a página do fabricante.');
  });
      document.querySelectorAll('[data-iface]').forEach(b=>b.onclick=async()=>{const id=b.dataset.iface,method=b.dataset.method; const title=method==='restore'?'Restaurar configuração':'Aplicar configuração'; if(!await ask(title, (method==='restore'?'Restaurar ':'Aplicar ')+id.replace('_',' ')+'?','Continuar'))return; b.disabled=true; const ret=await A(method==='restore'?'interface_restore':'interface_apply',id); toast(ret&&ret.ok?(method==='restore'?'Configuração restaurada':'Configuração aplicada')+(ret.reboot?' · novo login ou reinício pode ser necessário':''):(ret&&ret.error)||'Não foi possível concluir'); go('jogos')});
      document.querySelectorAll('[data-run]').forEach(b=>b.onclick=async()=>{const run=b.dataset.run; if(run==='high'||run==='balanced'){const ok=await A('setplan',run==='high'?'high':'balanced'); toast(ok?(run==='high'?'Modo alto desempenho ativado':'Plano equilibrado ativado'):'Plano indisponível neste PC'); if(ok)go('jogos'); return}
@@ -1289,7 +1330,7 @@ V.game=async()=>{
   const info=profiles[g.id]||{},found=!!info.found,applied=info.applied===true,backup=info.restorable===true;
   const state=applied?'✓ Perfil aplicado':backup?'Backup disponível':found?'Pronto para configurar':'Não detectado';
   const stateClass=applied?'success':backup?'warn':found?'ready':'muted';
-  return '<article class="gb-card '+g.id+'"><div class="gb-art"><div class="gb-artglow"></div><span class="gb-artglyph">'+g.glyph+'</span><b>'+g.name+'</b></div>'+
+  return '<article class="gb-card '+g.id+'"><div class="gb-art"><img class="gb-illustration" src="assets/games/'+g.id+'.svg" alt="Arte do '+g.name+'" onerror="this.style.display=\'none\'"></div>'+
   '<div class="gb-inner"><strong>'+g.name+'</strong><span class="gb-state '+stateClass+'">'+state+'</span>'+
   '<small>'+esc(g.note)+'</small><button class="gb-main-action" data-gb-optimize="'+g.id+'" '+(!found||backup?'disabled':'')+'>⚡ Otimizar</button>'+
   (backup?'<button class="gb-restore" data-gb-restore="'+g.id+'">↶ Restaurar</button>':'')+
