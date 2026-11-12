@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Painel — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link href="assets/widgets/widget_gallery.css" rel="stylesheet">
 <style>
 :root{--bg0:#0b0c10;--bg1:#171a20;--card:#1f2229;--card2:#262a33;--line:#2c313b;--tx:#f2f4f8;--mut:#9aa3b3;--blue:#2f6fed;--blue2:#5b95ff;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0}
@@ -679,7 +678,6 @@ html[data-ui-theme="light"] .il-card,html[data-ui-theme="light"] .up-card{backgr
   <button class="nav" data-v="debloat" data-tip="Debloat" aria-label="Debloat"><svg class="i"><use href="#svc"/></svg><span class="lbl">Debloat</span></button>
   <button class="nav" data-v="updates" data-tip="Atualizações" aria-label="Atualizações"><svg class="i"><use href="#refresh"/></svg><span class="lbl">Atualizações</span><span class="meta"></span></button>
   <button class="nav" data-v="proc" data-tip="Processos" aria-label="Processos"><svg class="i"><use href="#monitor"/></svg><span class="lbl">Processos</span></button>
-  <button class="nav" data-v="pers" data-tip="Personalização" aria-label="Personalização"><svg class="i"><use href="#gear"/></svg><span class="lbl">Personalização</span><span class="meta"></span></button>
   <div class="sp"></div>
   <button class="nav" data-v="config" data-tip="Configurações" aria-label="Configurações"><svg class="i"><use href="#gear"/></svg><span class="lbl">Configurações</span></button>
   <div class="ver">LZ Painel • v1.0</div>
@@ -971,12 +969,12 @@ function skeletonMarkup(k){
 function initFlyout(){}
 
 /* ---------- telas ---------- */
-const T={dash:['Dashboard','Visão geral do seu PC.'],jogos:['FPS Boost','Perfil de desempenho para jogos e FPS.'],input:['Input Lag','Ajustes focados em responsividade e latência do sistema.'],game:['Game Boost','Aplique melhorias rápidas para uma sessão de jogo mais limpa.'],apps:['Apps','Gerencie programas instalados e desinstale o que não usa.'],mem:['Memória','Veja o uso atual da RAM e libere memória quando necessário.'],rede:['Rede','Conexão, latência e DNS.'],bios:['BIOS','Ferramentas e atalhos úteis para sistema e hardware.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],debloat:['Debloat','Reduza bloat e serviços desnecessários com segurança.'],updates:['Atualizações','Revise opções e preferências ligadas ao Windows Update.'],proc:['Processos','Uso em tempo real e processos ativos.'],pers:['Personalização','Preferências visuais do painel e ajustes de interface.'],config:['Configurações','Preferências gerais do painel.']};
+const T={dash:['Dashboard','Visão geral do seu PC.'],jogos:['FPS Boost','Perfil de desempenho para jogos e FPS.'],input:['Input Lag','Ajustes focados em responsividade e latência do sistema.'],game:['Game Boost','Aplique melhorias rápidas para uma sessão de jogo mais limpa.'],apps:['Apps','Gerencie programas instalados e desinstale o que não usa.'],mem:['Memória','Veja o uso atual da RAM e libere memória quando necessário.'],rede:['Rede','Conexão, latência e DNS.'],bios:['BIOS','Ferramentas e atalhos úteis para sistema e hardware.'],limpeza:['Limpeza','Libere espaço removendo arquivos temporários.'],debloat:['Debloat','Reduza bloat e serviços desnecessários com segurança.'],updates:['Atualizações','Revise opções e preferências ligadas ao Windows Update.'],proc:['Processos','Uso em tempo real e processos ativos.'],config:['Configurações','Preferências gerais do painel.']};
 
 const ORIGINAL_TITLES=Object.fromEntries(Object.entries(T).map(([k,v])=>[k,v[0]]));
 const LANG_TITLES={
- en:{dash:'Dashboard',jogos:'FPS Boost',input:'Input Lag',game:'Game Boost',apps:'Apps',mem:'Memory',rede:'Network',bios:'BIOS',limpeza:'Cleanup',debloat:'Debloat',updates:'Updates',proc:'Processes',pers:'Customization',config:'Settings'},
- es:{dash:'Panel principal',jogos:'FPS Boost',input:'Input Lag',game:'Game Boost',apps:'Aplicaciones',mem:'Memoria',rede:'Red',bios:'BIOS',limpeza:'Limpieza',debloat:'Debloat',updates:'Actualizaciones',proc:'Procesos',pers:'Personalización',config:'Configuración'}
+ en:{dash:'Dashboard',jogos:'FPS Boost',input:'Input Lag',game:'Game Boost',apps:'Apps',mem:'Memory',rede:'Network',bios:'BIOS',limpeza:'Cleanup',debloat:'Debloat',updates:'Updates',proc:'Processes',config:'Settings'},
+ es:{dash:'Panel principal',jogos:'FPS Boost',input:'Input Lag',game:'Game Boost',apps:'Aplicaciones',mem:'Memoria',rede:'Red',bios:'BIOS',limpeza:'Limpieza',debloat:'Debloat',updates:'Actualizaciones',proc:'Procesos',config:'Configuración'}
 };
 function applyUiLanguage(){
  const titles=LANG_TITLES[S.lang]||{};
@@ -1374,6 +1372,7 @@ V.proc=async()=>V.monitor();
 V.pers=async()=>V.config();
 
 async function go(k){
+ if(!Object.prototype.hasOwnProperty.call(T,k))k='dash';
  if(typeof window.__wzCleanup==='function')window.__wzCleanup();
  const n=++gn;clearInterval(timer);
  const dash=$('#v-dash'),v=$('#view'),old=dash.hidden?v:dash;
@@ -1505,6 +1504,5 @@ if(DEMO){$('#demo').hidden=false;for(let i=0;i<MAXH;i++){HL.cpu.push(clamp(30+Ma
 bindWindowChrome();bars(0);radar();INFO=await A('info')||{};chips();await tick(true);lv();setTimeout(()=>$('#splash').classList.add('out'),200);initFlyout();setInterval(tick,2000);analyze()}
 window.addEventListener('pywebviewready',boot);setTimeout(boot,2200);
 </script>
-<script src="assets/widgets/widget_gallery.js"></script>
 </body>
 </html>

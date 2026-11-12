@@ -15,8 +15,8 @@ const fs=require('node:fs');
   assert.equal(await page.locator('#demo').isVisible(),true);
   assert.equal(await page.locator('#winClose').isDisabled(),true);
   const categories=await page.locator('.side [data-v]').evaluateAll(es=>es.map(e=>e.dataset.v));
-  assert.equal(categories.length,14);
-  assert.equal(new Set(categories).size,14);
+  assert.equal(categories.length,13);
+  assert.equal(new Set(categories).size,13);
   for(const k of categories){
    await page.evaluate(k=>go(k),k);
    assert.equal(await page.locator('#h1').innerText(),await page.evaluate(k=>T[k][0],k));
@@ -39,23 +39,10 @@ const fs=require('node:fs');
   assert.equal(await page.locator('.appbar').evaluate(e=>getComputedStyle(e).gridTemplateColumns.split(' ').length),2);
   await page.setViewportSize({width:1440,height:900});
 
-  // Nova biblioteca visual; não abre janelas nativas durante smoke test.
+  // Personalização removida; os links antigos voltam ao Dashboard.
+  assert.equal(await page.locator('.side [data-v="pers"]').count(),0);
   await page.evaluate(()=>go('pers'));
-  assert.equal(await page.locator('.wz-card').count(),9);
-  assert.equal(await page.locator('[data-wz-open]').count(),9);
-  assert.equal(await page.locator('[data-wz-filter]').count(),5);
-  await page.locator('[data-wz-filter="clock"]').click();
-  assert.equal(await page.locator('.wz-card').count(),2);
-  await page.locator('[data-wz-filter="weather"]').click();
-  assert.equal(await page.locator('.wz-card').count(),2);
-  await page.locator('[data-wz-filter="all"]').click();
-  assert.equal(await page.locator('.wz-card').count(),9);
-  await page.locator('[data-wz-accent="mint"]').click();
-  assert.equal(await page.locator('.wz-swatch.on').count(),1);
-  assert.equal((await page.locator('.wz-clock-pixel .wz-hr').first().innerText()).length,2);
-  await page.locator('[data-wz-open="pixel-clock"]').click();
-  assert.equal(await page.locator('.wz-card').count(),9); // Exibição nativa indisponível no navegador.
-  await page.evaluate(()=>go('jogos'));
+  assert.equal(await page.locator('#h1').innerText(),'Dashboard');
   assert.equal(await page.locator('.wz-page').count(),0);
   await page.evaluate(()=>go('jogos'));
   assert.equal(await page.locator('.fpsx-page').isVisible(),true);
