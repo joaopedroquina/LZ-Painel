@@ -1,5 +1,6 @@
 """Window bridge tests: no changes to the host PC or GUI startup."""
 import importlib.util
+import os
 import tempfile
 from pathlib import Path
 import sys
