@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Painel — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="assets/widgets/widget_gallery.css" rel="stylesheet">
 <style>
 :root{--bg0:#0b0c10;--bg1:#171a20;--card:#1f2229;--card2:#262a33;--line:#2c313b;--tx:#f2f4f8;--mut:#9aa3b3;--blue:#2f6fed;--blue2:#5b95ff;--ok:#34d399;--warn:#fbbf24;--bad:#f87171;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box;margin:0}
@@ -1373,6 +1374,7 @@ V.proc=async()=>V.monitor();
 V.pers=async()=>V.config();
 
 async function go(k){
+ if(typeof window.__wzCleanup==='function')window.__wzCleanup();
  const n=++gn;clearInterval(timer);
  const dash=$('#v-dash'),v=$('#view'),old=dash.hidden?v:dash;
  const animate=motionOn();
@@ -1503,5 +1505,6 @@ if(DEMO){$('#demo').hidden=false;for(let i=0;i<MAXH;i++){HL.cpu.push(clamp(30+Ma
 bindWindowChrome();bars(0);radar();INFO=await A('info')||{};chips();await tick(true);lv();setTimeout(()=>$('#splash').classList.add('out'),200);initFlyout();setInterval(tick,2000);analyze()}
 window.addEventListener('pywebviewready',boot);setTimeout(boot,2200);
 </script>
+<script src="assets/widgets/widget_gallery.js"></script>
 </body>
 </html>

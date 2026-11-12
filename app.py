@@ -1,5 +1,8 @@
 import os
 import webbrowser
+import urllib.parse
+import urllib.request
+from pathlib import Path
 import re
 import json
 import glob
@@ -172,6 +175,165 @@ class Api:
         self._maximized = False
         self._window_lock = threading.Lock()
         self._interface_lock = threading.RLock()
+        self._widget_lock = threading.RLock()
+        self._widget_windows = {}
+        self._widget_settings = {}
+        self._weather_cache = {}
+
+    # Widgets externos: janelas pequenas independentes da janela principal.
+    # Aceita somente tipos e configurações pré-definidos, sem execução de comandos.
+    _WIDGET_SIZES = {
+        "pixel-clock": (305, 205),
+        "orbital-clock": (290, 255),
+        "weather-dial": (295, 265),
+        "weather-glass": (300, 232),
+        "pc-pulse": (315, 234),
+        "calendar": (320, 300),
+        "storage": (305, 205),
+        "network": (310, 212),
+        "notes": (320, 248),
+    }
+    _WIDGET_ACCENTS = {"blue", "mint", "violet", "amber", "rose"}
+
+    def _widget_clean_config(self, config):
+        if not isinstance(config, dict):
+            config = {}
+        accent = str(config.get("accent", "blue"))
+        if accent not in self._WIDGET_ACCENTS:
+            accent = "blue"
+        return {
+            "accent": accent,
+            "on_top": config.get("on_top") is True,
+            "city": str(config.get("city") or "").strip()[:60],
+            "unit": "F" if config.get("unit") == "F" else "C",
+            "note": str(config.get("note") or "").strip()[:400],
+        }
+
+    def widget_list(self):
+        with self._widget_lock:
+            return list(self._widget_windows)
+
+    def widget_get_config(self, kind):
+        if kind not in self._WIDGET_SIZES:
+            return {}
+        with self._widget_lock:
+            return dict(self._widget_settings.get(kind, self._widget_clean_config({})))
+
+    def _forget_widget(self, kind, window):
+        with self._widget_lock:
+            if self._widget_windows.get(kind) is window:
+                self._widget_windows.pop(kind, None)
+
+    def widget_open(self, kind, config=None):
+        if kind not in self._WIDGET_SIZES:
+            return {"ok": False, "error": "Modelo de widget desconhecido."}
+        if self._window is None:
+            return {"ok": False, "error": "Abra o executável do Windows para usar a área de trabalho."}
+        clean = self._widget_clean_config(config)
+        with self._widget_lock:
+            previous = self._widget_windows.get(kind)
+            if previous is not None:
+                self._widget_settings[kind] = clean
+                try:
+                    previous.evaluate_js("window.widgetConfigure && window.widgetConfigure("
+                                         + json.dumps(clean, ensure_ascii=False) + ")")
+                    previous.show()
+                except Exception:
+                    pass
+                return {"ok": True, "already": True}
+            width, height = self._WIDGET_SIZES[kind]
+            try:
+                page = (Path(base()) / "assets" / "widgets" /
+                        "widget_desktop.html").resolve().as_uri() + "#" + kind
+                window = webview.create_window(
+                    "LZ Widget — " + kind, page,
+                    js_api=self, width=width, height=height, min_size=(width, height),
+                    frameless=True, easy_drag=False, resizable=False,
+                    on_top=clean["on_top"], transparent=True, shadow=False,
+                    background_color="#141a29"
+                )
+                self._widget_windows[kind] = window
+                self._widget_settings[kind] = clean
+                window.events.closed += lambda: self._forget_widget(kind, window)
+                return {"ok": True, "already": False}
+            except Exception:
+                return {"ok": False, "error": "Não foi possível criar a janela do widget."}
+
+    def widget_update(self, kind, config):
+        if kind not in self._WIDGET_SIZES:
+            return False
+        clean = self._widget_clean_config(config)
+        with self._widget_lock:
+            self._widget_settings[kind] = clean
+            window = self._widget_windows.get(kind)
+        if window is None:
+            return True
+        try:
+            window.evaluate_js("window.widgetConfigure && window.widgetConfigure("
+                               + json.dumps(clean, ensure_ascii=False) + ")")
+            return True
+        except Exception:
+            return False
+
+    def widget_close(self, kind):
+        if kind not in self._WIDGET_SIZES:
+            return False
+        with self._widget_lock:
+            window = self._widget_windows.get(kind)
+        if window is None:
+            return False
+        try:
+            window.destroy()
+            self._forget_widget(kind, window)
+            return True
+        except Exception:
+            return False
+
+    def weather_for_city(self, city):
+        """Consulta cidade informada pelo usuário. Sem GPS e sem temperatura simulada."""
+        city = str(city or "").strip()[:60]
+        if len(city) < 2:
+            return {"ok": False, "error": "Digite uma cidade para mostrar o clima."}
+        cache_key = city.casefold()
+        with self._widget_lock:
+            cached = self._weather_cache.get(cache_key)
+            if cached and time.time() - cached[0] < 900:
+                return dict(cached[1])
+        try:
+            search = "https://geocoding-api.open-meteo.com/v1/search?" + urllib.parse.urlencode(
+                {"name": city, "count": 1, "language": "pt", "format": "json"})
+            with urllib.request.urlopen(
+                    urllib.request.Request(search, headers={"User-Agent": "LZ-Painel-Widget/1.0"}),
+                    timeout=7) as response:
+                places = json.load(response).get("results") or []
+            if not places:
+                return {"ok": False, "error": "Cidade não encontrada. Tente incluir o estado."}
+            place = places[0]
+            url = "https://api.open-meteo.com/v1/forecast?" + urllib.parse.urlencode({
+                "latitude": place["latitude"], "longitude": place["longitude"],
+                "current": "temperature_2m,relative_humidity_2m,weather_code,is_day",
+                "timezone": "auto",
+            })
+            with urllib.request.urlopen(
+                    urllib.request.Request(url, headers={"User-Agent": "LZ-Painel-Widget/1.0"}),
+                    timeout=7) as response:
+                current = json.load(response).get("current") or {}
+            if current.get("temperature_2m") is None:
+                return {"ok": False, "error": "O serviço de clima não retornou temperatura."}
+            result = {
+                "ok": True, "city": str(place.get("name") or city),
+                "region": str(place.get("admin1") or ""),
+                "temp_c": float(current["temperature_2m"]),
+                "humidity": current.get("relative_humidity_2m"),
+                "weather_code": int(current.get("weather_code") or 0),
+                "is_day": bool(current.get("is_day", 1)),
+                "source": "Open-Meteo",
+            }
+            with self._widget_lock:
+                self._weather_cache[cache_key] = (time.time(), result)
+            return result
+        except Exception:
+            return {"ok": False, "error": "Não foi possível consultar o clima. Verifique a internet."}
 
     def window_state(self):
         return {"maximized": self._maximized}

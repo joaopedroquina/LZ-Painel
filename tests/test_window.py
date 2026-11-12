@@ -106,6 +106,42 @@ class WindowTests(unittest.TestCase):
             self.assertEqual(urls, ["https://www.nvidia.com/pt-br/drivers/",
                                     "https://www.amd.com/pt/support/download/drivers.html"])
 
+    def test_widget_allowlist_and_independent_windows(self):
+        self.assertEqual(len(self.api._WIDGET_SIZES), 9)
+        self.assertFalse(self.api.widget_open("command-exec")["ok"])
+        self.assertFalse(self.api.widget_close("command-exec"))
+        self.assertFalse(self.api.widget_update("command-exec", {"accent": "red"}))
+        self.assertEqual(self.api.widget_get_config("command-exec"), {})
+        self.assertEqual(self.api._widget_clean_config({"accent": "bad", "unit": "Z",
+                            "on_top": "yes", "note": "a" * 500})["accent"], "blue")
+        self.assertEqual(len(self.api._widget_clean_config({"note": "b" * 500})["note"]), 400)
+        child = MagicMock()
+        with patch.object(self.app.webview, "create_window", return_value=child) as creator:
+            result = self.api.widget_open("pixel-clock", {"accent": "violet", "on_top": True})
+            self.assertTrue(result["ok"])
+            self.assertEqual(self.api.widget_list(), ["pixel-clock"])
+            kwargs = creator.call_args.kwargs
+            self.assertTrue(kwargs["frameless"])
+            self.assertTrue(kwargs["transparent"])
+            self.assertTrue(kwargs["on_top"])
+            self.assertFalse(kwargs["resizable"])
+            self.assertIn("assets/widgets/widget_desktop.html", kwargs["url"])
+            self.assertIn("#pixel-clock", kwargs["url"])
+            self.assertTrue(self.api.widget_open("pixel-clock")["already"])
+            self.assertEqual(creator.call_count, 1)
+            self.assertTrue(self.api.widget_update("pixel-clock", {"accent": "mint"}))
+            self.assertTrue(self.api.widget_close("pixel-clock"))
+            child.destroy.assert_called_once()
+            self.assertEqual(self.api.widget_list(), [])
+
+    def test_widget_weather_requires_city_without_network(self):
+        self.assertFalse(self.api.weather_for_city("")["ok"])
+        self.assertFalse(self.api.weather_for_city("a")["ok"])
+        with patch.object(self.app.urllib.request, "urlopen", side_effect=OSError("offline")):
+            out = self.api.weather_for_city("Minha Cidade")
+            self.assertFalse(out["ok"])
+            self.assertIn("internet", out["error"])
+
     def test_no_window(self):
         self.api._window = None
         self.assertFalse(self.api.window_action("close"))

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LZ Widget</title>
+<link rel="stylesheet" href="widget_gallery.css">
+<style>
+:root{--wz-accent:#5a93ff; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;min-height:100%;background:transparent!important;overflow:hidden;color:#fff;font:13px/1.4 "Segoe UI",Consolas,sans-serif;user-select:none}
+button{font:inherit}
+.dw-shell{position:relative;height:100vh;min-height:100%;width:100%;overflow:hidden;border-radius:23px;border:1px solid #7895d33f;box-shadow:0 12px 40px #0007;background:linear-gradient(140deg,#10141df5,#161f2cf2);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);display:flex;flex-direction:column}
+.dw-shell.clock-dark{background:radial-gradient(circle at 40% 25%,#29304066,transparent 70%),#080b11ef}
+.dw-shell.weather-dark{background:radial-gradient(circle at 40% 0%,#284b8fa5,transparent 70%),#090f20ee}
+.dw-shell.note-dark{background:linear-gradient(145deg,#322b4beb,#171a28ef)}
+.dw-shell>header{position:relative;height:30px;min-height:30px;display:flex;align-items:center;justify-content:space-between;padding:5px 35px 0 14px;color:#8ca1bc;font-weight:800;font-size:9px;letter-spacing:.16em;opacity:.64}
+.dw-grab{flex:1;cursor:grab;height:100%}
+.dw-close{position:absolute;z-index:5;right:9px;top:7px;border:1px solid #4b607d80;color:#ccdbf2;background:#17243cbd;width:24px;height:24px;border-radius:8px;cursor:pointer;font-size:15px;line-height:1;opacity:.6}
+.dw-shell:hover .dw-close,.dw-close:focus{opacity:1}
+.dw-main{min-height:0;flex:1;display:flex;align-items:center;justify-content:center;padding:5px 15px 12px}
+.dw-main .wz-clock-pixel .wz-hr,.dw-main .wz-clock-pixel .wz-min{font-size:78px}
+.dw-main .wz-clock-pixel .wz-pixel-date{font-size:12px}
+.dw-main .wz-orbital{height:174px;width:174px}
+.dw-main .wz-orbital .wz-orbit-dot{top:-4px}
+.dw-main .wz-dial{transform:scale(1.12);transform-origin:center}
+.dw-main .wz-glassweather{max-width:260px}
+.dw-main .wz-perfbox,.dw-main .wz-storagebox,.dw-main .wz-netbox{max-width:260px}
+.dw-main .wz-noteboard{height:164px;max-width:265px;transform:rotate(-1deg)}
+.dw-main .wz-noteboard p{font-size:15px}
+.dw-main .wz-calbox{width:260px}
+.dw-main .wz-calendar{gap:5px}
+.dw-main .wz-calendar span{height:25px}
+.dw-source{height:19px;min-height:19px;font-size:9px;color:#93a8c5;opacity:.68;text-align:center}
+.dw-main .wz-storagebox small{font-size:12px}
+.dw-main .wz-netbox .wz-ping{font-size:53px}
+.dw-empty{color:#abc0df;text-align:center;font-size:12px;max-width:225px}
+</style>
+</head>
+<body>
+<div class="dw-shell" id="dwShell">
+  <header><div class="dw-grab pywebview-drag-region">LZ WIDGETS • ARRASTE AQUI</div></header>
+  <button type="button" id="dwClose" class="dw-close" aria-label="Fechar widget" title="Fechar widget">×</button>
+  <main class="dw-main" id="dwMain"></main>
+  <footer class="dw-source" id="dwSource"></footer>
+</div>
+<script src="widget_desktop.js"></script>
+</body>
+</html>
