@@ -126,7 +126,7 @@ class WindowTests(unittest.TestCase):
             self.assertTrue(kwargs["on_top"])
             self.assertFalse(kwargs["resizable"])
             self.assertIn("assets/widgets/widget_desktop.html", creator.call_args.args[1])
-            self.assertIn("#pixel-clock", kwargs["url"])
+            self.assertIn("#pixel-clock", creator.call_args.args[1])
             self.assertTrue(self.api.widget_open("pixel-clock")["already"])
             self.assertEqual(creator.call_count, 1)
             self.assertTrue(self.api.widget_update("pixel-clock", {"accent": "mint"}))
