@@ -623,6 +623,28 @@ html[data-ui-theme="light"] .il-card,html[data-ui-theme="light"] .up-card{backgr
 @media(max-width:1100px){.il-grid,.up-grid{grid-template-columns:1fr}}
 @media(max-width:770px){.il-summary{flex-direction:column;align-items:flex-start}.il-summary-stats{width:100%}.il-summary-stats>div{flex:1}.up-card{flex-wrap:wrap}.up-card button{margin-left:auto}}
 
+
+/* LZ Painel: janela sem moldura preta nem espaçamento externo. */
+html,body{min-height:100%;background:var(--bg1)}
+.shell{
+  margin:0!important;
+  width:100%!important;
+  min-height:100vh!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+.side{
+  top:0!important;
+  height:100vh!important;
+  border-radius:0!important;
+}
+.main{min-height:100vh!important}
+html[data-ui-theme="light"] body{background:#f6f8fc}
+.userchip .userplan{color:#a9c9ff;font-weight:800;letter-spacing:.08em}
+/* Remoção de contador numérico, mantendo o botão de novidades funcional. */
+.appmini .badge{display:none!important}
+
 </style>
 </head>
 <body>
@@ -689,8 +711,8 @@ html[data-ui-theme="light"] .il-card,html[data-ui-theme="light"] .up-card{backgr
     <div class="appdrag pywebview-drag-region" id="appdrag" title="Arraste para mover o painel"></div>
     
     <div class="appbar-right">
-      <div class="userchip"><div class="userav">LZ</div><div class="userplan">GRÁTIS</div></div>
-      <button class="appmini" id="appPulse" aria-label="Central de novidades"><svg class="i"><use href="#refresh"/></svg><span class="badge">7</span></button>
+      <div class="userchip"><div class="userav">LZ</div><div class="userplan">PRO</div></div>
+      <button class="appmini" id="appPulse" aria-label="Central de novidades"><svg class="i"><use href="#refresh"/></svg></button>
       <div class="winset">
         <button class="winbtn" id="winMin" aria-label="Minimizar"><svg class="i"><use href="#min"/></svg></button>
         <button class="winbtn" id="winMax" aria-label="Maximizar ou restaurar"><svg class="i"><use href="#max"/></svg></button>
